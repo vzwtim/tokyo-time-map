@@ -1,0 +1,5503 @@
+{
+  "retrieved": "2026-10-14",
+  "category": "ワンルーム・1K・1DK",
+  "method": "駅徒歩10分以内の平均賃料を軸としたLIFULL HOME'S独自相場。管理費・駐車場代除外。面積・築年数・構造は未統一。",
+  "sources": [
+    {
+      "id": "odakyuodawara",
+      "name": "小田急小田原線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/odakyuodawara-line/price/",
+      "line": "小田急線"
+    },
+    {
+      "id": "yamanote",
+      "name": "山手線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/yamanote-line/price/",
+      "line": "山手線"
+    },
+    {
+      "id": "chuo",
+      "name": "中央線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/chuo-line/price/",
+      "line": "中央線快速"
+    },
+    {
+      "id": "keio",
+      "name": "京王線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keio-line/price/",
+      "line": "京王線"
+    },
+    {
+      "id": "tokyometrochiyoda",
+      "name": "千代田線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometrochiyoda-line/price/",
+      "line": "千代田線"
+    },
+    {
+      "id": "tokyometrotozai",
+      "name": "東西線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometrotozai-line/price/",
+      "line": "東西線"
+    },
+    {
+      "id": "tokyudenentoshi",
+      "name": "田園都市線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyudenentoshi-line/price/",
+      "line": "田園都市線"
+    },
+    {
+      "id": "tokyutoyoko",
+      "name": "東横線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyutoyoko-line/price/",
+      "line": "東横線"
+    },
+    {
+      "id": "seibuikebukuro",
+      "name": "西武池袋線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/seibuikebukuro-line/price/",
+      "line": "西武池袋線"
+    },
+    {
+      "id": "keioinokashira",
+      "name": "井の頭線",
+      "line": "井の頭線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keioinokashira-line/price/"
+    },
+    {
+      "id": "tokyometroginza",
+      "name": "銀座線",
+      "line": "銀座線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometroginza-line/price/"
+    },
+    {
+      "id": "tokyometrohanzomon",
+      "name": "半蔵門線",
+      "line": "半蔵門線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometrohanzomon-line/price/"
+    },
+    {
+      "id": "tokyometrohibiya",
+      "name": "日比谷線",
+      "line": "日比谷線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometrohibiya-line/price/"
+    },
+    {
+      "id": "tokyometrofukutoshin",
+      "name": "副都心線",
+      "line": "副都心線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometrofukutoshin-line/price/"
+    },
+    {
+      "id": "tokyometroyurakucho",
+      "name": "有楽町線",
+      "line": "有楽町線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometroyurakucho-line/price/"
+    },
+    {
+      "id": "tokyometronamboku",
+      "name": "南北線",
+      "line": "南北線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometronamboku-line/price/"
+    },
+    {
+      "id": "toeioedo",
+      "name": "大江戸線",
+      "line": "大江戸線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/toeioedo-line/price/"
+    },
+    {
+      "id": "toeishinjuku",
+      "name": "都営新宿線",
+      "line": "都営新宿線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/toeishinjuku-line/price/"
+    },
+    {
+      "id": "toeiasakusa",
+      "name": "浅草線",
+      "line": "浅草線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/toeiasakusa-line/price/"
+    },
+    {
+      "id": "toeimita",
+      "name": "三田線",
+      "line": "三田線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/toeimita-line/price/"
+    },
+    {
+      "id": "saikyo",
+      "name": "埼京線",
+      "line": "埼京線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/saikyo-line/price/"
+    },
+    {
+      "id": "sobu",
+      "name": "中央・総武線",
+      "line": "中央・総武線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/sobu-line/price/"
+    },
+    {
+      "id": "joban",
+      "name": "常磐線各駅停車",
+      "line": "常磐線各駅停車",
+      "url": "https://www.homes.co.jp/chintai/tokyo/joban-line/price/"
+    },
+    {
+      "id": "seibushinjuku",
+      "name": "西武新宿線",
+      "line": "西武新宿線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/seibushinjuku-line/price/"
+    },
+    {
+      "id": "tobutojo",
+      "name": "東武東上線",
+      "line": "東武東上線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tobutojo-line/price/"
+    },
+    {
+      "id": "keikyuhonsen",
+      "name": "京急線",
+      "line": "京急線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keikyuhonsen-line/price/"
+    },
+    {
+      "id": "nambu",
+      "name": "南武線",
+      "line": "南武線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/nambu-line/price/"
+    },
+    {
+      "id": "yokohama",
+      "name": "横浜線",
+      "line": "横浜線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/yokohama-line/price/"
+    },
+    {
+      "id": "tobuisesaki",
+      "name": "東武スカイツリーライン",
+      "line": "東武スカイツリーライン",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tobuisesaki-line/price/"
+    },
+    {
+      "id": "keiseihonsen",
+      "name": "京成本線",
+      "line": "京成本線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keiseihonsen-line/price/"
+    },
+    {
+      "id": "tokyometromarunochi",
+      "name": "丸ノ内線",
+      "line": "丸ノ内線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyometromarunochi-line/price/"
+    },
+    {
+      "id": "keihintohokunegishi",
+      "name": "京浜東北線",
+      "line": "京浜東北線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keihintohokunegishi-line/price/"
+    },
+    {
+      "id": "sotetsuhonsen",
+      "name": "相鉄本線",
+      "line": "相鉄本線",
+      "url": "https://www.homes.co.jp/chintai/kanagawa/sotetsuhonsen-line/price/"
+    },
+    {
+      "id": "keiyo",
+      "name": "京葉線",
+      "line": "京葉線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keiyo-line/price/"
+    },
+    {
+      "id": "musashino",
+      "name": "武蔵野線",
+      "line": "武蔵野線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/musashino-line/price/"
+    },
+    {
+      "id": "tsukubaexpress",
+      "name": "つくばエクスプレス",
+      "line": "つくばエクスプレス",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tsukubaexpress-line/price/"
+    },
+    {
+      "id": "tokyumeguro",
+      "name": "東急目黒線",
+      "line": "東急目黒線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyumeguro-line/price/"
+    },
+    {
+      "id": "tokyuoimachi",
+      "name": "大井町線",
+      "line": "大井町線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyuoimachi-line/price/"
+    },
+    {
+      "id": "keiosagamihara",
+      "name": "京王相模原線",
+      "line": "京王相模原線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keiosagamihara-line/price/"
+    },
+    {
+      "id": "odakyutama",
+      "name": "小田急多摩線",
+      "line": "小田急多摩線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/odakyutama-line/price/"
+    },
+    {
+      "id": "odakyuenoshima",
+      "name": "小田急江ノ島線",
+      "line": "小田急江ノ島線",
+      "url": "https://www.homes.co.jp/chintai/kanagawa/odakyuenoshima-line/price/"
+    },
+    {
+      "id": "sotetsuizumino",
+      "name": "相鉄いずみ野線",
+      "line": "相鉄いずみ野線",
+      "url": "https://www.homes.co.jp/chintai/kanagawa/sotetsuizumino-line/price/"
+    },
+    {
+      "id": "saitamakosokutetsudo",
+      "name": "埼玉高速鉄道線",
+      "line": "埼玉高速鉄道線",
+      "url": "https://www.homes.co.jp/chintai/saitama/saitamakosokutetsudo-line/price/"
+    },
+    {
+      "id": "tokyomonorail",
+      "name": "東京モノレール",
+      "line": "東京モノレール",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyomonorail-line/price/"
+    },
+    {
+      "id": "keikyukuko",
+      "name": "京急空港線",
+      "line": "京急空港線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/keikyukuko-line/price/"
+    },
+    {
+      "id": "tokyuikegami",
+      "name": "池上線（一部）",
+      "line": "池上線（一部）",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyuikegami-line/price/"
+    },
+    {
+      "id": "shinkotsuyurikamome",
+      "name": "ゆりかもめ",
+      "line": "ゆりかもめ",
+      "url": "https://www.homes.co.jp/chintai/tokyo/shinkotsuyurikamome-line/price/"
+    },
+    {
+      "id": "tokyorinkaikosokutetsudorinkai",
+      "name": "りんかい線",
+      "line": "りんかい線",
+      "url": "https://www.homes.co.jp/chintai/tokyo/tokyorinkaikosokutetsudorinkai-line/price/"
+    },
+    {
+      "id": "hokusotetsudo",
+      "name": "北総線",
+      "line": "北総線",
+      "url": "https://www.homes.co.jp/chintai/chiba/hokusotetsudo-line/price/"
+    }
+  ],
+  "records": [
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "南新宿",
+      "rent": 144600,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "参宮橋",
+      "rent": 124600,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "代々木八幡",
+      "rent": 147400,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "代々木上原",
+      "rent": 153500,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "東北沢",
+      "rent": 129900,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "下北沢",
+      "rent": 132300,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "世田谷代田",
+      "rent": 105600,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "梅ヶ丘",
+      "rent": 90100,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "豪徳寺",
+      "rent": 99000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "経堂",
+      "rent": 101000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "千歳船橋",
+      "rent": 116000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "祖師ヶ谷大蔵",
+      "rent": 93400,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "成城学園前",
+      "rent": 86000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "喜多見",
+      "rent": 99000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "狛江",
+      "rent": 73700,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "和泉多摩川",
+      "rent": 69400,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "登戸",
+      "rent": 91700,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "向ヶ丘遊園",
+      "rent": 87400,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "生田",
+      "rent": 78500,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "読売ランド前",
+      "rent": 77500,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "百合ヶ丘",
+      "rent": 69000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "新百合ヶ丘",
+      "rent": 82500,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "柿生",
+      "rent": 67700,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "鶴川",
+      "rent": 69000,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "玉川学園前",
+      "rent": 74800,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "町田",
+      "rent": 86300,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "相模大野",
+      "rent": 62300,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "小田急相模原",
+      "rent": 64600,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "相武台前",
+      "rent": 69200,
+      "source": "odakyuodawara"
+    },
+    {
+      "name": "東京",
+      "rent": 146000,
+      "source": "yamanote"
+    },
+    {
+      "name": "新橋",
+      "rent": 153000,
+      "source": "yamanote"
+    },
+    {
+      "name": "浜松町",
+      "rent": 156000,
+      "source": "yamanote"
+    },
+    {
+      "name": "田町",
+      "rent": 138900,
+      "source": "yamanote"
+    },
+    {
+      "name": "高輪ゲートウェイ",
+      "rent": 130300,
+      "source": "yamanote"
+    },
+    {
+      "name": "品川",
+      "rent": 181900,
+      "source": "yamanote"
+    },
+    {
+      "name": "大崎",
+      "rent": 118000,
+      "source": "yamanote"
+    },
+    {
+      "name": "五反田",
+      "rent": 127100,
+      "source": "yamanote"
+    },
+    {
+      "name": "目黒",
+      "rent": 156700,
+      "source": "yamanote"
+    },
+    {
+      "name": "恵比寿",
+      "rent": 168400,
+      "source": "yamanote"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "yamanote"
+    },
+    {
+      "name": "原宿",
+      "rent": 154500,
+      "source": "yamanote"
+    },
+    {
+      "name": "代々木",
+      "rent": 152700,
+      "source": "yamanote"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "yamanote"
+    },
+    {
+      "name": "新大久保",
+      "rent": 122200,
+      "source": "yamanote"
+    },
+    {
+      "name": "高田馬場",
+      "rent": 129900,
+      "source": "yamanote"
+    },
+    {
+      "name": "目白",
+      "rent": 124700,
+      "source": "yamanote"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "yamanote"
+    },
+    {
+      "name": "大塚",
+      "rent": 126700,
+      "source": "yamanote"
+    },
+    {
+      "name": "巣鴨",
+      "rent": 124500,
+      "source": "yamanote"
+    },
+    {
+      "name": "駒込",
+      "rent": 118900,
+      "source": "yamanote"
+    },
+    {
+      "name": "田端",
+      "rent": 115200,
+      "source": "yamanote"
+    },
+    {
+      "name": "西日暮里",
+      "rent": 122400,
+      "source": "yamanote"
+    },
+    {
+      "name": "日暮里",
+      "rent": 121500,
+      "source": "yamanote"
+    },
+    {
+      "name": "鶯谷",
+      "rent": 122800,
+      "source": "yamanote"
+    },
+    {
+      "name": "上野",
+      "rent": 141400,
+      "source": "yamanote"
+    },
+    {
+      "name": "御徒町",
+      "rent": 139900,
+      "source": "yamanote"
+    },
+    {
+      "name": "秋葉原",
+      "rent": 144400,
+      "source": "yamanote"
+    },
+    {
+      "name": "神田",
+      "rent": 154400,
+      "source": "yamanote"
+    },
+    {
+      "name": "東京",
+      "rent": 146000,
+      "source": "chuo"
+    },
+    {
+      "name": "神田",
+      "rent": 154400,
+      "source": "chuo"
+    },
+    {
+      "name": "御茶ノ水",
+      "rent": 151100,
+      "source": "chuo"
+    },
+    {
+      "name": "水道橋",
+      "rent": 152900,
+      "source": "chuo"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "chuo"
+    },
+    {
+      "name": "市ケ谷",
+      "rent": 160200,
+      "source": "chuo"
+    },
+    {
+      "name": "四ツ谷",
+      "rent": 149400,
+      "source": "chuo"
+    },
+    {
+      "name": "信濃町",
+      "rent": 127000,
+      "source": "chuo"
+    },
+    {
+      "name": "千駄ケ谷",
+      "rent": 150200,
+      "source": "chuo"
+    },
+    {
+      "name": "代々木",
+      "rent": 152700,
+      "source": "chuo"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "chuo"
+    },
+    {
+      "name": "大久保",
+      "rent": 129100,
+      "source": "chuo"
+    },
+    {
+      "name": "東中野",
+      "rent": 120600,
+      "source": "chuo"
+    },
+    {
+      "name": "中野",
+      "rent": 114100,
+      "source": "chuo"
+    },
+    {
+      "name": "高円寺",
+      "rent": 102500,
+      "source": "chuo"
+    },
+    {
+      "name": "阿佐ケ谷",
+      "rent": 112600,
+      "source": "chuo"
+    },
+    {
+      "name": "荻窪",
+      "rent": 107200,
+      "source": "chuo"
+    },
+    {
+      "name": "西荻窪",
+      "rent": 118100,
+      "source": "chuo"
+    },
+    {
+      "name": "吉祥寺",
+      "rent": 100500,
+      "source": "chuo"
+    },
+    {
+      "name": "三鷹",
+      "rent": 94600,
+      "source": "chuo"
+    },
+    {
+      "name": "武蔵境",
+      "rent": 80000,
+      "source": "chuo"
+    },
+    {
+      "name": "東小金井",
+      "rent": 77300,
+      "source": "chuo"
+    },
+    {
+      "name": "武蔵小金井",
+      "rent": 81300,
+      "source": "chuo"
+    },
+    {
+      "name": "国分寺",
+      "rent": 73800,
+      "source": "chuo"
+    },
+    {
+      "name": "西国分寺",
+      "rent": 79000,
+      "source": "chuo"
+    },
+    {
+      "name": "国立",
+      "rent": 90900,
+      "source": "chuo"
+    },
+    {
+      "name": "立川",
+      "rent": 107900,
+      "source": "chuo"
+    },
+    {
+      "name": "日野",
+      "rent": 76700,
+      "source": "chuo"
+    },
+    {
+      "name": "豊田",
+      "rent": 78900,
+      "source": "chuo"
+    },
+    {
+      "name": "八王子",
+      "rent": 79500,
+      "source": "chuo"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "keio"
+    },
+    {
+      "name": "初台",
+      "rent": 128500,
+      "source": "keio"
+    },
+    {
+      "name": "幡ヶ谷",
+      "rent": 120400,
+      "source": "keio"
+    },
+    {
+      "name": "笹塚",
+      "rent": 116500,
+      "source": "keio"
+    },
+    {
+      "name": "代田橋",
+      "rent": 106800,
+      "source": "keio"
+    },
+    {
+      "name": "明大前",
+      "rent": 104700,
+      "source": "keio"
+    },
+    {
+      "name": "下高井戸",
+      "rent": 92100,
+      "source": "keio"
+    },
+    {
+      "name": "桜上水",
+      "rent": 88900,
+      "source": "keio"
+    },
+    {
+      "name": "上北沢",
+      "rent": 101600,
+      "source": "keio"
+    },
+    {
+      "name": "八幡山",
+      "rent": 97200,
+      "source": "keio"
+    },
+    {
+      "name": "芦花公園",
+      "rent": 88000,
+      "source": "keio"
+    },
+    {
+      "name": "千歳烏山",
+      "rent": 93200,
+      "source": "keio"
+    },
+    {
+      "name": "仙川",
+      "rent": 92400,
+      "source": "keio"
+    },
+    {
+      "name": "つつじヶ丘",
+      "rent": 84800,
+      "source": "keio"
+    },
+    {
+      "name": "柴崎",
+      "rent": 77400,
+      "source": "keio"
+    },
+    {
+      "name": "国領",
+      "rent": 73600,
+      "source": "keio"
+    },
+    {
+      "name": "布田",
+      "rent": 65100,
+      "source": "keio"
+    },
+    {
+      "name": "調布",
+      "rent": 86500,
+      "source": "keio"
+    },
+    {
+      "name": "西調布",
+      "rent": 79900,
+      "source": "keio"
+    },
+    {
+      "name": "飛田給",
+      "rent": 85200,
+      "source": "keio"
+    },
+    {
+      "name": "武蔵野台",
+      "rent": 69800,
+      "source": "keio"
+    },
+    {
+      "name": "多磨霊園",
+      "rent": 77100,
+      "source": "keio"
+    },
+    {
+      "name": "東府中",
+      "rent": 79400,
+      "source": "keio"
+    },
+    {
+      "name": "府中",
+      "rent": 81000,
+      "source": "keio"
+    },
+    {
+      "name": "分倍河原",
+      "rent": 81800,
+      "source": "keio"
+    },
+    {
+      "name": "中河原",
+      "rent": 77800,
+      "source": "keio"
+    },
+    {
+      "name": "聖蹟桜ヶ丘",
+      "rent": 72100,
+      "source": "keio"
+    },
+    {
+      "name": "百草園",
+      "rent": 67900,
+      "source": "keio"
+    },
+    {
+      "name": "高幡不動",
+      "rent": 64200,
+      "source": "keio"
+    },
+    {
+      "name": "南平",
+      "rent": 59200,
+      "source": "keio"
+    },
+    {
+      "name": "北綾瀬",
+      "rent": 103200,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "綾瀬",
+      "rent": 96200,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "北千住",
+      "rent": 101500,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "町屋",
+      "rent": 94400,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "西日暮里",
+      "rent": 122400,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "千駄木",
+      "rent": 131900,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "根津",
+      "rent": 130200,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "湯島",
+      "rent": 148800,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "新御茶ノ水",
+      "rent": 148100,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "大手町",
+      "rent": 160700,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "国会議事堂前",
+      "rent": 177000,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "赤坂",
+      "rent": 168100,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "乃木坂",
+      "rent": 170700,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "表参道",
+      "rent": 164500,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "明治神宮前",
+      "rent": 179700,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "代々木公園",
+      "rent": 146500,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "代々木上原",
+      "rent": 153500,
+      "source": "tokyometrochiyoda"
+    },
+    {
+      "name": "門前仲町",
+      "rent": 138200,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "木場",
+      "rent": 128100,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "東陽町",
+      "rent": 126200,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "南砂町",
+      "rent": 114100,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "西葛西",
+      "rent": 96700,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "葛西",
+      "rent": 92500,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "浦安",
+      "rent": 96800,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "南行徳",
+      "rent": 87500,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "行徳",
+      "rent": 89400,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "妙典",
+      "rent": 85100,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "原木中山",
+      "rent": 86400,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "西船橋",
+      "rent": 88200,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "中野",
+      "rent": 114100,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "落合",
+      "rent": 107400,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "高田馬場",
+      "rent": 129900,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "早稲田",
+      "rent": 125600,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "神楽坂",
+      "rent": 136800,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "九段下",
+      "rent": 145400,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "竹橋",
+      "rent": 145000,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "大手町",
+      "rent": 160700,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "日本橋",
+      "rent": 160700,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "茅場町",
+      "rent": 146300,
+      "source": "tokyometrotozai"
+    },
+    {
+      "name": "宮崎台",
+      "rent": 91400,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "宮前平",
+      "rent": 86700,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "市が尾",
+      "rent": 81400,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "藤が丘",
+      "rent": 74800,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "青葉台",
+      "rent": 98000,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "田奈",
+      "rent": 88900,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "長津田",
+      "rent": 84200,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "南町田グランベリーパーク",
+      "rent": 82600,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "つきみ野",
+      "rent": 81200,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "中央林間",
+      "rent": 71200,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "池尻大橋",
+      "rent": 138700,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "三軒茶屋",
+      "rent": 126900,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "駒沢大学",
+      "rent": 121700,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "桜新町",
+      "rent": 122000,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "用賀",
+      "rent": 111200,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "二子玉川",
+      "rent": 121600,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "二子新地",
+      "rent": 113200,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "高津",
+      "rent": 96700,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "溝の口",
+      "rent": 92900,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "梶が谷",
+      "rent": 102100,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "鷺沼",
+      "rent": 91800,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "たまプラーザ",
+      "rent": 87400,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "あざみ野",
+      "rent": 80900,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "江田",
+      "rent": 76600,
+      "source": "tokyudenentoshi"
+    },
+    {
+      "name": "白楽",
+      "rent": 76700,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "東白楽",
+      "rent": 72400,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "反町",
+      "rent": 91700,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "横浜",
+      "rent": 109100,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "代官山",
+      "rent": 158300,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "中目黒",
+      "rent": 148500,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "祐天寺",
+      "rent": 130700,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "学芸大学",
+      "rent": 124400,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "都立大学",
+      "rent": 126800,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "自由が丘",
+      "rent": 138000,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "田園調布",
+      "rent": 108400,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "多摩川",
+      "rent": 100700,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "新丸子",
+      "rent": 114200,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "武蔵小杉",
+      "rent": 106900,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "元住吉",
+      "rent": 86800,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "日吉",
+      "rent": 72300,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "綱島",
+      "rent": 83800,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "大倉山",
+      "rent": 91600,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "菊名",
+      "rent": 73200,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "妙蓮寺",
+      "rent": 74700,
+      "source": "tokyutoyoko"
+    },
+    {
+      "name": "西所沢",
+      "rent": 74100,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "小手指",
+      "rent": 71600,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "狭山ヶ丘",
+      "rent": 63100,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "武蔵藤沢",
+      "rent": 64500,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "稲荷山公園",
+      "rent": 65300,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "入間市",
+      "rent": 61500,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "仏子",
+      "rent": 62100,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "元加治",
+      "rent": 65600,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "飯能",
+      "rent": 64900,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "椎名町",
+      "rent": 109600,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "東長崎",
+      "rent": 110900,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "江古田",
+      "rent": 97700,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "桜台",
+      "rent": 100200,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "練馬",
+      "rent": 97700,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "中村橋",
+      "rent": 96400,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "富士見台",
+      "rent": 90200,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "練馬高野台",
+      "rent": 90600,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "石神井公園",
+      "rent": 94000,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "大泉学園",
+      "rent": 82200,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "保谷",
+      "rent": 79900,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "ひばりヶ丘",
+      "rent": 79700,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "東久留米",
+      "rent": 73500,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "清瀬",
+      "rent": 71400,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "秋津",
+      "rent": 66300,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "所沢",
+      "rent": 65700,
+      "source": "seibuikebukuro"
+    },
+    {
+      "name": "新代田",
+      "rent": 110700,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "東松原",
+      "rent": 105500,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "明大前",
+      "rent": 104700,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "永福町",
+      "rent": 94700,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "西永福",
+      "rent": 87400,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "浜田山",
+      "rent": 97000,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "高井戸",
+      "rent": 103400,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "富士見ヶ丘",
+      "rent": 81400,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "久我山",
+      "rent": 86500,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "三鷹台",
+      "rent": 77200,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "井の頭公園",
+      "rent": 71600,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "吉祥寺",
+      "rent": 100500,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "神泉",
+      "rent": 153200,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "駒場東大前",
+      "rent": 135200,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "池ノ上",
+      "rent": 136700,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "下北沢",
+      "rent": 132300,
+      "source": "keioinokashira"
+    },
+    {
+      "name": "末広町",
+      "rent": 148700,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "神田",
+      "rent": 154400,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "三越前",
+      "rent": 140500,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "日本橋",
+      "rent": 160700,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "京橋",
+      "rent": 152300,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "銀座",
+      "rent": 153300,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "新橋",
+      "rent": 153000,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "虎ノ門",
+      "rent": 145300,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "溜池山王",
+      "rent": 170000,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "赤坂見附",
+      "rent": 181400,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "青山一丁目",
+      "rent": 180300,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "外苑前",
+      "rent": 164800,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "表参道",
+      "rent": 164500,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "浅草",
+      "rent": 130700,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "田原町",
+      "rent": 143900,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "稲荷町",
+      "rent": 149500,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "上野",
+      "rent": 141400,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "上野広小路",
+      "rent": 150400,
+      "source": "tokyometroginza"
+    },
+    {
+      "name": "九段下",
+      "rent": 145400,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "神保町",
+      "rent": 155700,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "大手町",
+      "rent": 160700,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "三越前",
+      "rent": 140500,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "水天宮前",
+      "rent": 140900,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "清澄白河",
+      "rent": 136000,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "住吉",
+      "rent": 129500,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "錦糸町",
+      "rent": 128700,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "押上",
+      "rent": 122600,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "表参道",
+      "rent": 164500,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "青山一丁目",
+      "rent": 180300,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "永田町",
+      "rent": 208400,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "半蔵門",
+      "rent": 198300,
+      "source": "tokyometrohanzomon"
+    },
+    {
+      "name": "北千住",
+      "rent": 101500,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "南千住",
+      "rent": 115000,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "三ノ輪",
+      "rent": 108900,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "入谷",
+      "rent": 131700,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "上野",
+      "rent": 141400,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "仲御徒町",
+      "rent": 135100,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "秋葉原",
+      "rent": 144400,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "小伝馬町",
+      "rent": 137500,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "人形町",
+      "rent": 153100,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "茅場町",
+      "rent": 146300,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "八丁堀",
+      "rent": 152100,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "築地",
+      "rent": 152000,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "東銀座",
+      "rent": 138500,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "銀座",
+      "rent": 153300,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "虎ノ門ヒルズ",
+      "rent": 161200,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "神谷町",
+      "rent": 211600,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "六本木",
+      "rent": 177500,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "広尾",
+      "rent": 153200,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "恵比寿",
+      "rent": 168400,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "中目黒",
+      "rent": 148500,
+      "source": "tokyometrohibiya"
+    },
+    {
+      "name": "和光市",
+      "rent": 80600,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "地下鉄成増",
+      "rent": 94900,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "地下鉄赤塚",
+      "rent": 93100,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "平和台",
+      "rent": 97600,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "氷川台",
+      "rent": 98100,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "小竹向原",
+      "rent": 91700,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "千川",
+      "rent": 94100,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "要町",
+      "rent": 119300,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "雑司が谷",
+      "rent": 134300,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "西早稲田",
+      "rent": 119600,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "東新宿",
+      "rent": 153900,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "新宿三丁目",
+      "rent": 162700,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "北参道",
+      "rent": 152100,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "明治神宮前",
+      "rent": 179700,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "tokyometrofukutoshin"
+    },
+    {
+      "name": "和光市",
+      "rent": 80600,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "地下鉄成増",
+      "rent": 94900,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "地下鉄赤塚",
+      "rent": 93100,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "平和台",
+      "rent": 97600,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "氷川台",
+      "rent": 98100,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "小竹向原",
+      "rent": 91700,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "千川",
+      "rent": 94100,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "要町",
+      "rent": 119300,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "東池袋",
+      "rent": 130700,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "護国寺",
+      "rent": 119100,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "江戸川橋",
+      "rent": 134000,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "市ケ谷",
+      "rent": 160200,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "麹町",
+      "rent": 196400,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "永田町",
+      "rent": 208400,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "銀座一丁目",
+      "rent": 190000,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "新富町",
+      "rent": 154500,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "月島",
+      "rent": 141200,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "豊洲",
+      "rent": 151000,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "辰巳",
+      "rent": 154500,
+      "source": "tokyometroyurakucho"
+    },
+    {
+      "name": "赤羽岩淵",
+      "rent": 106100,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "志茂",
+      "rent": 110500,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "王子神谷",
+      "rent": 93400,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "王子",
+      "rent": 110300,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "西ケ原",
+      "rent": 104600,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "駒込",
+      "rent": 118900,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "本駒込",
+      "rent": 109000,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "東大前",
+      "rent": 101800,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "後楽園",
+      "rent": 134100,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "市ケ谷",
+      "rent": 160200,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "四ツ谷",
+      "rent": 149400,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "永田町",
+      "rent": 208400,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "溜池山王",
+      "rent": 170000,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "六本木一丁目",
+      "rent": 185200,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "麻布十番",
+      "rent": 162900,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "白金高輪",
+      "rent": 146700,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "白金台",
+      "rent": 149200,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "目黒",
+      "rent": 156700,
+      "source": "tokyometronamboku"
+    },
+    {
+      "name": "新宿西口",
+      "rent": 158700,
+      "source": "toeioedo"
+    },
+    {
+      "name": "東新宿",
+      "rent": 153900,
+      "source": "toeioedo"
+    },
+    {
+      "name": "若松河田",
+      "rent": 126500,
+      "source": "toeioedo"
+    },
+    {
+      "name": "牛込柳町",
+      "rent": 126300,
+      "source": "toeioedo"
+    },
+    {
+      "name": "牛込神楽坂",
+      "rent": 143400,
+      "source": "toeioedo"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "toeioedo"
+    },
+    {
+      "name": "春日",
+      "rent": 134400,
+      "source": "toeioedo"
+    },
+    {
+      "name": "本郷三丁目",
+      "rent": 151600,
+      "source": "toeioedo"
+    },
+    {
+      "name": "上野御徒町",
+      "rent": 147100,
+      "source": "toeioedo"
+    },
+    {
+      "name": "新御徒町",
+      "rent": 141200,
+      "source": "toeioedo"
+    },
+    {
+      "name": "蔵前",
+      "rent": 133400,
+      "source": "toeioedo"
+    },
+    {
+      "name": "両国",
+      "rent": 129500,
+      "source": "toeioedo"
+    },
+    {
+      "name": "森下",
+      "rent": 129400,
+      "source": "toeioedo"
+    },
+    {
+      "name": "清澄白河",
+      "rent": 136000,
+      "source": "toeioedo"
+    },
+    {
+      "name": "門前仲町",
+      "rent": 138200,
+      "source": "toeioedo"
+    },
+    {
+      "name": "月島",
+      "rent": 141200,
+      "source": "toeioedo"
+    },
+    {
+      "name": "勝どき",
+      "rent": 147300,
+      "source": "toeioedo"
+    },
+    {
+      "name": "築地市場",
+      "rent": 199800,
+      "source": "toeioedo"
+    },
+    {
+      "name": "汐留",
+      "rent": 159100,
+      "source": "toeioedo"
+    },
+    {
+      "name": "大門",
+      "rent": 160300,
+      "source": "toeioedo"
+    },
+    {
+      "name": "赤羽橋",
+      "rent": 161400,
+      "source": "toeioedo"
+    },
+    {
+      "name": "麻布十番",
+      "rent": 162900,
+      "source": "toeioedo"
+    },
+    {
+      "name": "六本木",
+      "rent": 177500,
+      "source": "toeioedo"
+    },
+    {
+      "name": "青山一丁目",
+      "rent": 180300,
+      "source": "toeioedo"
+    },
+    {
+      "name": "国立競技場",
+      "rent": 150000,
+      "source": "toeioedo"
+    },
+    {
+      "name": "代々木",
+      "rent": 152700,
+      "source": "toeioedo"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "toeioedo"
+    },
+    {
+      "name": "都庁前",
+      "rent": 138000,
+      "source": "toeioedo"
+    },
+    {
+      "name": "西新宿五丁目",
+      "rent": 131500,
+      "source": "toeioedo"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "新宿三丁目",
+      "rent": 162700,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "曙橋",
+      "rent": 142600,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "市ヶ谷",
+      "rent": 160200,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "九段下",
+      "rent": 145400,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "神保町",
+      "rent": 155700,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "小川町",
+      "rent": 147900,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "岩本町",
+      "rent": 142700,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "馬喰横山",
+      "rent": 136800,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "浜町",
+      "rent": 144600,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "森下",
+      "rent": 129400,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "菊川",
+      "rent": 131200,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "住吉",
+      "rent": 129500,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "西大島",
+      "rent": 121800,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "大島",
+      "rent": 115100,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "東大島",
+      "rent": 110400,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "船堀",
+      "rent": 95700,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "一之江",
+      "rent": 101100,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "瑞江",
+      "rent": 82200,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "篠崎",
+      "rent": 92500,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "本八幡",
+      "rent": 94000,
+      "source": "toeishinjuku"
+    },
+    {
+      "name": "西馬込",
+      "rent": 111600,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "馬込",
+      "rent": 106100,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "中延",
+      "rent": 110400,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "戸越",
+      "rent": 119400,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "五反田",
+      "rent": 127100,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "高輪台",
+      "rent": 130100,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "泉岳寺",
+      "rent": 132700,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "三田",
+      "rent": 141200,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "大門",
+      "rent": 160300,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "新橋",
+      "rent": 153000,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "東銀座",
+      "rent": 138500,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "宝町",
+      "rent": 155900,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "日本橋",
+      "rent": 160700,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "人形町",
+      "rent": 153100,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "東日本橋",
+      "rent": 136900,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "浅草橋",
+      "rent": 134000,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "蔵前",
+      "rent": 133400,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "浅草",
+      "rent": 130700,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "本所吾妻橋",
+      "rent": 123800,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "押上",
+      "rent": 122600,
+      "source": "toeiasakusa"
+    },
+    {
+      "name": "目黒",
+      "rent": 156700,
+      "source": "toeimita"
+    },
+    {
+      "name": "白金台",
+      "rent": 149200,
+      "source": "toeimita"
+    },
+    {
+      "name": "白金高輪",
+      "rent": 146700,
+      "source": "toeimita"
+    },
+    {
+      "name": "三田",
+      "rent": 141200,
+      "source": "toeimita"
+    },
+    {
+      "name": "芝公園",
+      "rent": 145600,
+      "source": "toeimita"
+    },
+    {
+      "name": "御成門",
+      "rent": 154500,
+      "source": "toeimita"
+    },
+    {
+      "name": "内幸町",
+      "rent": 146100,
+      "source": "toeimita"
+    },
+    {
+      "name": "大手町",
+      "rent": 160700,
+      "source": "toeimita"
+    },
+    {
+      "name": "神保町",
+      "rent": 155700,
+      "source": "toeimita"
+    },
+    {
+      "name": "水道橋",
+      "rent": 152900,
+      "source": "toeimita"
+    },
+    {
+      "name": "春日",
+      "rent": 134400,
+      "source": "toeimita"
+    },
+    {
+      "name": "白山",
+      "rent": 108600,
+      "source": "toeimita"
+    },
+    {
+      "name": "千石",
+      "rent": 119900,
+      "source": "toeimita"
+    },
+    {
+      "name": "巣鴨",
+      "rent": 124500,
+      "source": "toeimita"
+    },
+    {
+      "name": "西巣鴨",
+      "rent": 113400,
+      "source": "toeimita"
+    },
+    {
+      "name": "新板橋",
+      "rent": 110400,
+      "source": "toeimita"
+    },
+    {
+      "name": "板橋区役所前",
+      "rent": 108300,
+      "source": "toeimita"
+    },
+    {
+      "name": "板橋本町",
+      "rent": 101100,
+      "source": "toeimita"
+    },
+    {
+      "name": "本蓮沼",
+      "rent": 99200,
+      "source": "toeimita"
+    },
+    {
+      "name": "志村坂上",
+      "rent": 94200,
+      "source": "toeimita"
+    },
+    {
+      "name": "志村三丁目",
+      "rent": 100200,
+      "source": "toeimita"
+    },
+    {
+      "name": "蓮根",
+      "rent": 88700,
+      "source": "toeimita"
+    },
+    {
+      "name": "西台",
+      "rent": 92200,
+      "source": "toeimita"
+    },
+    {
+      "name": "高島平",
+      "rent": 96200,
+      "source": "toeimita"
+    },
+    {
+      "name": "新高島平",
+      "rent": 87900,
+      "source": "toeimita"
+    },
+    {
+      "name": "西高島平",
+      "rent": 80300,
+      "source": "toeimita"
+    },
+    {
+      "name": "羽沢横浜国大",
+      "rent": 86500,
+      "source": "saikyo"
+    },
+    {
+      "name": "武蔵小杉",
+      "rent": 106900,
+      "source": "saikyo"
+    },
+    {
+      "name": "西大井",
+      "rent": 126400,
+      "source": "saikyo"
+    },
+    {
+      "name": "大崎",
+      "rent": 118000,
+      "source": "saikyo"
+    },
+    {
+      "name": "恵比寿",
+      "rent": 168400,
+      "source": "saikyo"
+    },
+    {
+      "name": "渋谷",
+      "rent": 167900,
+      "source": "saikyo"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "saikyo"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "saikyo"
+    },
+    {
+      "name": "板橋",
+      "rent": 116700,
+      "source": "saikyo"
+    },
+    {
+      "name": "十条",
+      "rent": 106100,
+      "source": "saikyo"
+    },
+    {
+      "name": "赤羽",
+      "rent": 106600,
+      "source": "saikyo"
+    },
+    {
+      "name": "北赤羽",
+      "rent": 83100,
+      "source": "saikyo"
+    },
+    {
+      "name": "浮間舟渡",
+      "rent": 88400,
+      "source": "saikyo"
+    },
+    {
+      "name": "戸田公園",
+      "rent": 87400,
+      "source": "saikyo"
+    },
+    {
+      "name": "戸田",
+      "rent": 83900,
+      "source": "saikyo"
+    },
+    {
+      "name": "北戸田",
+      "rent": 78100,
+      "source": "saikyo"
+    },
+    {
+      "name": "武蔵浦和",
+      "rent": 88600,
+      "source": "saikyo"
+    },
+    {
+      "name": "中浦和",
+      "rent": 76500,
+      "source": "saikyo"
+    },
+    {
+      "name": "南与野",
+      "rent": 74100,
+      "source": "saikyo"
+    },
+    {
+      "name": "与野本町",
+      "rent": 79200,
+      "source": "saikyo"
+    },
+    {
+      "name": "北与野",
+      "rent": 71300,
+      "source": "saikyo"
+    },
+    {
+      "name": "大宮",
+      "rent": 86500,
+      "source": "saikyo"
+    },
+    {
+      "name": "日進",
+      "rent": 70300,
+      "source": "saikyo"
+    },
+    {
+      "name": "西大宮",
+      "rent": 66800,
+      "source": "saikyo"
+    },
+    {
+      "name": "指扇",
+      "rent": 67300,
+      "source": "saikyo"
+    },
+    {
+      "name": "南古谷",
+      "rent": 57600,
+      "source": "saikyo"
+    },
+    {
+      "name": "川越",
+      "rent": 72700,
+      "source": "saikyo"
+    },
+    {
+      "name": "千葉",
+      "rent": 77600,
+      "source": "sobu"
+    },
+    {
+      "name": "西千葉",
+      "rent": 75600,
+      "source": "sobu"
+    },
+    {
+      "name": "稲毛",
+      "rent": 75700,
+      "source": "sobu"
+    },
+    {
+      "name": "新検見川",
+      "rent": 70400,
+      "source": "sobu"
+    },
+    {
+      "name": "幕張",
+      "rent": 77600,
+      "source": "sobu"
+    },
+    {
+      "name": "幕張本郷",
+      "rent": 79400,
+      "source": "sobu"
+    },
+    {
+      "name": "津田沼",
+      "rent": 75200,
+      "source": "sobu"
+    },
+    {
+      "name": "東船橋",
+      "rent": 71000,
+      "source": "sobu"
+    },
+    {
+      "name": "船橋",
+      "rent": 87500,
+      "source": "sobu"
+    },
+    {
+      "name": "西船橋",
+      "rent": 88200,
+      "source": "sobu"
+    },
+    {
+      "name": "下総中山",
+      "rent": 80900,
+      "source": "sobu"
+    },
+    {
+      "name": "本八幡",
+      "rent": 96400,
+      "source": "sobu"
+    },
+    {
+      "name": "市川",
+      "rent": 90700,
+      "source": "sobu"
+    },
+    {
+      "name": "小岩",
+      "rent": 89500,
+      "source": "sobu"
+    },
+    {
+      "name": "新小岩",
+      "rent": 98700,
+      "source": "sobu"
+    },
+    {
+      "name": "平井",
+      "rent": 87900,
+      "source": "sobu"
+    },
+    {
+      "name": "亀戸",
+      "rent": 121700,
+      "source": "sobu"
+    },
+    {
+      "name": "錦糸町",
+      "rent": 128700,
+      "source": "sobu"
+    },
+    {
+      "name": "両国",
+      "rent": 129500,
+      "source": "sobu"
+    },
+    {
+      "name": "浅草橋",
+      "rent": 134000,
+      "source": "sobu"
+    },
+    {
+      "name": "秋葉原",
+      "rent": 144400,
+      "source": "sobu"
+    },
+    {
+      "name": "御茶ノ水",
+      "rent": 151100,
+      "source": "sobu"
+    },
+    {
+      "name": "水道橋",
+      "rent": 152900,
+      "source": "sobu"
+    },
+    {
+      "name": "飯田橋",
+      "rent": 156700,
+      "source": "sobu"
+    },
+    {
+      "name": "市ケ谷",
+      "rent": 160200,
+      "source": "sobu"
+    },
+    {
+      "name": "四ツ谷",
+      "rent": 149400,
+      "source": "sobu"
+    },
+    {
+      "name": "信濃町",
+      "rent": 127000,
+      "source": "sobu"
+    },
+    {
+      "name": "千駄ケ谷",
+      "rent": 150200,
+      "source": "sobu"
+    },
+    {
+      "name": "代々木",
+      "rent": 152700,
+      "source": "sobu"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "sobu"
+    },
+    {
+      "name": "品川",
+      "rent": 181900,
+      "source": "joban"
+    },
+    {
+      "name": "新橋",
+      "rent": 153000,
+      "source": "joban"
+    },
+    {
+      "name": "東京",
+      "rent": 146000,
+      "source": "joban"
+    },
+    {
+      "name": "上野",
+      "rent": 141400,
+      "source": "joban"
+    },
+    {
+      "name": "日暮里",
+      "rent": 121500,
+      "source": "joban"
+    },
+    {
+      "name": "三河島",
+      "rent": 100300,
+      "source": "joban"
+    },
+    {
+      "name": "南千住",
+      "rent": 115000,
+      "source": "joban"
+    },
+    {
+      "name": "北千住",
+      "rent": 101500,
+      "source": "joban"
+    },
+    {
+      "name": "綾瀬",
+      "rent": 96200,
+      "source": "joban"
+    },
+    {
+      "name": "亀有",
+      "rent": 90900,
+      "source": "joban"
+    },
+    {
+      "name": "金町",
+      "rent": 78400,
+      "source": "joban"
+    },
+    {
+      "name": "松戸",
+      "rent": 82500,
+      "source": "joban"
+    },
+    {
+      "name": "北松戸",
+      "rent": 75400,
+      "source": "joban"
+    },
+    {
+      "name": "馬橋",
+      "rent": 70600,
+      "source": "joban"
+    },
+    {
+      "name": "新松戸",
+      "rent": 69000,
+      "source": "joban"
+    },
+    {
+      "name": "北小金",
+      "rent": 67500,
+      "source": "joban"
+    },
+    {
+      "name": "南柏",
+      "rent": 71400,
+      "source": "joban"
+    },
+    {
+      "name": "柏",
+      "rent": 78200,
+      "source": "joban"
+    },
+    {
+      "name": "北柏",
+      "rent": 64900,
+      "source": "joban"
+    },
+    {
+      "name": "我孫子",
+      "rent": 70400,
+      "source": "joban"
+    },
+    {
+      "name": "天王台",
+      "rent": 64300,
+      "source": "joban"
+    },
+    {
+      "name": "西武新宿",
+      "rent": 134500,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "高田馬場",
+      "rent": 129900,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "下落合",
+      "rent": 114000,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "中井",
+      "rent": 107300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "新井薬師前",
+      "rent": 108900,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "沼袋",
+      "rent": 95400,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "野方",
+      "rent": 86300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "都立家政",
+      "rent": 86100,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "鷺ノ宮",
+      "rent": 84900,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "下井草",
+      "rent": 78200,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "井荻",
+      "rent": 79300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "上井草",
+      "rent": 75900,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "上石神井",
+      "rent": 91800,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "武蔵関",
+      "rent": 91400,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "東伏見",
+      "rent": 77700,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "西武柳沢",
+      "rent": 72100,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "田無",
+      "rent": 73400,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "花小金井",
+      "rent": 78200,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "小平",
+      "rent": 62300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "久米川",
+      "rent": 69700,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "東村山",
+      "rent": 68800,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "所沢",
+      "rent": 65700,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "航空公園",
+      "rent": 63600,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "新所沢",
+      "rent": 64300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "入曽",
+      "rent": 65100,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "狭山市",
+      "rent": 65700,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "新狭山",
+      "rent": 64500,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "南大塚",
+      "rent": 62800,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "本川越",
+      "rent": 65300,
+      "source": "seibushinjuku"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "北池袋",
+      "rent": 109200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "下板橋",
+      "rent": 114200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "大山",
+      "rent": 100500,
+      "source": "tobutojo"
+    },
+    {
+      "name": "中板橋",
+      "rent": 94900,
+      "source": "tobutojo"
+    },
+    {
+      "name": "ときわ台",
+      "rent": 96500,
+      "source": "tobutojo"
+    },
+    {
+      "name": "上板橋",
+      "rent": 87700,
+      "source": "tobutojo"
+    },
+    {
+      "name": "東武練馬",
+      "rent": 93800,
+      "source": "tobutojo"
+    },
+    {
+      "name": "下赤塚",
+      "rent": 92100,
+      "source": "tobutojo"
+    },
+    {
+      "name": "成増",
+      "rent": 97000,
+      "source": "tobutojo"
+    },
+    {
+      "name": "和光市",
+      "rent": 80600,
+      "source": "tobutojo"
+    },
+    {
+      "name": "朝霞",
+      "rent": 71200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "朝霞台",
+      "rent": 72900,
+      "source": "tobutojo"
+    },
+    {
+      "name": "志木",
+      "rent": 74400,
+      "source": "tobutojo"
+    },
+    {
+      "name": "みずほ台",
+      "rent": 65400,
+      "source": "tobutojo"
+    },
+    {
+      "name": "鶴瀬",
+      "rent": 72200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "ふじみ野",
+      "rent": 69600,
+      "source": "tobutojo"
+    },
+    {
+      "name": "上福岡",
+      "rent": 65600,
+      "source": "tobutojo"
+    },
+    {
+      "name": "新河岸",
+      "rent": 63900,
+      "source": "tobutojo"
+    },
+    {
+      "name": "川越",
+      "rent": 72700,
+      "source": "tobutojo"
+    },
+    {
+      "name": "川越市",
+      "rent": 63300,
+      "source": "tobutojo"
+    },
+    {
+      "name": "霞ヶ関",
+      "rent": 57200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "鶴ヶ島",
+      "rent": 57800,
+      "source": "tobutojo"
+    },
+    {
+      "name": "若葉",
+      "rent": 64900,
+      "source": "tobutojo"
+    },
+    {
+      "name": "坂戸",
+      "rent": 57100,
+      "source": "tobutojo"
+    },
+    {
+      "name": "北坂戸",
+      "rent": 60100,
+      "source": "tobutojo"
+    },
+    {
+      "name": "高坂",
+      "rent": 54500,
+      "source": "tobutojo"
+    },
+    {
+      "name": "東松山",
+      "rent": 54600,
+      "source": "tobutojo"
+    },
+    {
+      "name": "森林公園",
+      "rent": 54000,
+      "source": "tobutojo"
+    },
+    {
+      "name": "つきのわ",
+      "rent": 57200,
+      "source": "tobutojo"
+    },
+    {
+      "name": "泉岳寺",
+      "rent": 132700,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "品川",
+      "rent": 181900,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "北品川",
+      "rent": 131200,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "新馬場",
+      "rent": 125600,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "青物横丁",
+      "rent": 140100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "鮫洲",
+      "rent": 107600,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "立会川",
+      "rent": 119100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "大森海岸",
+      "rent": 118800,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "平和島",
+      "rent": 100200,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "大森町",
+      "rent": 106100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "梅屋敷",
+      "rent": 105100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "京急蒲田",
+      "rent": 107100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "雑色",
+      "rent": 95700,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "六郷土手",
+      "rent": 99300,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "京急川崎",
+      "rent": 102000,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "八丁畷",
+      "rent": 89100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "鶴見市場",
+      "rent": 89900,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "京急鶴見",
+      "rent": 96700,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "花月総持寺",
+      "rent": 80800,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "生麦",
+      "rent": 78300,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "京急新子安",
+      "rent": 80000,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "子安",
+      "rent": 82100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "神奈川新町",
+      "rent": 84400,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "京急東神奈川",
+      "rent": 94900,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "神奈川",
+      "rent": 97200,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "横浜",
+      "rent": 109100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "戸部",
+      "rent": 87600,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "日ノ出町",
+      "rent": 94400,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "黄金町",
+      "rent": 93000,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "南太田",
+      "rent": 75800,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "川崎",
+      "rent": 100200,
+      "source": "nambu"
+    },
+    {
+      "name": "浜川崎",
+      "rent": 67500,
+      "source": "nambu"
+    },
+    {
+      "name": "小田栄",
+      "rent": 70500,
+      "source": "nambu"
+    },
+    {
+      "name": "川崎新町",
+      "rent": 80300,
+      "source": "nambu"
+    },
+    {
+      "name": "八丁畷",
+      "rent": 91000,
+      "source": "nambu"
+    },
+    {
+      "name": "尻手",
+      "rent": 93200,
+      "source": "nambu"
+    },
+    {
+      "name": "矢向",
+      "rent": 83500,
+      "source": "nambu"
+    },
+    {
+      "name": "鹿島田",
+      "rent": 97800,
+      "source": "nambu"
+    },
+    {
+      "name": "平間",
+      "rent": 85600,
+      "source": "nambu"
+    },
+    {
+      "name": "向河原",
+      "rent": 98900,
+      "source": "nambu"
+    },
+    {
+      "name": "武蔵小杉",
+      "rent": 106300,
+      "source": "nambu"
+    },
+    {
+      "name": "武蔵中原",
+      "rent": 108900,
+      "source": "nambu"
+    },
+    {
+      "name": "武蔵新城",
+      "rent": 91300,
+      "source": "nambu"
+    },
+    {
+      "name": "武蔵溝ノ口",
+      "rent": 91200,
+      "source": "nambu"
+    },
+    {
+      "name": "津田山",
+      "rent": 84300,
+      "source": "nambu"
+    },
+    {
+      "name": "久地",
+      "rent": 83800,
+      "source": "nambu"
+    },
+    {
+      "name": "宿河原",
+      "rent": 87000,
+      "source": "nambu"
+    },
+    {
+      "name": "登戸",
+      "rent": 92200,
+      "source": "nambu"
+    },
+    {
+      "name": "中野島",
+      "rent": 75800,
+      "source": "nambu"
+    },
+    {
+      "name": "稲田堤",
+      "rent": 67000,
+      "source": "nambu"
+    },
+    {
+      "name": "矢野口",
+      "rent": 69400,
+      "source": "nambu"
+    },
+    {
+      "name": "稲城長沼",
+      "rent": 65900,
+      "source": "nambu"
+    },
+    {
+      "name": "南多摩",
+      "rent": 76900,
+      "source": "nambu"
+    },
+    {
+      "name": "府中本町",
+      "rent": 81100,
+      "source": "nambu"
+    },
+    {
+      "name": "分倍河原",
+      "rent": 80200,
+      "source": "nambu"
+    },
+    {
+      "name": "西府",
+      "rent": 71000,
+      "source": "nambu"
+    },
+    {
+      "name": "谷保",
+      "rent": 74700,
+      "source": "nambu"
+    },
+    {
+      "name": "矢川",
+      "rent": 71800,
+      "source": "nambu"
+    },
+    {
+      "name": "西国立",
+      "rent": 77200,
+      "source": "nambu"
+    },
+    {
+      "name": "立川",
+      "rent": 108800,
+      "source": "nambu"
+    },
+    {
+      "name": "八王子",
+      "rent": 79500,
+      "source": "yokohama"
+    },
+    {
+      "name": "片倉",
+      "rent": 65100,
+      "source": "yokohama"
+    },
+    {
+      "name": "八王子みなみ野",
+      "rent": 70300,
+      "source": "yokohama"
+    },
+    {
+      "name": "相原",
+      "rent": 60500,
+      "source": "yokohama"
+    },
+    {
+      "name": "橋本",
+      "rent": 65800,
+      "source": "yokohama"
+    },
+    {
+      "name": "相模原",
+      "rent": 89500,
+      "source": "yokohama"
+    },
+    {
+      "name": "矢部",
+      "rent": 58300,
+      "source": "yokohama"
+    },
+    {
+      "name": "淵野辺",
+      "rent": 61000,
+      "source": "yokohama"
+    },
+    {
+      "name": "古淵",
+      "rent": 62100,
+      "source": "yokohama"
+    },
+    {
+      "name": "町田",
+      "rent": 86300,
+      "source": "yokohama"
+    },
+    {
+      "name": "長津田",
+      "rent": 84200,
+      "source": "yokohama"
+    },
+    {
+      "name": "十日市場",
+      "rent": 82100,
+      "source": "yokohama"
+    },
+    {
+      "name": "中山",
+      "rent": 74800,
+      "source": "yokohama"
+    },
+    {
+      "name": "鴨居",
+      "rent": 78900,
+      "source": "yokohama"
+    },
+    {
+      "name": "小机",
+      "rent": 67700,
+      "source": "yokohama"
+    },
+    {
+      "name": "新横浜",
+      "rent": 101600,
+      "source": "yokohama"
+    },
+    {
+      "name": "菊名",
+      "rent": 73200,
+      "source": "yokohama"
+    },
+    {
+      "name": "大口",
+      "rent": 76400,
+      "source": "yokohama"
+    },
+    {
+      "name": "東神奈川",
+      "rent": 92800,
+      "source": "yokohama"
+    },
+    {
+      "name": "横浜",
+      "rent": 109100,
+      "source": "yokohama"
+    },
+    {
+      "name": "桜木町",
+      "rent": 91900,
+      "source": "yokohama"
+    },
+    {
+      "name": "関内",
+      "rent": 102600,
+      "source": "yokohama"
+    },
+    {
+      "name": "石川町",
+      "rent": 90800,
+      "source": "yokohama"
+    },
+    {
+      "name": "山手",
+      "rent": 64900,
+      "source": "yokohama"
+    },
+    {
+      "name": "根岸",
+      "rent": 73600,
+      "source": "yokohama"
+    },
+    {
+      "name": "磯子",
+      "rent": 87900,
+      "source": "yokohama"
+    },
+    {
+      "name": "新杉田",
+      "rent": 76900,
+      "source": "yokohama"
+    },
+    {
+      "name": "洋光台",
+      "rent": 85800,
+      "source": "yokohama"
+    },
+    {
+      "name": "港南台",
+      "rent": 74100,
+      "source": "yokohama"
+    },
+    {
+      "name": "本郷台",
+      "rent": 77800,
+      "source": "yokohama"
+    },
+    {
+      "name": "浅草",
+      "rent": 130700,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "とうきょうスカイツリー",
+      "rent": 126100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "押上",
+      "rent": 122600,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "曳舟",
+      "rent": 119100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "東向島",
+      "rent": 104800,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "鐘ヶ淵",
+      "rent": 90600,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "堀切",
+      "rent": 83900,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "牛田",
+      "rent": 87400,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "北千住",
+      "rent": 101500,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "小菅",
+      "rent": 79900,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "五反野",
+      "rent": 81800,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "梅島",
+      "rent": 81100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "西新井",
+      "rent": 86100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "竹ノ塚",
+      "rent": 97300,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "谷塚",
+      "rent": 67300,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "草加",
+      "rent": 79300,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "獨協大学前",
+      "rent": 73000,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "新田",
+      "rent": 61000,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "蒲生",
+      "rent": 74700,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "新越谷",
+      "rent": 72600,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "越谷",
+      "rent": 73500,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "北越谷",
+      "rent": 73400,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "大袋",
+      "rent": 61600,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "せんげん台",
+      "rent": 59000,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "武里",
+      "rent": 51300,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "一ノ割",
+      "rent": 57200,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "春日部",
+      "rent": 62900,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "北春日部",
+      "rent": 62100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "姫宮",
+      "rent": 76100,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "東武動物公園",
+      "rent": 60500,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "日暮里",
+      "rent": 121500,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "新三河島",
+      "rent": 108300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成町屋",
+      "rent": 92400,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "千住大橋",
+      "rent": 100800,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成関屋",
+      "rent": 89900,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "堀切菖蒲園",
+      "rent": 84500,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "お花茶屋",
+      "rent": 88600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "青砥",
+      "rent": 99100,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成高砂",
+      "rent": 78700,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成小岩",
+      "rent": 74300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "江戸川",
+      "rent": 77700,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "国府台",
+      "rent": 80300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "市川真間",
+      "rent": 86000,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "菅野",
+      "rent": 70000,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成八幡",
+      "rent": 88600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "鬼越",
+      "rent": 76700,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成中山",
+      "rent": 74100,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "東中山",
+      "rent": 82300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成西船",
+      "rent": 85300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "海神",
+      "rent": 79100,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成船橋",
+      "rent": 84200,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "大神宮下",
+      "rent": 76900,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "船橋競馬場",
+      "rent": 75500,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "谷津",
+      "rent": 63500,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成津田沼",
+      "rent": 66800,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成大久保",
+      "rent": 67400,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "実籾",
+      "rent": 56300,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "八千代台",
+      "rent": 66900,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成大和田",
+      "rent": 59000,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "勝田台",
+      "rent": 63600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "池袋",
+      "rent": 131200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新大塚",
+      "rent": 118300,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "茗荷谷",
+      "rent": 123900,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "後楽園",
+      "rent": 134100,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "本郷三丁目",
+      "rent": 151600,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "御茶ノ水",
+      "rent": 151100,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "淡路町",
+      "rent": 153900,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "大手町",
+      "rent": 160700,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "東京",
+      "rent": 146000,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "銀座",
+      "rent": 153300,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "国会議事堂前",
+      "rent": 177000,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "赤坂見附",
+      "rent": 181400,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "四ツ谷",
+      "rent": 149400,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "四谷三丁目",
+      "rent": 146200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新宿御苑前",
+      "rent": 159300,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新宿三丁目",
+      "rent": 162700,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新宿",
+      "rent": 144200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "西新宿",
+      "rent": 151400,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "中野坂上",
+      "rent": 129200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新中野",
+      "rent": 108800,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "東高円寺",
+      "rent": 105300,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "新高円寺",
+      "rent": 104000,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "南阿佐ケ谷",
+      "rent": 108200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "荻窪",
+      "rent": 107200,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "中野新橋",
+      "rent": 115100,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "中野富士見町",
+      "rent": 117900,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "方南町",
+      "rent": 111800,
+      "source": "tokyometromarunochi"
+    },
+    {
+      "name": "南浦和",
+      "rent": 93200,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "蕨",
+      "rent": 79000,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "西川口",
+      "rent": 83300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "川口",
+      "rent": 91500,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "赤羽",
+      "rent": 106600,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "東十条",
+      "rent": 99300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "王子",
+      "rent": 110300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "上中里",
+      "rent": 107300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "田端",
+      "rent": 115200,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "西日暮里",
+      "rent": 122400,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "日暮里",
+      "rent": 121500,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "鶯谷",
+      "rent": 122800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "上野",
+      "rent": 141400,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "御徒町",
+      "rent": 139900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "秋葉原",
+      "rent": 144400,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "神田",
+      "rent": 154400,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "東京",
+      "rent": 146000,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "新橋",
+      "rent": 153000,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "浜松町",
+      "rent": 156000,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "田町",
+      "rent": 138900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "高輪ゲートウェイ",
+      "rent": 130300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "品川",
+      "rent": 181900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "大井町",
+      "rent": 133300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "大森",
+      "rent": 120300,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "蒲田",
+      "rent": 125900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "川崎",
+      "rent": 100800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "鶴見",
+      "rent": 100900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "新子安",
+      "rent": 81600,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "東神奈川",
+      "rent": 92800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "横浜",
+      "rent": 109100,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "横浜",
+      "rent": 111200,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "平沼橋",
+      "rent": 96400,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "西横浜",
+      "rent": 79700,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "天王町",
+      "rent": 73700,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "星川",
+      "rent": 70400,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "和田町",
+      "rent": 70200,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "上星川",
+      "rent": 66900,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "西谷",
+      "rent": 77400,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "鶴ケ峰",
+      "rent": 68500,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "二俣川",
+      "rent": 74200,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "希望ケ丘",
+      "rent": 76200,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "三ツ境",
+      "rent": 69300,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "瀬谷",
+      "rent": 76600,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "大和",
+      "rent": 79400,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "相模大塚",
+      "rent": 79300,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "さがみ野",
+      "rent": 70200,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "かしわ台",
+      "rent": 63400,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "海老名",
+      "rent": 82100,
+      "source": "sotetsuhonsen"
+    },
+    {
+      "name": "大久保",
+      "rent": 129100,
+      "source": "sobu"
+    },
+    {
+      "name": "東中野",
+      "rent": 120600,
+      "source": "sobu"
+    },
+    {
+      "name": "中野",
+      "rent": 114100,
+      "source": "sobu"
+    },
+    {
+      "name": "高円寺",
+      "rent": 102500,
+      "source": "sobu"
+    },
+    {
+      "name": "阿佐ケ谷",
+      "rent": 112600,
+      "source": "sobu"
+    },
+    {
+      "name": "荻窪",
+      "rent": 107200,
+      "source": "sobu"
+    },
+    {
+      "name": "西荻窪",
+      "rent": 118100,
+      "source": "sobu"
+    },
+    {
+      "name": "吉祥寺",
+      "rent": 100500,
+      "source": "sobu"
+    },
+    {
+      "name": "三鷹",
+      "rent": 94600,
+      "source": "sobu"
+    },
+    {
+      "name": "武蔵嵐山",
+      "rent": 51600,
+      "source": "tobutojo"
+    },
+    {
+      "name": "井土ヶ谷",
+      "rent": 73100,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "弘明寺",
+      "rent": 69800,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "上大岡",
+      "rent": 74500,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "屏風浦",
+      "rent": 64800,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "杉田",
+      "rent": 75000,
+      "source": "keikyuhonsen"
+    },
+    {
+      "name": "大船",
+      "rent": 83000,
+      "source": "yokohama"
+    },
+    {
+      "name": "和戸",
+      "rent": 70400,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "久喜",
+      "rent": 58500,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "鷲宮",
+      "rent": 49300,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "花崎",
+      "rent": 56700,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "加須",
+      "rent": 57700,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "南羽生",
+      "rent": 46000,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "羽生",
+      "rent": 62800,
+      "source": "tobuisesaki"
+    },
+    {
+      "name": "志津",
+      "rent": 61900,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "ユーカリが丘",
+      "rent": 56600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成臼井",
+      "rent": 78400,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成佐倉",
+      "rent": 65500,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成酒々井",
+      "rent": 60600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "宗吾参道",
+      "rent": 73600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "公津の杜",
+      "rent": 77600,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "京成成田",
+      "rent": 73700,
+      "source": "keiseihonsen"
+    },
+    {
+      "name": "桜木町",
+      "rent": 91900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "関内",
+      "rent": 102600,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "石川町",
+      "rent": 90800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "山手",
+      "rent": 64900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "根岸",
+      "rent": 73600,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "磯子",
+      "rent": 87900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "新杉田",
+      "rent": 76900,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "洋光台",
+      "rent": 85800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "港南台",
+      "rent": 74100,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "本郷台",
+      "rent": 77800,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "大船",
+      "rent": 83000,
+      "source": "keihintohokunegishi"
+    },
+    {
+      "name": "東京",
+      "rent": 146300,
+      "source": "keiyo"
+    },
+    {
+      "name": "八丁堀",
+      "rent": 152400,
+      "source": "keiyo"
+    },
+    {
+      "name": "越中島",
+      "rent": 140100,
+      "source": "keiyo"
+    },
+    {
+      "name": "潮見",
+      "rent": 108400,
+      "source": "keiyo"
+    },
+    {
+      "name": "舞浜",
+      "rent": 93700,
+      "source": "keiyo"
+    },
+    {
+      "name": "新浦安",
+      "rent": 79200,
+      "source": "keiyo"
+    },
+    {
+      "name": "稲毛海岸",
+      "rent": 81600,
+      "source": "keiyo"
+    },
+    {
+      "name": "千葉みなと",
+      "rent": 71300,
+      "source": "keiyo"
+    },
+    {
+      "name": "蘇我",
+      "rent": 68500,
+      "source": "keiyo"
+    },
+    {
+      "name": "府中本町",
+      "rent": 81100,
+      "source": "musashino"
+    },
+    {
+      "name": "西国分寺",
+      "rent": 78500,
+      "source": "musashino"
+    },
+    {
+      "name": "新小平",
+      "rent": 57500,
+      "source": "musashino"
+    },
+    {
+      "name": "新秋津",
+      "rent": 64300,
+      "source": "musashino"
+    },
+    {
+      "name": "東所沢",
+      "rent": 71000,
+      "source": "musashino"
+    },
+    {
+      "name": "新座",
+      "rent": 67300,
+      "source": "musashino"
+    },
+    {
+      "name": "北朝霞",
+      "rent": 67000,
+      "source": "musashino"
+    },
+    {
+      "name": "西浦和",
+      "rent": 72800,
+      "source": "musashino"
+    },
+    {
+      "name": "武蔵浦和",
+      "rent": 84400,
+      "source": "musashino"
+    },
+    {
+      "name": "南浦和",
+      "rent": 92300,
+      "source": "musashino"
+    },
+    {
+      "name": "東浦和",
+      "rent": 78500,
+      "source": "musashino"
+    },
+    {
+      "name": "東川口",
+      "rent": 67100,
+      "source": "musashino"
+    },
+    {
+      "name": "南越谷",
+      "rent": 73500,
+      "source": "musashino"
+    },
+    {
+      "name": "越谷レイクタウン",
+      "rent": 73100,
+      "source": "musashino"
+    },
+    {
+      "name": "吉川",
+      "rent": 77500,
+      "source": "musashino"
+    },
+    {
+      "name": "吉川美南",
+      "rent": 73400,
+      "source": "musashino"
+    },
+    {
+      "name": "三郷",
+      "rent": 77300,
+      "source": "musashino"
+    },
+    {
+      "name": "南流山",
+      "rent": 73600,
+      "source": "musashino"
+    },
+    {
+      "name": "新松戸",
+      "rent": 70100,
+      "source": "musashino"
+    },
+    {
+      "name": "新八柱",
+      "rent": 65300,
+      "source": "musashino"
+    },
+    {
+      "name": "東松戸",
+      "rent": 71600,
+      "source": "musashino"
+    },
+    {
+      "name": "船橋法典",
+      "rent": 75600,
+      "source": "musashino"
+    },
+    {
+      "name": "西船橋",
+      "rent": 89200,
+      "source": "musashino"
+    },
+    {
+      "name": "秋葉原",
+      "rent": 144400,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "新御徒町",
+      "rent": 141200,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "浅草",
+      "rent": 130700,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "南千住",
+      "rent": 115000,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "北千住",
+      "rent": 101500,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "青井",
+      "rent": 80200,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "六町",
+      "rent": 85900,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "八潮",
+      "rent": 75500,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "三郷中央",
+      "rent": 71500,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "南流山",
+      "rent": 73400,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "流山セントラルパーク",
+      "rent": 84400,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "流山おおたかの森",
+      "rent": 90500,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "柏の葉キャンパス",
+      "rent": 98300,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "柏たなか",
+      "rent": 75000,
+      "source": "tsukubaexpress"
+    },
+    {
+      "name": "目黒",
+      "rent": 156700,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "不動前",
+      "rent": 131800,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "武蔵小山",
+      "rent": 131400,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "西小山",
+      "rent": 118300,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "洗足",
+      "rent": 116400,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "大岡山",
+      "rent": 119000,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "奥沢",
+      "rent": 118300,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "田園調布",
+      "rent": 108400,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "多摩川",
+      "rent": 100700,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "新丸子",
+      "rent": 114200,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "武蔵小杉",
+      "rent": 106900,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "元住吉",
+      "rent": 86800,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "日吉",
+      "rent": 72300,
+      "source": "tokyumeguro"
+    },
+    {
+      "name": "大井町",
+      "rent": 133300,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "下神明",
+      "rent": 120600,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "戸越公園",
+      "rent": 120700,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "中延",
+      "rent": 110400,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "荏原町",
+      "rent": 103300,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "旗の台",
+      "rent": 106800,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "北千束",
+      "rent": 115200,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "大岡山",
+      "rent": 119000,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "緑が丘",
+      "rent": 107800,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "自由が丘",
+      "rent": 138000,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "九品仏",
+      "rent": 120300,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "尾山台",
+      "rent": 112900,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "等々力",
+      "rent": 113400,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "上野毛",
+      "rent": 102700,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "二子玉川",
+      "rent": 121600,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "二子新地",
+      "rent": 113200,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "高津",
+      "rent": 96700,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "溝の口",
+      "rent": 92900,
+      "source": "tokyuoimachi"
+    },
+    {
+      "name": "調布",
+      "rent": 84500,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王多摩川",
+      "rent": 70000,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王稲田堤",
+      "rent": 66900,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王よみうりランド",
+      "rent": 60300,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "稲城",
+      "rent": 67800,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "若葉台",
+      "rent": 113100,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王永山",
+      "rent": 73200,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王多摩センター",
+      "rent": 71200,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "京王堀之内",
+      "rent": 69800,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "南大沢",
+      "rent": 52900,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "多摩境",
+      "rent": 56100,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "橋本",
+      "rent": 65200,
+      "source": "keiosagamihara"
+    },
+    {
+      "name": "新百合ヶ丘",
+      "rent": 81600,
+      "source": "odakyutama"
+    },
+    {
+      "name": "五月台",
+      "rent": 33700,
+      "source": "odakyutama"
+    },
+    {
+      "name": "栗平",
+      "rent": 65000,
+      "source": "odakyutama"
+    },
+    {
+      "name": "黒川",
+      "rent": 68800,
+      "source": "odakyutama"
+    },
+    {
+      "name": "はるひ野",
+      "rent": 71800,
+      "source": "odakyutama"
+    },
+    {
+      "name": "小田急永山",
+      "rent": 50700,
+      "source": "odakyutama"
+    },
+    {
+      "name": "小田急多摩センター",
+      "rent": 51800,
+      "source": "odakyutama"
+    },
+    {
+      "name": "唐木田",
+      "rent": 60900,
+      "source": "odakyutama"
+    },
+    {
+      "name": "相模大野",
+      "rent": 62300,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "東林間",
+      "rent": 66800,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "中央林間",
+      "rent": 71200,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "南林間",
+      "rent": 65200,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "鶴間",
+      "rent": 64100,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "大和",
+      "rent": 77700,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "桜ヶ丘",
+      "rent": 63800,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "高座渋谷",
+      "rent": 67700,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "長後",
+      "rent": 67300,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "湘南台",
+      "rent": 78300,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "六会日大前",
+      "rent": 59900,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "善行",
+      "rent": 73100,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "藤沢本町",
+      "rent": 79600,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "藤沢",
+      "rent": 77700,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "本鵠沼",
+      "rent": 79600,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "鵠沼海岸",
+      "rent": 72300,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "片瀬江ノ島",
+      "rent": 76500,
+      "source": "odakyuenoshima"
+    },
+    {
+      "name": "二俣川",
+      "rent": 72100,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "南万騎が原",
+      "rent": 59700,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "緑園都市",
+      "rent": 74200,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "弥生台",
+      "rent": 74500,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "いずみ野",
+      "rent": 58200,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "いずみ中央",
+      "rent": 69500,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "ゆめが丘",
+      "rent": 78600,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "湘南台",
+      "rent": 78200,
+      "source": "sotetsuizumino"
+    },
+    {
+      "name": "赤羽岩淵",
+      "rent": 105300,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "川口元郷",
+      "rent": 77400,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "南鳩ヶ谷",
+      "rent": 78900,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "鳩ヶ谷",
+      "rent": 77000,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "新井宿",
+      "rent": 73500,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "戸塚安行",
+      "rent": 73100,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "東川口",
+      "rent": 67100,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "浦和美園",
+      "rent": 79300,
+      "source": "saitamakosokutetsudo"
+    },
+    {
+      "name": "浜松町",
+      "rent": 159100,
+      "source": "tokyomonorail"
+    },
+    {
+      "name": "天王洲アイル",
+      "rent": 139300,
+      "source": "tokyomonorail"
+    },
+    {
+      "name": "大井競馬場前",
+      "rent": 121200,
+      "source": "tokyomonorail"
+    },
+    {
+      "name": "昭和島",
+      "rent": 110000,
+      "source": "tokyomonorail"
+    },
+    {
+      "name": "天空橋",
+      "rent": 103300,
+      "source": "tokyomonorail"
+    },
+    {
+      "name": "京急蒲田",
+      "rent": 106400,
+      "source": "keikyukuko"
+    },
+    {
+      "name": "糀谷",
+      "rent": 99500,
+      "source": "keikyukuko"
+    },
+    {
+      "name": "大鳥居",
+      "rent": 99300,
+      "source": "keikyukuko"
+    },
+    {
+      "name": "穴守稲荷",
+      "rent": 96300,
+      "source": "keikyukuko"
+    },
+    {
+      "name": "天空橋",
+      "rent": 103300,
+      "source": "keikyukuko"
+    },
+    {
+      "name": "五反田",
+      "rent": 127100,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "大崎広小路",
+      "rent": 122200,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "戸越銀座",
+      "rent": 114900,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "荏原中延",
+      "rent": 112700,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "旗の台",
+      "rent": 106800,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "長原",
+      "rent": 116100,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "洗足池",
+      "rent": 114300,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "石川台",
+      "rent": 109000,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "雪が谷大塚",
+      "rent": 100000,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "御嶽山",
+      "rent": 89600,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "久が原",
+      "rent": 91300,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "千鳥町",
+      "rent": 99800,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "池上",
+      "rent": 113700,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "蓮沼",
+      "rent": 118400,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "蒲田",
+      "rent": 125900,
+      "source": "tokyuikegami"
+    },
+    {
+      "name": "新橋",
+      "rent": 152700,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "汐留",
+      "rent": 161200,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "竹芝",
+      "rent": 184000,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "日の出",
+      "rent": 140200,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "芝浦ふ頭",
+      "rent": 140500,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "お台場海浜公園",
+      "rent": 169800,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "有明テニスの森",
+      "rent": 174300,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "新豊洲",
+      "rent": 186000,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "豊洲",
+      "rent": 150900,
+      "source": "shinkotsuyurikamome"
+    },
+    {
+      "name": "東雲",
+      "rent": 117200,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "国際展示場",
+      "rent": 145200,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "天王洲アイル",
+      "rent": 139300,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "品川シーサイド",
+      "rent": 145700,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "大井町",
+      "rent": 132600,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "大崎",
+      "rent": 117400,
+      "source": "tokyorinkaikosokutetsudorinkai"
+    },
+    {
+      "name": "京成高砂",
+      "rent": 78500,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "新柴又",
+      "rent": 89200,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "矢切",
+      "rent": 72400,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "北国分",
+      "rent": 58800,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "秋山",
+      "rent": 86400,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "東松戸",
+      "rent": 67100,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "松飛台",
+      "rent": 86800,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "新鎌ヶ谷",
+      "rent": 74900,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "西白井",
+      "rent": 74400,
+      "source": "hokusotetsudo"
+    },
+    {
+      "name": "白井",
+      "rent": 77900,
+      "source": "hokusotetsudo"
+    }
+  ],
+  "distanceModel": {
+    "enabledByDefault": true,
+    "baselineMinutes": 10,
+    "discountPerMinute": 0.01,
+    "maxDiscount": 0.25,
+    "walkSpeedKmh": 4.8,
+    "detourFactor": 1.25,
+    "empirical": false
+  },
+  "stationAliases": {
+    "市ヶ谷": "市ケ谷",
+    "西ケ原": "西ヶ原",
+    "鶴ケ峰": "鶴ヶ峰",
+    "希望ケ丘": "希望ヶ丘"
+  }
+}
