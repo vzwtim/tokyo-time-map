@@ -39,7 +39,7 @@ function calculate(origin,mode='rail',express=true){
  if(mode==='rail')while(heap.a.length){const [t,key]=heap.pop();if(t>times[key]+1e-8)continue;const station=Math.floor(key/stride),state=key%stride,onTrain=state>=2,lastLine=onTrain?Math.floor((state-2)/2):-1,lastDir=onTrain?(state-2)%2:-1;
   for(const e of adj[station]){const same=onTrain&&lastLine===e.line&&lastDir===e.dir;
    const direct=onTrain&&!same&&through.has(station+':'+lastLine+':'+lastDir+'>'+e.line+':'+e.dir);
-   const board=!(same||direct),transfer=board&&(onTrain||state===1),boardWait=board?(transfer||station!==origin?policy.boardingWait:(policy.initialBoardingWait??policy.boardingWait)):0,transferTime=transfer?(onTrain?(transfers[station].get((lastLine*2+lastDir)*stride+e.line*2+e.dir)??policy.transferWalk):policy.stationEntry):0;
+   const board=!(same||direct),transfer=board&&(onTrain||state===1),boardWait=board?(transfer?policy.boardingWait:(policy.initialBoardingWait??policy.boardingWait)):0,transferTime=transfer?(onTrain?(transfers[station].get((lastLine*2+lastDir)*stride+e.line*2+e.dir)??policy.transferWalk):policy.stationEntry):0;
    // Dwell belongs to a departure while staying on the train, never to the final arrival.
    const dwell=board?0:(e.dwell??(LINES[lastLine].express?.6:.4)),ride=e.run+dwell,wait=boardWait+transferTime,next=e.to*stride+2+e.line*2+e.dir;
    relax(next,t+ride+wait,key,{type:'rail',from:station,to:e.to,line:e.line,direction:e.dir,t:ride,run:e.run,dwell,wait,boardWait,transferTime,transfer,through:direct,boarding:board,calibrated:e.calibrated});

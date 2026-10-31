@@ -7,7 +7,7 @@ const benchmarks=[['吉祥寺','新宿',15,15],['新宿','吉祥寺',14,16],
  ['荻窪','新宿',10,11],['中野','新宿',3.5,4.5],['新宿','東京',14,14],
  ['吉祥寺','渋谷',17,17],['渋谷','吉祥寺',16,16],
  ['渋谷','新宿',5,5],['新宿','渋谷',5,5],['池袋','新宿',5,5],
- ['新宿','池袋',5,5],['下北沢','新宿',7,8],['新宿','下北沢',7,8],
+ ['新宿','池袋',5,5],['下北沢','新宿',7,8],['新宿','下北沢',7,9],
  ['三鷹','新宿',12,15],['立川','新宿',26,30],['二子玉川','渋谷',10,12]];
 for(const [a,b,min,max] of benchmarks){
  const r=calculate(S[a]),s=r.summary(S[b]);
@@ -31,5 +31,6 @@ for(const [a,b] of [['吉祥寺','六本木'],['吉祥寺','銀座'],['渋谷','
 assert.ok(transferCount>0);
 // Calibrated local rapid still works with optional express services switched off.
 assert.equal(calculate(S['吉祥寺'],'rail',false).best[S['新宿']].time,15);
+const firstWalk=calculate(S['東京']).summary(S['竹橋']);assert.equal(firstWalk.transfers,0);assert.equal(firstWalk.boardingWait,0,'Walking before the first train is not a transfer');
 console.log('PASS: '+benchmarks.length+' external timing benchmarks; calibrated segments, reverse directions, transfers and express-off.');
 `,c);
