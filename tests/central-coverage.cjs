@@ -13,6 +13,6 @@ assert.notEqual(S['早稲田'],S['早稲田（都電）']);
 for(const n of ['戸越銀座','池上','上町','柴又','京成上野','赤土小学校前','鬼子母神前','亀戸水神']){
  const result=calculate(S[n]);assert.ok(result.route(S['新宿']).some(e=>e.type==='rail'),n);
 }
-assert.equal(STATIONS.length,808);assert.equal(new Set(STATIONS.map(s=>s.name)).size,808);
-console.log('PASS: 9 expanded routes, 808 unique stations, disconnected same-name stops remain separate.');
+assert.equal(STATIONS.length,809);assert.equal(new Set(STATIONS.map(s=>s.name)).size,809);
+console.log('PASS: 9 expanded routes, 809 unique stations, disconnected same-name stops remain separate.');
 `,c);

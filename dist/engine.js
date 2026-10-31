@@ -13,7 +13,13 @@ function routingNetwork(express){
  if(ROUTING_NETWORK_CACHE.has(express))return ROUTING_NETWORK_CACHE.get(express);
  const policy=typeof ROUTING_POLICY==='undefined'?{boardingWait:3,transferWalk:5,stationExit:1,stationEntry:2,through:[]}:ROUTING_POLICY;
  const n=STATIONS.length,stride=2+LINES.length*2,adj=Array.from({length:n},()=>[]),through=new Set();
- LINES.forEach((l,li)=>{if(l.express&&!express)return;for(let i=1;i<l.stops.length;i++){const a=l.stops[i-1],b=l.stops[i],run=km(STATIONS[a],STATIONS[b])/l.speed+.3;adj[a].push({to:b,line:li,dir:0,run});adj[b].push({to:a,line:li,dir:1,run});}});
+ LINES.forEach((l,li)=>{if(l.express&&!express)return;for(let i=1;i<l.stops.length;i++){
+  const a=l.stops[i-1],b=l.stops[i],fallback=km(STATIONS[a],STATIONS[b])/l.speed+.3;
+  for(const [from,to,dir] of [[a,b,0],[b,a,1]]){
+   const timing=typeof segmentTiming==='function'?segmentTiming(l.name,STATIONS[from].name,STATIONS[to].name):null;
+   adj[from].push({to,line:li,dir,run:timing?timing.run:fallback,dwell:timing?timing.dwell:null,calibrated:!!timing});
+  }
+ }});
  const lineIds=new Map(LINES.map((l,i)=>[l.name,i]));
  for(const [name,a,ad,b,bd] of policy.through){const station=S[name],ai=lineIds.get(a),bi=lineIds.get(b);if(station===undefined||ai===undefined||bi===undefined)throw Error('Invalid through rule '+name);if(!LINES[ai].stops.includes(station)||!LINES[bi].stops.includes(station))throw Error('Disconnected through rule '+name);if(!express&&(LINES[ai].express||LINES[bi].express))continue;through.add(station+':'+ai+':'+ad+'>'+bi+':'+bd);through.add(station+':'+bi+':'+(1-bd)+'>'+ai+':'+(1-ad));}
  // Compile small transfer tables once, outside the shortest-path loop.
@@ -33,10 +39,10 @@ function calculate(origin,mode='rail',express=true){
  if(mode==='rail')while(heap.a.length){const [t,key]=heap.pop();if(t>times[key]+1e-8)continue;const station=Math.floor(key/stride),state=key%stride,onTrain=state>=2,lastLine=onTrain?Math.floor((state-2)/2):-1,lastDir=onTrain?(state-2)%2:-1;
   for(const e of adj[station]){const same=onTrain&&lastLine===e.line&&lastDir===e.dir;
    const direct=onTrain&&!same&&through.has(station+':'+lastLine+':'+lastDir+'>'+e.line+':'+e.dir);
-   const board=!(same||direct),transfer=board&&(onTrain||state===1),boardWait=board?policy.boardingWait:0,transferTime=transfer?(onTrain?(transfers[station].get((lastLine*2+lastDir)*stride+e.line*2+e.dir)??policy.transferWalk):policy.stationEntry):0;
+   const board=!(same||direct),transfer=board&&(onTrain||state===1),boardWait=board?(transfer?policy.boardingWait:(policy.initialBoardingWait??policy.boardingWait)):0,transferTime=transfer?(onTrain?(transfers[station].get((lastLine*2+lastDir)*stride+e.line*2+e.dir)??policy.transferWalk):policy.stationEntry):0;
    // Dwell belongs to a departure while staying on the train, never to the final arrival.
-   const dwell=board?0:(LINES[lastLine].express?.6:.4),ride=e.run+dwell,wait=boardWait+transferTime,next=e.to*stride+2+e.line*2+e.dir;
-   relax(next,t+ride+wait,key,{type:'rail',from:station,to:e.to,line:e.line,direction:e.dir,t:ride,run:e.run,dwell,wait,boardWait,transferTime,transfer,through:direct,boarding:board});
+   const dwell=board?0:(e.dwell??(LINES[lastLine].express?.6:.4)),ride=e.run+dwell,wait=boardWait+transferTime,next=e.to*stride+2+e.line*2+e.dir;
+   relax(next,t+ride+wait,key,{type:'rail',from:station,to:e.to,line:e.line,direction:e.dir,t:ride,run:e.run,dwell,wait,boardWait,transferTime,transfer,through:direct,boarding:board,calibrated:e.calibrated});
   }
   if(onTrain)for(const e of connectors[station])relax(e.to*stride+1,t+e.t+policy.stationExit,key,{type:'walk',from:station,to:e.to,t:e.t+policy.stationExit,exit:policy.stationExit});
  }

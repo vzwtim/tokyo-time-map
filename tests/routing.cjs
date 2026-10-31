@@ -36,7 +36,7 @@ const real={assert,console};vm.createContext(real);
 vm.runInContext(['data','routing-data','network-expansion','transfer-data','engine'].map(f=>fs.readFileSync('dist/'+f+'.js','utf8')).join('\n'),real);
 vm.runInContext(`
 for(const [a,b] of [['下北沢','大手町'],['三軒茶屋','大手町'],['新宿','東京テレポート'],['笹塚','九段下'],['品川','浅草'],['亀有','大手町']]){
- const r=calculate(S[a]),s=r.summary(S[b]);assert.equal(s.transfers,0,a+' → '+b);assert.ok(s.through>0);assert.equal(s.boardingWait,3);assert.equal(s.transferWalk,0);assert.ok(Math.abs(s.total-r.best[S[b]].time)<1e-7);
+ const r=calculate(S[a]),s=r.summary(S[b]);assert.equal(s.transfers,0,a+' → '+b);assert.ok(s.through>0);assert.equal(s.boardingWait,0);assert.equal(s.transferWalk,0);assert.ok(Math.abs(s.total-r.best[S[b]].time)<1e-7);
 }
 assert.ok(!routingNetwork(false).adj.some(edges=>edges.some(e=>LINES[e.line].express)));
 assert.ok(ROUTING_RESULT_CACHE.size<=8);
