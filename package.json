@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node --check dist/app.js && node --check dist/engine.js && node --check dist/rent-layer.js",
+    "build": "node --check dist/app.js && node --check dist/engine.js && node --check dist/routing-data.js && node --check dist/rent-layer.js",
     "deploy": "npx wrangler deploy",
-    "test": "node tests/interaction.cjs && node tests/rent-interaction.cjs && node tests/rent.cjs"
+    "test": "node tests/interaction.cjs && node tests/rent-interaction.cjs && node tests/rent.cjs && node tests/routing.cjs && node tests/transfers.cjs && node tests/model.cjs && node tests/timing.cjs"
   }
 }
