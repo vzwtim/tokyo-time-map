@@ -4,7 +4,7 @@
 globalThis.createRentLayer=function(data,stations,lines,xy){
  const sourceById=new Map(data.sources.map(s=>[s.id,s])),byName=new Map();
  for(const r of data.records){const name=data.stationAliases?.[r.name]||r.name;if(!byName.has(name))byName.set(name,r);}
- const observed=stations.map(s=>byName.get(s.name)||null),geos=stations.map(xy);
+ const observed=stations.map(s=>(!s.region||s.region==='東京圏')?byName.get(s.name)||null:null),geos=stations.map(xy);
  const samples=stations.flatMap((s,i)=>observed[i]?[{id:i,geo:geos[i],value:observed[i].rent}]:[]);
  const neighbors=samples.map(s=>stations.filter(t=>t.id!==s.id).map(t=>({id:t.id,d:Math.hypot(geos[t.id][0]-s.geo[0],geos[t.id][1]-s.geo[1])})).filter(t=>t.d>.05).sort((a,b)=>a.d-b.d).slice(0,3));
  const groups=data.sources.flatMap(source=>{const line=lines.find(l=>l.name===source.line);return line?[{source,line,ids:[...new Set(line.stops)]}]:[];});

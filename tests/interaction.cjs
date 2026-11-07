@@ -47,3 +47,53 @@ down(103,600,300);run(`assert.ok($('destinationCard').hidden);`);up(103,600,300,
 documentHandlers.keydown({key:'Escape'});run(`assert.ok($('destinationCard').hidden);showDestination(S['東京']);`);documentHandlers.pointerdown({target:elements.warpSlider});run(`assert.ok($('destinationCard').hidden);$('view3d').onclick();assert.equal(terrainDepth,1);assert.equal($('view3d').textContent,'2D');`);
 down(104,200,200);move(104,250,230);up(104,250,230);run(`assert.ok(yaw>0);const angleBeforePinch=yaw,tiltBeforePinch=pitch;`);down(105,200,200);down(106,300,200);move(106,360,280);up(106,360,280);up(105,200,200);run(`assert.equal(yaw,angleBeforePinch);assert.equal(pitch,tiltBeforePinch);assert.equal(terrainDepth,1);$('view3d').onclick();assert.equal(terrainDepth,0);assert.equal($('view3d').textContent,'3D');`);
 console.log('PASS: 2D pinch drift never activates 3D; focal zoom and pan; cancellation has no phantom tap; popup dismisses on map/outside/Escape and cancels pending reopen; explicit 3D touch orbit with independent pinch zoom.');
+
+const mapWheel=elements.map.handlers.wheel;
+let requestedLocation;
+c.navigator={geolocation:{getCurrentPosition(ok,fail){requestedLocation={ok,fail};}}};
+vm.runInContext(fs.readFileSync(root+'dist/regional-ui.js','utf8'),c,{filename:'regional-ui.js'});
+elements.locateMe.removeAttribute=key=>delete elements.locateMe.attrs[key];
+run(`
+const originalOrigin=origin;
+$('locateMe').onclick();
+assert.equal($('locateMe').disabled,true);
+`);
+requestedLocation.ok({coords:{latitude:35.6812,longitude:139.7671,accuracy:80}});
+run(`
+assert.equal(origin,originalOrigin);
+assert.equal(mix,0);
+assert.equal($('locateMe').disabled,false);
+const geolocationOffset=()=>{
+ const a=xy(STATIONS[origin]),b=xy(deviceLocation);
+ const [x,y]=project([b[0]-a[0],b[1]-a[1]]);
+ return Math.hypot(x-W/2,y-H/2);
+};
+assert(geolocationOffset()<1e-7);
+$('zoomIn').onclick();
+assert(geolocationOffset()<1e-7);
+$('locateMe').onclick();
+`);
+requestedLocation.fail({code:1});
+run(`
+assert.equal($('locateMe').disabled,false);
+assert.match($('locationStatus').textContent,/位置情報を許可/);
+clearTimeout(locationStatusTimer);
+`);
+console.log('PASS: location permission feedback, geographic centering, and focal button zoom.');
+
+run(`animation=null;viewMotion=null;terrainDepth=0;zoom=1;pan=[18,-26];`);
+const wheel=()=>mapWheel({clientX:357,clientY:293,deltaY:120,deltaMode:0,preventDefault(){}});
+wheel();
+wheel();
+run(`
+assert.equal(zoom,1,'Wheel input queues a target before drawing');
+const focalPoint=[(357-W/2-pan[0])/(17*zoom),(293-H/2-pan[1])/(17*zoom)];
+`);
+t+=16;c.scheduled(t);
+run(`assert.ok(zoom<1&&zoom>Math.exp(-.36));`);
+t+=500;c.scheduled(t);
+run(`
+assert.ok(Math.abs(zoom-Math.exp(-.36))<.002);
+assert.ok(Math.hypot(project(focalPoint)[0]-357,project(focalPoint)[1]-293)<1e-7);
+`);
+console.log('PASS: wheel input accumulates, eases through intermediate scales, and holds the cursor anchor.');

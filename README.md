@@ -1,30 +1,10 @@
-# 東京の距離 / TOKYO TIME WARP
+# 日本の時間地図 — 全国鉄道版
 
-東京の移動時間を距離へ変換するインタラクティブ地図。家賃比較・沿線断面・808駅の経路モデルを収録。
+`dist/index.html` を開くと試せます。APIキーやビルドは不要です。家賃表示も試す場合はローカルHTTPサーバーで開いてください。全国の駅を検索して出発地・目的地に設定し、所要時間で歪む地図を表示します。
 
-## Cloudflare Workers Builds
+- 東京側の駅・路線・代表区間時分は [東京の距離](https://github.com/vzwtim/tokyo-time-map) のコミット `cdf1d43011e8b697da7367d7b953ad94326e42ed` をクローンし、UI・描画・経路エンジンを継承。
+- 全国の駅と線路は [国土数値情報 鉄道データ N02-25](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-N02-2025.html) を加工。地図の海岸線は [Natural Earth 1:10m](https://www.naturalearthdata.com/downloads/10m-cultural-vectors/10m-admin-0-countries/) を加工。
+- 国土数値情報の `N02-25_RailroadSection.geojson`、`N02-25_Station.geojson` と Natural Earth の `ne_10m_admin_0_countries.geojson` を `countries.json` として同じディレクトリに置き、`python tools/build-geodata.py <入力ディレクトリ>` で地理データを再生成できます。
+- 時刻は区間時分・速度・代表待ち時間による試算です。全国の快速・特急・直通・乗換は一部を反映しています。沖縄や一部のケーブルカーなど、鉄道で接続していない路線は各路線内で探索できます。収録基準は2025年12月末です。初回の発車待ちは東京版と同じく所要時間に含めていません。地図内の路線は隣接駅間を簡略化して描画します。
 
-- Repository: `vzwtim/tokyo-time-map`
-- Production branch: `main`
-- Root directory: `/`
-- Build command: `npm run build`（省略も可）
-- Deploy command: `npx wrangler deploy`
-- Worker name: `tokyo-time-map`
-
-`wrangler.jsonc` の `assets.directory` が `dist` を指定します。ビルドによる変換は不要です。GitHub連携済みのCloudflare Workers Buildsがmainへのpushを検出して公開します。認証情報はリポジトリに保存しません。
-
-## Local verification
-
-`npm run build` / `npm test`
-
-## Included UX updates
-
-- 常時表示の家賃ボタンと「時間で探す／家賃で比べる」
-- 切替パネル・金額カードのアニメーションと安い順の明示
-- 約110pxの行き先カード、経路の折りたたみ、レイヤー設定撤去
-
-家賃は固定スナップショット、所要時間はモデル上の概算です。詳細は地図内の説明を参照してください。
-
-## 所要時間の補正（2026-10-31）
-
-表示は初回発車後の概算です。初回待ちを除き、乗換待ちは維持。確認済み区間には代表区間時分を使います。[点検結果・出典・未対応範囲](dist/timing-audit.md) を参照。`npm test` に時間ベンチマーク・経路整合性検査を含めています。
+`npm run build` と `npm test` で構文・既存東京版の回帰・広域経路を確認できます。
