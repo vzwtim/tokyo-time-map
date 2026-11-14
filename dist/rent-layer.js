@@ -47,5 +47,14 @@ globalThis.createRentLayer=function(data,stations,lines,xy){
 
  function compare(eligible){const set=new Set(eligible);return groups.flatMap(g=>{const ids=g.ids.filter(i=>set.has(i)),values=ids.filter(i=>observed[i]).map(i=>observed[i].rent).sort((a,b)=>a-b);if(values.length<3||values.length/ids.length<.5)return [];const n=values.length;return [{name:g.source.name,line:g.line.name,color:g.line.color,median:(values[Math.floor((n-1)/2)]+values[Math.floor(n/2)])/2,count:n,total:ids.length,ids:ids.filter(i=>observed[i])}];}).sort((a,b)=>a.median-b.median);}
  function profile(name){const line=lines.find(l=>l.name===name);return line?[...new Set(line.stops)].map(id=>({id,name:stations[id].name,rent:observed[id]?.rent??null})):[];}
- return {data,observed,color,height,discount,build,prepare,draw,elevation:p=>field?.elevation(p)||0,compare,profile,groups,source:r=>sourceById.get(r.source),count:observed.filter(Boolean).length};
+ function profileLines(station){
+  const eligible=new Map();
+  for(const line of lines){
+   if(line.express||line.bullet||!line.stops.includes(station)||eligible.has(line.name))continue;
+   const coverage=new Set(line.stops.filter(id=>observed[id])).size;
+   if(coverage>=3)eligible.set(line.name,{name:line.name,color:line.color,coverage});
+  }
+  return [...eligible.values()].sort((a,b)=>b.coverage-a.coverage);
+ }
+ return {data,observed,color,height,discount,build,prepare,draw,elevation:p=>field?.elevation(p)||0,compare,profile,profileLines,groups,source:r=>sourceById.get(r.source),count:observed.filter(Boolean).length};
 };

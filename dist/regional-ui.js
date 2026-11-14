@@ -82,10 +82,20 @@ for(const station of STATIONS){
   $('stationNames').append(option);
   stationOptions.set(value,station.id);
 }
+function resolveStationInput(value) {
+  const name=value.trim();
+  const exact=stationOptions.get(name);
+  if(Number.isInteger(exact))return exact;
+  const matches=byName.get(name);
+  if(matches?.length===1)return matches[0].id;
+  // Prefer the main mapped station for same-region duplicate entries.
+  if(matches?.every(station=>station.region===matches[0].region)&&matches.some(station=>station.id===S[name]))return S[name];
+  return undefined;
+}
 $('stationInput').oninput=()=>$('stationInput').setCustomValidity('');
 $('stationSearch').onsubmit=e=>{
   e.preventDefault();
-  const input=$('stationInput'),name=input.value.trim(),id=stationOptions.get(name)??(byName.get(name)?.length===1?byName.get(name)[0].id:undefined);
+  const input=$('stationInput'),id=resolveStationInput(input.value);
   if(!Number.isInteger(id)){input.setCustomValidity('候補から駅を選んでください');input.reportValidity();return;}
   if(e.submitter?.value==='destination'){
     showDestination(id);
