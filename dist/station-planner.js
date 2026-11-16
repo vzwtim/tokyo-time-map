@@ -22,6 +22,8 @@ const planner = $('stationPlanner');
 const plannerInputs = ['plannerFirst', 'plannerSecond', 'plannerThird'].map($);
 const yen = new Intl.NumberFormat('ja-JP');
 let plannerMode = 'living', plannerSearch = null, plannerRevision = 0, plannerLine = null;
+let plannerMarkers = [];
+let plannerFocusId = null;
 
 function plannerStationLabel(id) {
   return [...stationOptions].find(([, station]) => station === id)?.[0] ?? STATIONS[id].name;
@@ -30,6 +32,9 @@ function plannerStationLabel(id) {
 function openPlanner(kind, line = null) {
   plannerRevision++;
   plannerSearch = null;
+  plannerMarkers = [];
+  plannerFocusId = null;
+  $('plannerIntro').hidden = false;
   plannerMode = kind;
   plannerLine = line;
   const living = kind === 'living';
@@ -49,40 +54,72 @@ function openPlanner(kind, line = null) {
   plannerInputs[1].required = !living;
   $('plannerStatus').textContent = '';
   $('plannerRun').disabled = false;
+  $('plannerStations').open = true;
+  $('livingControls').open = false;
+  $('plannerStationSummary').textContent = living ? '職場の駅を選ぶ' : '出発駅を選ぶ';
   $('plannerResults').replaceChildren();
   $('plannerNote').textContent = living
     ? '通勤時間は職場の駅を起点にした片道の概算。家賃は東京圏の単身向け相場（2026年10月取得、面積・築年数未補正）。'
     : '所要時間は駅から駅までの概算（新幹線を除く）。終電やお店の営業時間は別途ご確認ください。';
   updateTimeValue();
-  planner.showModal();
+  planner.hidden = false;
+  $('explorePanel').hidden = true;
+  dismissDestination();
+  setLayer(false);
+  set3D(false);
+  if (mix < .98) changeMix(1, true);
+  syncLayerModes();
+  setSheetLevel(1);
+  sheetHandle.focus({preventScroll:true});
 }
 
 function updateTimeValue() {
   $('timeValueLabel').textContent = yen.format($('timeValue').valueAsNumber) + '円';
 }
 
-function viewPlannerStation(journeyOrigin, id, living) {
-  planner.close();
-  if (STATIONS[journeyOrigin].region !== STATIONS[origin].region) zoom = 1;
+function closePlanner() {
+  plannerRevision++;
+  plannerSearch = null;
+  plannerMarkers = [];
+  planner.hidden = true;
+  $('explorePanel').hidden = false;
+  dismissDestination();
+}
+
+function focusPlannerStation(id) {
+  const point = points[stationIndex[id]].target;
+  wheelZoom = null;
   overviewMode = null;
-  if (!living) {
-    setLayer(false);
-    if (shinkansen) {
-      shinkansen = false;
-      $('shinkansen').checked = false;
-      if (journeyOrigin === origin) updateModel(false);
-    }
+  animation = null;
+  zoom = 1;
+  const visibleHeight = Math.max(120, H - $('rentDock').offsetHeight);
+  pan = [-point[0] * 17, visibleHeight * .52 - H / 2 - point[1] * 17];
+  requestDraw();
+}
+
+function drawPlannerMarkers() {
+  if (planner.hidden) return;
+  const color = plannerMode === 'living' ? '#1c7164' : '#6755a5';
+  ctx.save();
+  ctx.font = '700 12px system-ui, sans-serif';
+  ctx.textAlign = 'center';
+  ctx.textBaseline = 'middle';
+  for (let i = plannerMarkers.length - 1; i >= 0; i--) {
+    const id = plannerMarkers[i].station.id;
+    if (i>=3 && id!==plannerFocusId) continue;
+    const point = lastScreen[stationIndex[id]];
+    if (!point || point[0]<0 || point[0]>W || point[1]<0 || point[1]>H) continue;
+    ctx.beginPath();
+    ctx.arc(point[0], point[1], id===plannerFocusId || !i ? 13 : 10, 0, Math.PI * 2);
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.strokeStyle = '#fff';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.fillStyle = '#fff';
+    ctx.fillText(String(i + 1), point[0], point[1] + .5);
   }
-  $('stationInput').value = plannerStationLabel(id);
-  selectOrigin(journeyOrigin);
-  showDestination(id);
-  if (STATIONS[id].region !== STATIONS[origin].region) fitRegionalOverview();
-  else {
-    const target = points[stationIndex[id]].target;
-    pan = [-target[0] * 17 * zoom, -target[1] * 17 * zoom];
-    animation = null;
-    requestDraw();
-  }
+  ctx.restore();
 }
 
 function renderPlannerResults() {
@@ -91,28 +128,48 @@ function renderPlannerResults() {
   const rows = living
     ? rankLivingStations(STATIONS, journeys[0].best, rentLayer.observed, $('timeValue').valueAsNumber, $('commuteDays').valueAsNumber, allowed)
     : rankMeetingStations(STATIONS, journeys);
+  plannerMarkers = [];
+  for (const row of rows) {
+    const duplicate = plannerMarkers.some(({station}) =>
+      station.name === row.station.name && station.region === row.station.region && distance(station,row.station)<.75);
+    if (!duplicate) plannerMarkers.push(row);
+    if (plannerMarkers.length === 8) break;
+  }
+  if (!plannerMarkers.some(row => row.station.id === plannerFocusId)) plannerFocusId = null;
+  $('plannerIntro').hidden = rows.length > 0;
   const list = $('plannerResults');
   list.replaceChildren();
   $('plannerStatus').textContent = rows.length
-    ? (living ? '月の負担が小さい順' : '最も遠い人の所要時間が短い順') + ' · 上位' + Math.min(rows.length, 8) + '駅'
+    ? (living ? '月の負担が小さい順' : '最も遠い人の所要時間が短い順') + ' · 上位' + plannerMarkers.length + '駅'
     : (living ? '比較できる家賃相場がありません。職場の駅や沿線を変えてください。' : '全員が鉄道で行ける駅が見つかりませんでした。');
-  for (const row of rows.slice(0, 8)) {
+  for (const [index, row] of plannerMarkers.entries()) {
     const li = document.createElement('li');
     const button = document.createElement('button');
     const name = document.createElement('strong');
     const detail = document.createElement('small');
     const amount = document.createElement('span');
     button.type = 'button';
-    name.textContent = plannerStationLabel(row.station.id);
+    const sameName = byName.get(row.station.name);
+    const nearbyDuplicates = sameName?.every(station => station.region === row.station.region && distance(station,row.station)<.75);
+    name.textContent = (index + 1) + '　' + (nearbyDuplicates ? row.station.name : plannerStationLabel(row.station.id));
     detail.textContent = living
       ? '家賃 ' + yen.format(row.rent) + '円 ＋ 通勤 ' + yen.format(row.timeCost) + '円 · 片道約' + Math.round(row.minutes) + '分'
       : row.minutes.map((minutes, i) => STATIONS[ids[i]].name + 'から ' + Math.round(minutes) + '分').join(' / ');
     amount.textContent = living ? yen.format(row.total) + '円／月' : '最長 ' + Math.round(row.longest) + '分';
     button.append(name, amount, detail);
-    button.onclick = () => viewPlannerStation(ids[0], row.station.id, living);
+    if (row.station.id === plannerFocusId) button.setAttribute('aria-current', 'true');
+    button.onclick = () => {
+      plannerFocusId = row.station.id;
+      setSheetLevel(1);
+      focusPlannerStation(row.station.id);
+      list.querySelector('[aria-current]')?.removeAttribute('aria-current');
+      button.setAttribute('aria-current', 'true');
+    };
     li.append(button);
     list.append(li);
   }
+  updateSheetSummary();
+  requestDraw();
 }
 
 $('livingOpen').onclick = () => openPlanner('living');
@@ -127,17 +184,15 @@ $('commuteDays').oninput = () => {
 for (const input of plannerInputs) input.oninput = () => {
   plannerRevision++;
   plannerSearch = null;
+  plannerMarkers = [];
+  plannerFocusId = null;
   input.setCustomValidity('');
   $('plannerResults').replaceChildren();
   $('plannerStatus').textContent = '';
   $('plannerRun').disabled = false;
+  updateSheetSummary();
+  requestDraw();
 };
-planner.addEventListener('close', () => {
-  if (planner.open) return;
-  plannerRevision++;
-  plannerSearch = null;
-});
-
 $('plannerForm').onsubmit = async event => {
   event.preventDefault();
   const living = plannerMode === 'living';
@@ -159,15 +214,24 @@ $('plannerForm').onsubmit = async event => {
   try {
     if (living) await loadRent();
     await new Promise(resolve => setTimeout(resolve, 0));
-    if (revision !== plannerRevision || !planner.open) return;
+    if (revision !== plannerRevision || planner.hidden) return;
     const journeys = ids.map(id => calculate(id, 'rail', express, living && shinkansen));
     const allowed = living && plannerLine
       ? new Set(rentLayer.profile(plannerLine).map(row => row.id)) : null;
     plannerSearch = {living, ids, journeys, allowed};
     renderPlannerResults();
+    if (plannerMarkers.length) {
+      $('plannerStationSummary').textContent = ids.map(id => STATIONS[id].name).join('・') + ' · 変更';
+      $('plannerStations').open = false;
+      selectOrigin(ids[0]);
+      focusPlannerStation(plannerMarkers[0].station.id);
+    }
   } catch {
     if (revision === plannerRevision) $('plannerStatus').textContent = '候補を表示できませんでした。もう一度お試しください。';
   } finally {
-    if (revision === plannerRevision) $('plannerRun').disabled = false;
+    if (revision === plannerRevision) {
+      $('plannerRun').disabled = false;
+      updateSheetSummary();
+    }
   }
 };
