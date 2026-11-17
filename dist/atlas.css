@@ -193,3 +193,95 @@
   #stationPlanner .planner-inputs {grid-template-columns:1fr}
   #roadsView .road-chips button {box-shadow:0 1px 4px #28635922}
 }
+
+/* One map and three low-profile sheets. */
+#railView {--sheet-height:47px}
+#railView:has([data-sheet-level="1"]:not([hidden])) {--sheet-height:min(260px,35dvh)}
+#railView:has([data-sheet-level="2"]:not([hidden])) {--sheet-height:min(650px,76dvh)}
+#railView:has([data-sheet-level="2"]:not([hidden])) .map-navigation {visibility:hidden}
+#railView:not(:has([data-sheet-level="2"]:not([hidden]))) .map-navigation {visibility:visible}
+#railView[data-view]:not([data-view="rail"]) :is(.origin-info,#rentLegend,#rentLoading) {display:none}
+#railView .sheet-handle {
+  height:47px;min-height:47px;padding:12px 42px 3px 14px;gap:4px 9px;
+  flex-direction:row;align-items:center;justify-content:flex-start;
+}
+#railView .sheet-handle strong {font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:52%}
+#railView .sheet-grip {top:5px;width:27px;height:3px}
+#railView .sheet-chevron {right:18px;bottom:16px;width:7px;height:7px}
+#railView .sheet-body {padding-inline:14px}
+#railView .map-toolbar .map-menu-open {margin-left:auto}
+#railView .map-toolbar .map-segment :is(#timeExplore,#rentExplore) {width:41px;padding:0;display:grid;place-items:center}
+#railView .map-segment svg {width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
+#railView .station-actions {display:flex;justify-content:flex-end;gap:4px;margin-top:-1px}
+#railView .station-actions button {min-height:29px;border:0;border-radius:14px;padding:0 8px;font-size:12px;background:#ecf1eb}
+#railView .station-actions .station-dismiss {width:29px;padding:0;font-size:16px}
+#railView .time-choices button {min-height:32px}
+#railView .rent-filters {display:flex;flex-wrap:wrap;align-items:center;gap:3px 5px;padding:0 0 4px}
+#railView .rent-tabs {width:auto;flex:1;border:0;gap:2px}
+#railView .rent-tabs button {flex:none;min-height:31px;padding:0 8px;font-size:12px}
+#railView .hourly-toggle,#railView .hourly-settings {
+  border:0;border-radius:16px;min-height:30px;padding:0 8px;font-size:12px;background:#edf1ed;color:var(--ink);
+}
+#railView .hourly-toggle[aria-pressed="true"] {background:#dceee5;color:#18594e}
+#railView .hourly-settings {min-width:30px;padding:0;font-size:16px}
+#railView .rent-range {flex-basis:100%;display:flex;gap:8px;min-height:32px;padding:0 1px}
+#rentRangeLabel {min-width:59px;font-size:12px;font-variant-numeric:tabular-nums;font-weight:650}
+.range-track {
+  position:relative;flex:1;height:32px;min-width:75px;cursor:pointer;touch-action:none;
+}
+.range-track::before {
+  content:'';position:absolute;inset:14px 9px;border-radius:9px;
+  background:linear-gradient(to right,#d8e0da 0 var(--from),#397e72 var(--from) var(--to),#d8e0da var(--to) 100%);
+}
+.range-track input {
+  appearance:none;-webkit-appearance:none;position:absolute;inset:0;width:100%;height:32px;margin:0;
+  padding:0;background:transparent;pointer-events:none;
+}
+.range-track input::-webkit-slider-runnable-track {background:transparent;height:18px}
+.range-track input::-webkit-slider-thumb {
+  appearance:none;width:18px;height:18px;border-radius:50%;border:2px solid white;
+  background:#317569;box-shadow:0 0 0 1px #71978d;pointer-events:auto;cursor:ew-resize;
+}
+.range-track input::-moz-range-thumb {
+  width:15px;height:15px;border-radius:50%;border:2px solid white;
+  background:#317569;box-shadow:0 0 0 1px #71978d;pointer-events:auto;cursor:ew-resize;
+}
+.range-track input:focus-visible {outline-offset:0}
+#railView .profile-legend {flex-basis:100%;font-size:11px}
+#railView .profile-caption {margin-block:2px 0;min-height:0}
+
+#roadTools {position:absolute;inset:0 58px auto 0;pointer-events:none}
+#roadTools > * {pointer-events:auto}
+#roadTools .road-search {width:min(480px,100%);min-height:48px}
+#roadFilter {
+  margin-top:6px;max-width:min(260px,100%);min-height:34px;border:0;border-radius:18px;
+  padding:0 9px;background:var(--surface);box-shadow:var(--control-shadow);font-size:12px;
+}
+#railView .road-timetable {border:0}
+#railView #stationPlanner {
+  width:min(100%,680px);max-height:none;padding:0;margin:0;
+  background:var(--surface);
+}
+#railView #stationPlanner :is(.sheet-handle,#plannerConditions) {background:var(--planner-light)}
+#railView #stationPlanner #plannerConditions {border-radius:10px;margin:0 0 4px;padding:0 8px}
+#plannerConditions summary {width:max-content;padding:5px 4px;color:var(--planner-color);font-size:12px;font-weight:650}
+#railView #stationPlanner .planner-form {padding:2px 2px 6px;border:0;gap:4px}
+#railView #stationPlanner .planner-stations {grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:5px}
+#railView #stationPlanner .planner-inputs {grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+#railView #stationPlanner .planner-inputs input {min-height:33px;padding:3px 7px}
+#railView #stationPlanner .planner-inputs #plannerThirdRow {grid-column:1/-1}
+#railView #stationPlanner .planner-primary {min-height:34px;padding-inline:9px;font-size:12px}
+#railView #stationPlanner .planner-options {margin:0;padding-top:3px}
+#railView #stationPlanner .planner-limits input {min-height:29px;width:58px}
+#railView #stationPlanner .planner-status {margin:4px 0;font-size:11px}
+#railView #stationPlanner .planner-results li {display:block;padding:0;border-top:1px solid var(--line)}
+#railView #stationPlanner .planner-results li > button {
+  display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:baseline;gap:2px 6px;
+  padding:4px 5px;min-height:40px;font-size:13px;
+}
+#railView #stationPlanner .planner-results li > button[aria-pressed="true"] {background:var(--planner-light)}
+#railView #stationPlanner .planner-results li > button small {font-size:11px}
+#railView #stationPlanner #meetingControls {
+  padding:0;border:0;margin:0 0 3px;
+}
+#railView #stationPlanner .planner-segment button {min-height:30px;font-size:12px}

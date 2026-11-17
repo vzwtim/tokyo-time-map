@@ -1,9 +1,10 @@
 'use strict';
 const $=id=>document.getElementById(id),canvas=$('map'),ctx=canvas.getContext('2d'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let origin=S['新宿'],mode='rail',express=true,shinkansen=true,mix=1,zoom=1,pan=[0,0],selected=null,hover=null,result,warp,W=0,H=0,dpr=1,animation=null,frame=0,points=[],lastScreen=[],stationIndex=[],drawLabels=[],ringTargets=[],selectedMinute=30,hoverMinute=null;
+let mapView='rail';
 let rentLayer=null,layerMode=0,rentTab='stations',rentPromise=null,viewMotion=null,terrainDepth=0,layerRequest=0;
 let yaw=0,pitch=.72,rentOpacity=.75,walkCorrection=true,modelRevision=0,profileLine=null,profileStation=null,orbit=null;
-function viewDepth(now=performance.now()){if(!viewMotion)return terrainDepth;const t=Math.max(0,Math.min(1,(now-viewMotion.start)/650));return viewMotion.from+(terrainDepth-viewMotion.from)*(1-Math.cos(Math.PI*t))/2;}
+function viewDepth(now=performance.now()){if(mapView!=='rail')return 0;if(!viewMotion)return terrainDepth;const t=Math.max(0,Math.min(1,(now-viewMotion.start)/650));return viewMotion.from+(terrainDepth-viewMotion.from)*(1-Math.cos(Math.PI*t))/2;}
 function set3D(enabled){const from=viewDepth();terrainDepth=enabled?1:0;viewMotion=reduced?null:{from,start:performance.now()};$('view3d').setAttribute('aria-pressed',enabled);$('view3d').classList.toggle('active',enabled);$('view3d').textContent=enabled?'2D':'3D';$('view3d').setAttribute('aria-label',enabled?'平面表示に戻す':'3D表示に切り替える');requestDraw();}
 function sceneProjection(now=performance.now()){const depth=viewDepth(now),angle=yaw*depth,tilt=pitch*depth,c=Math.cos(angle),s=Math.sin(angle),cp=Math.cos(tilt),sp=Math.sin(tilt),base=baseScreen(),camera=currentPan(now),scale=17*zoom;return (p,height=0)=>[base[0]+(p[0]*c-p[1]*s)*scale+camera[0],base[1]+((p[0]*s+p[1]*c)*cp-height*sp)*scale+camera[1]+depth*35];}
 const geoXY=(p)=>xy({lon:p[0],lat:p[1]});
@@ -102,7 +103,7 @@ function drawRegionalLines(projection){
 }
 function visible(p,margin=50){return p[0]>-margin&&p[0]<W+margin&&p[1]>-margin&&p[1]<H+margin;}
 function requestDraw(){if(!frame)frame=requestAnimationFrame(draw);}
-function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);ctx.fillStyle='#f1efe7';ctx.fillRect(0,0,W,H);const ease=progress(now),scale=17*zoom,depth=viewDepth(now),projection=sceneProjection(now),world=animation?points.map(p=>[p.from[0]+(p.target[0]-p.from[0])*ease,p.from[1]+(p.target[1]-p.from[1])*ease]):points.map(p=>p.target);lastScreen=world.map(p=>projection(p));
+function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);if(mapView!=='rail'){drawAtlasOverlay();return;}ctx.fillStyle='#f1efe7';ctx.fillRect(0,0,W,H);const ease=progress(now),scale=17*zoom,depth=viewDepth(now),projection=sceneProjection(now),world=animation?points.map(p=>[p.from[0]+(p.target[0]-p.from[0])*ease,p.from[1]+(p.target[1]-p.from[1])*ease]):points.map(p=>p.target);lastScreen=world.map(p=>projection(p));
  if(rentLayer&&layerMode)rentLayer.prepare(stationIndex.map(i=>world[i]),modelRevision+':'+(animation?animation.start:'settled')+':'+walkCorrection,now,!!animation,walkCorrection);
  if(regionCoast.length){
   ctx.fillStyle='#dbe7e4';ctx.fillRect(0,0,W,H);
@@ -249,22 +250,61 @@ function showDestination(id, keepRentPanel=false){
 function hit(x,y){const ids=zoom<.12?[...majorStations,...(selected===null?[]:[selected])]:null;
  let nearest=null,near=7;for(const i of ids??STATIONS.keys()){const p=lastScreen[stationIndex[i]];if(!p)continue;const d=Math.hypot(p[0]-x,p[1]-y);if(d<near){nearest=i;near=d;}}if(nearest!==null)return nearest;for(let j=drawLabels.length-1;j>=0;j--){const b=drawLabels[j];if(x>=b[0]&&x<=b[0]+b[2]&&y>=b[1]&&y<=b[1]+b[3])return b.id;}let id=null,best=15;for(const i of ids??STATIONS.keys()){const p=lastScreen[stationIndex[i]];if(!p)continue;const d=Math.hypot(p[0]-x,p[1]-y);if(d<best){id=i;best=d;}}return id;}
 function hitRing(x,y,labelsOnly=false){if(mix<.98)return null;for(const ring of ringTargets){const r=ring.rect;if(r&&x>=r[0]-5&&x<=r[0]+r[2]+5&&y>=r[1]-5&&y<=r[1]+r[3]+5)return ring.minute;}if(labelsOnly)return null;let minute=null,best=10;for(const ring of ringTargets){const d=Math.abs(Math.hypot(x-ring.center[0],(y-ring.center[1])/(ring.yScale||1))-ring.radius);if(d<best){best=d;minute=ring.minute;}}return minute;}
-const pointers=new Map();let drag=null,pinch=null,lastTap=null,tapTimer=null;
+const pointers=new Map();let drag=null,pinch=null,lastTap=null,tapTimer=null,quickTap=null;
 function dismissDestination(){clearTimeout(tapTimer);tapTimer=null;lastTap=null;selected=null;hover=null;$('tip').hidden=true;$('destinationCard').hidden=true;document.querySelectorAll('[data-station]').forEach(b=>b.classList.toggle('active',false));updateSumuLink();if(typeof updateSheetSummary==='function')updateSheetSummary();requestDraw();}
-document.addEventListener('pointerdown',e=>{if(!$('railView').hidden&&e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('regionTools').contains(e.target)&&!e.target.closest?.('dialog, [data-atlas-picker]')&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('mapOptions').open&&!$('atlasPicker').open&&!$('railView').hidden){dismissDestination();}});
+document.addEventListener('pointerdown',e=>{if(mapView==='rail'&&!$('railView').hidden&&e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('regionTools').contains(e.target)&&!e.target.closest?.('dialog, [data-atlas-picker]')&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
+document.addEventListener('keydown',e=>{if(mapView==='rail'&&e.key==='Escape'&&!$('mapOptions').open&&!$('atlasPicker').open&&!$('railView').hidden){dismissDestination();}});
 function stationTap(id,x,y,now=performance.now()){if(lastTap&&lastTap.id===id&&now-lastTap.time<380&&Math.hypot(x-lastTap.x,y-lastTap.y)<24){clearTimeout(tapTimer);tapTimer=null;lastTap=null;selectOrigin(id);return 'center';}if(tapTimer)clearTimeout(tapTimer);lastTap={id,x,y,time:now};tapTimer=setTimeout(()=>{tapTimer=null;showDestination(id);},380);return 'destination';}
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
-canvas.addEventListener('pointerdown',e=>{wheelZoom=null;settleMotion();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);$('tip').hidden=true;if(selected!==null)dismissDestination();
- if(pointers.size===1&&e.pointerType!=='touch'&&(e.button===2||e.ctrlKey)){e.preventDefault();clearTimeout(tapTimer);tapTimer=null;lastTap=null;orbit={x:e.clientX,y:e.clientY,yaw,pitch};drag=null;set3D(true);return;}
- if(pointers.size===1){drag={x:e.clientX,y:e.clientY,pan:currentPan(),moved:false};if(e.pointerType==='touch'&&terrainDepth)orbit={x:e.clientX,y:e.clientY,yaw,pitch};}
- else{orbit=null;clearTimeout(tapTimer);tapTimer=null;lastTap=null;const p=[...pointers.values()],r=canvas.getBoundingClientRect();pinch={distance:Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]),zoom,cx:(p[0][0]+p[1][0])/2-r.left,cy:(p[0][1]+p[1][1])/2-r.top,pan:currentPan()};if(drag)drag.moved=true;}});
+canvas.addEventListener('pointerdown',e=>{wheelZoom=null;settleMotion();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);$('tip').hidden=true;if(mapView==='rail'&&selected!==null)dismissDestination();
+ if(mapView==='rail'&&pointers.size===1&&e.pointerType!=='touch'&&(e.button===2||e.ctrlKey)){e.preventDefault();clearTimeout(tapTimer);tapTimer=null;lastTap=null;orbit={x:e.clientX,y:e.clientY,yaw,pitch};drag=null;set3D(true);return;}
+ if(pointers.size===1){
+   const second=e.pointerType==='touch'&&quickTap&&performance.now()-quickTap.time<360&&Math.hypot(e.clientX-quickTap.x,e.clientY-quickTap.y)<28;
+   quickTap=null;
+   drag={x:e.clientX,y:e.clientY,pan:currentPan(),moved:false,quick:!!second,touch:e.pointerType==='touch'};
+   if(mapView==='rail'&&e.pointerType==='touch'&&terrainDepth&&!second)orbit={x:e.clientX,y:e.clientY,yaw,pitch};
+ }
+ else{quickTap=null;orbit=null;clearTimeout(tapTimer);tapTimer=null;lastTap=null;const p=[...pointers.values()],r=canvas.getBoundingClientRect();pinch={distance:Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1]),zoom,cx:(p[0][0]+p[1][0])/2-r.left,cy:(p[0][1]+p[1][1])/2-r.top,pan:currentPan()};if(drag)drag.moved=true;}});
 canvas.addEventListener('pointermove',e=>{const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;if(pointers.has(e.pointerId)){pointers.set(e.pointerId,[e.clientX,e.clientY]);
  if(pointers.size>1&&pinch){const p=[...pointers.values()],cx=(p[0][0]+p[1][0])/2-r.left,cy=(p[0][1]+p[1][1])/2-r.top,b=baseScreen();b[1]+=viewDepth()*35;zoom=Math.max(.007,Math.min(4,pinch.zoom*Math.hypot(p[0][0]-p[1][0],p[0][1]-p[1][1])/Math.max(1,pinch.distance)));const scale=zoom/pinch.zoom;pan=[cx-b[0]-(pinch.cx-b[0]-pinch.pan[0])*scale,cy-b[1]-(pinch.cy-b[1]-pinch.pan[1])*scale];if(animation)animation.panFrom=[...pan];requestDraw();return;}
  if(orbit){yaw=orbit.yaw+(e.clientX-orbit.x)*.008;pitch=Math.max(.12,Math.min(1.25,orbit.pitch+(e.clientY-orbit.y)*.006));if(Math.hypot(e.clientX-orbit.x,e.clientY-orbit.y)>5){clearTimeout(tapTimer);tapTimer=null;lastTap=null;if(drag)drag.moved=true;}requestDraw();return;}
+ if(drag?.quick){
+  const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)<6)return;
+  if(!drag.moved){clearTimeout(tapTimer);tapTimer=null;lastTap=null;drag.moved=true;drag.lastY=drag.y;}
+  zoomAround(drag.x-r.left,drag.y-r.top,zoom*Math.exp((e.clientY-drag.lastY)*.012));
+  drag.lastY=e.clientY;requestDraw();return;
+ }
  if(drag){const dx=e.clientX-drag.x,dy=e.clientY-drag.y;if(Math.hypot(dx,dy)>5){drag.moved=true;clearTimeout(tapTimer);tapTimer=null;lastTap=null;}pan=[drag.pan[0]+dx,drag.pan[1]+dy];if(animation)animation.panFrom=[...pan];requestDraw();}return;}
+ if(mapView!=='rail'){canvas.style.cursor=hitAtlasOverlay(x,y)?'pointer':'grab';return;}
  const labelMinute=hitRing(x,y,true),id=labelMinute===null?hit(x,y):null;const minute=id===null?hitRing(x,y):null;if(id!==hover||minute!==hoverMinute){hover=id;hoverMinute=minute;requestDraw();}canvas.style.cursor=id!==null||hoverMinute!==null?'pointer':'grab';if(id===null){$('tip').hidden=true;return;}$('tip').hidden=false;$('tip').innerHTML=STATIONS[id].name+'<small>'+STATIONS[origin].name+'から約'+Math.round(result.best[id].time)+'分 / 概算</small>'+rentTooltip(id);$('tip').style.left=Math.min(x+13,W-175)+'px';$('tip').style.top=Math.min(y+13,H-56)+'px';});
-function endPointer(e){if(!pointers.has(e.pointerId))return;if(orbit){pointers.delete(e.pointerId);orbit=null;drag=null;pinch=null;requestDraw();return;}const wasMulti=!!pinch;pointers.delete(e.pointerId);if(!pointers.size){if(drag&&!drag.moved&&!wasMulti&&e.type!=='pointercancel'&&e.type!=='lostpointercapture'){const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top,label=hitRing(x,y,true),id=label===null?hit(x,y):null;if(label!==null){clearTimeout(tapTimer);lastTap=null;chooseMinute(label);}else if(id!==null)stationTap(id,x,y);else{const minute=hitRing(x,y);if(minute!==null){clearTimeout(tapTimer);lastTap=null;chooseMinute(minute);}}}drag=null;pinch=null;}else{const p=[...pointers.values()][0];drag={x:p[0],y:p[1],pan:[...pan],moved:true};}requestDraw();}
+function endPointer(event){
+ if(!pointers.has(event.pointerId))return;
+ pointers.delete(event.pointerId);
+ if(orbit){orbit=null;drag=null;pinch=null;requestDraw();return;}
+ if(pointers.size){
+  const point=pointers.values().next().value;
+  drag={x:point[0],y:point[1],pan:[...pan],moved:true};
+ }else{
+  if(drag&&!drag.moved&&!pinch&&event.type==='pointerup'){
+   const rect=canvas.getBoundingClientRect(),x=event.clientX-rect.left,y=event.clientY-rect.top;
+   if(drag.touch&&!drag.quick)quickTap={x:event.clientX,y:event.clientY,time:performance.now()};
+   if(mapView!=='rail'){
+    const pick=hitAtlasOverlay(x,y);
+    if(pick)pick();
+    else if(drag.quick)zoomAround(x,y,zoom*1.5);
+   }else{
+    const label=hitRing(x,y,true),id=label===null?hit(x,y):null;
+    if(label!==null){clearTimeout(tapTimer);lastTap=null;chooseMinute(label);}
+    else if(id!==null)stationTap(id,x,y);
+    else if(drag.quick)zoomAround(x,y,zoom*1.5);
+    else{const minute=hitRing(x,y);if(minute!==null){clearTimeout(tapTimer);lastTap=null;chooseMinute(minute);}}
+   }
+  }
+  drag=null;pinch=null;
+ }
+ requestDraw();
+}
 canvas.addEventListener('dblclick',e=>e.preventDefault());canvas.addEventListener('pointerup',endPointer);canvas.addEventListener('pointercancel',endPointer);canvas.addEventListener('lostpointercapture',endPointer);canvas.addEventListener('pointerleave',()=>{$('tip').hidden=true;hover=null;hoverMinute=null;requestDraw();});
 let wheelZoom=null;
 function zoomAround(x,y,next){
@@ -289,7 +329,7 @@ function advanceWheelZoom(now){
 canvas.addEventListener('wheel',e=>{
  e.preventDefault();
  if(!e.deltaY)return;
- if(!wheelZoom){dismissDestination();settleMotion();}
+ if(!wheelZoom){if(mapView==='rail')dismissDestination();settleMotion();}
  const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
  const delta=e.deltaY*(e.deltaMode===1?16:e.deltaMode===2?H:1);
  const target=Math.max(.007,Math.min(4,(wheelZoom?.target??zoom)*Math.exp(-delta*.0015)));
@@ -299,7 +339,7 @@ canvas.addEventListener('wheel',e=>{
 },{passive:false});
 $('zoomIn').onclick=()=>{wheelZoom=null;settleMotion();zoomAround(W/2,H/2,zoom*1.25);requestDraw();};
 $('zoomOut').onclick=()=>{wheelZoom=null;settleMotion();zoomAround(W/2,H/2,zoom/1.25);requestDraw();};
-$('reset').onclick=()=>{wheelZoom=null;yaw=0;pitch=.72;set3D(false);updateModel(true,true);};$('view3d').onclick=()=>set3D(!terrainDepth);$('geoBtn').onclick=()=>changeMix(0,true);$('timeBtn').onclick=()=>changeMix(1,true);$('warpSlider').oninput=e=>changeMix(Number(e.target.value)/100);
+$('reset').onclick=()=>{if(mapView!=='rail'){resetAtlasCamera();return;}wheelZoom=null;yaw=0;pitch=.72;set3D(false);updateModel(true,true);};$('view3d').onclick=()=>set3D(!terrainDepth);$('geoBtn').onclick=()=>changeMix(0,true);$('timeBtn').onclick=()=>changeMix(1,true);$('warpSlider').oninput=e=>changeMix(Number(e.target.value)/100);
 $('centerStation').onclick=()=>{if(selected!==null)selectOrigin(selected);};$('stationCount').textContent=STATIONS.length;$('express').onchange=e=>{express=e.target.checked;updateModel();};$('closeCard').onclick=dismissDestination;
 for(let minute=10;minute<=90;minute+=10){const b=document.createElement('button');b.dataset.minute=minute;b.innerHTML=minute+'<small>分</small>';b.setAttribute('aria-pressed',minute===selectedMinute);b.classList.toggle('active',minute===selectedMinute);b.onclick=()=>chooseMinute(minute);$('timeChoices').append(b);}
 $('aboutBtn').onclick=()=>$('about').showModal();$('closeAbout').onclick=()=>$('about').close();$('about').addEventListener('click',e=>{if(e.target===$('about')){const r=$('about').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('about').close();}});
@@ -357,6 +397,11 @@ let rentHourlyEnabled=false,rentHourlyValue=2000,rentCommuteDays=20;
 function syncRentRange(){
  $('rentFrom').value=rentFrom;
  $('rentTo').value=rentTo;
+ $('rentRangeLabel').textContent=rentFrom===rentTo?rentFrom+'分':rentFrom+'–'+rentTo+'分';
+ $('rentRangeTrack').style.setProperty('--from',rentFrom/90*100+'%');
+ $('rentRangeTrack').style.setProperty('--to',rentTo/90*100+'%');
+ $('rentFrom').setAttribute('aria-valuetext',rentFrom+'分');
+ $('rentTo').setAttribute('aria-valuetext',rentTo+'分');
 }
 
 function commuteRent(rent,time){
@@ -488,23 +533,37 @@ function drawProfile(station){
  caption.textContent=profileLine+' · '+STATIONS[station].name+
   (rentHourlyEnabled&&chosen?.total!=null?'　時給込み '+(chosen.total/10000).toFixed(2)+'万円':'');
 }
+let rentRangeFrame=null;
+function setRentRange(id,value){
+ if(id==='rentFrom')rentFrom=Math.min(value,rentTo);
+ else rentTo=Math.max(value,rentFrom);
+ syncRentRange();
+ if(rentRangeFrame===null)rentRangeFrame=requestAnimationFrame(()=>{
+  rentRangeFrame=null;
+  if(layerMode&&rentTab==='stations')updateRentCards();
+  requestDraw();
+ });
+}
 for(const id of ['rentFrom','rentTo']){
  const input=$(id);
- for(let minutes=0;minutes<=90;minutes+=10){
-  const option=document.createElement('option');option.value=minutes;option.textContent=minutes+'分';input.append(option);
- }
- input.onchange=()=>{
-  if(id==='rentFrom'){rentFrom=Number(input.value);rentTo=Math.max(rentFrom,rentTo);}
-  else{rentTo=Number(input.value);rentFrom=Math.min(rentFrom,rentTo);}
-  syncRentRange();updateRentCards();requestDraw();
- };
+ input.oninput=()=>setRentRange(id,Number(input.value));
+ input.onchange=()=>{if(layerMode&&rentTab==='stations')updateRentCards();};
 }
+$('rentRangeTrack').addEventListener('pointerdown',event=>{
+ if(event.target!==$('rentRangeTrack'))return;
+ const rect=event.target.getBoundingClientRect();
+ const value=Math.round(Math.max(0,Math.min(1,(event.clientX-rect.left-9)/(rect.width-18)))*9)*10;
+ const id=value<=rentFrom||value<rentTo&&value-rentFrom<rentTo-value?'rentFrom':'rentTo';
+ setRentRange(id,value);
+});
 syncRentRange();
-$('rentHourly').onchange=()=>{
- rentHourlyEnabled=$('rentHourly').checked;
- $('rentHourlyFields').hidden=!rentHourlyEnabled;
+$('rentHourly').onclick=()=>{
+ rentHourlyEnabled=!rentHourlyEnabled;
+ $('rentHourly').setAttribute('aria-pressed',rentHourlyEnabled);
+ $('rentHourlySettings').hidden=!rentHourlyEnabled;
  updateRentCards(true);
 };
+$('rentHourlySettings').onclick=()=>$('rentHourlyDialog').showModal();
 for(const id of ['rentHourlyValue','rentCommuteDays'])$(id).oninput=()=>{
  const input=$(id);
  if(!input.validity.valid||!Number.isFinite(input.valueAsNumber))return;
@@ -515,16 +574,6 @@ for(const id of ['rentHourlyValue','rentCommuteDays'])$(id).oninput=()=>{
 function syncRentTabs(){for(const [id,value]of [['rentStations','stations'],['rentProfile','profile']]){const active=rentTab===value;$(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);}}
 $('rentExplore').onclick=()=>setLayer(true);$('timeExplore').onclick=()=>setLayer(false);
 for(const [id,value]of [['rentStations','stations'],['rentProfile','profile']])$(id).onclick=()=>{rentPanelActive=true;rentTab=value;syncRentTabs();updateCards();};
-$('stationProfile').onclick=async()=>{
- const station=selected;
- if(station===null)return;
- await setLayer(true);
- if(!layerMode||selected!==station)return;
- rentPanelActive=true;
- rentTab='profile';
- syncRentTabs();
- updateRentCards();
-};
 $('rentInfo').onclick=()=>{$('about').showModal();$('rentMethod').scrollIntoView({block:'start'});};
 window.addEventListener('resize',resize);if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(canvas);resize();mix=0;updateModel(false);changeMix(1,true);
 

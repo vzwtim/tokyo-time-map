@@ -24,11 +24,11 @@ clock=3500;c.drawNext(clock);
 run(`assert.ok($('rentLegend').hidden);assert.ok($('rentTabs').hidden);assert.ok($('destRent').hidden);assert.equal($('placesTitle').textContent,'30分前後の駅');assert.equal(viewDepth(),0);for(let i=0;i<before;i++)assert.ok(Math.hypot(normal[i][0]-lastScreen[i][0],normal[i][1]-lastScreen[i][1])<1e-7);`);
 await elements.rentExplore.onclick();run(`assert.equal(layerMode,1);rentTab='profile';syncRentTabs();updateCards();`);await elements.timeExplore.onclick();await elements.rentExplore.onclick();run(`assert.equal(rentTab,'stations');assert.equal($('placesTitle').textContent,'家賃');`);assert.equal(fetched,1,'Re-entry must reuse rent data');
 run(`
-$('rentFrom').value=20;$('rentFrom').onchange();$('rentTo').value=40;$('rentTo').onchange();
+$('rentFrom').value=20;$('rentFrom').oninput();$('rentTo').value=40;$('rentTo').oninput();$('rentTo').onchange();
 assert.match($('suggestionMeta').textContent,/20〜40分/);
 assert.ok($('placeCards').children.length>0);
 assert.ok($('placeCards').children.every(button=>{const time=result.best[button.dataset.station].time;return time>=20&&time<=40}));
-$('rentHourly').checked=true;$('rentHourly').onchange();
+$('rentHourly').onclick();
 assert.equal(commuteRent(70000,30),110000);
 assert.match($('suggestionMeta').textContent,/時給込み/);
 $('rentProfile').onclick();assert.match($('placeCards').children[0].attrs['aria-label'],/時給込み/);

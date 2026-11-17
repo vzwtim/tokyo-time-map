@@ -5,7 +5,7 @@ function bindMapSheet(sheet, handle, body, onChange) {
 
   function heights() {
     const available = sheet.parentElement.clientHeight;
-    return [76, Math.min(340, available * .49), Math.min(680, available * .82)];
+    return [47, Math.min(260, available * .35), Math.min(650, available * .76)];
   }
 
   function setLevel(next) {

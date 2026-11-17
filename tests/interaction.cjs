@@ -51,6 +51,18 @@ documentHandlers.pointerdown({target:elements.plannerForm??{}});
 run(`assert.equal(selected,S['東京'],'Planner interactions must preserve the map selection');$('railView').hidden=false;dismissDestination();`);
 console.log('PASS: 2D pinch drift never activates 3D; focal zoom and pan; cancellation has no phantom tap; popup dismisses on map/outside/Escape and cancels pending reopen; explicit 3D touch orbit with independent pinch zoom.');
 
+run(`dismissDestination();quickTap=null;wheelZoom=null;animation=null;zoom=1;pan=[0,0];`);
+t+=1000;
+down(701,430,200);up(701,430,200);
+t+=110;
+down(702,430,200);move(702,430,250);
+run(`assert.ok(zoom>1,'Dragging down after a double tap zooms in');assert.ok(pan.every(Number.isFinite));`);
+move(702,430,170);
+run(`assert.ok(zoom<1,'Dragging above the anchor zooms out');assert.equal(tapTimer,null);`);
+up(702,430,170);
+run(`assert.equal(pointers.size,0);`);
+console.log('PASS: double-tap drag zooms in both directions without selecting a station.');
+
 const mapWheel=elements.map.handlers.wheel;
 let requestedLocation;
 c.navigator={geolocation:{getCurrentPosition(ok,fail){requestedLocation={ok,fail};}}};
