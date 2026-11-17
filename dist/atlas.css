@@ -54,12 +54,7 @@
 }
 .road-chips button[aria-pressed="true"] {border-color:#879b90;background:#e3eee5}
 .road-chips i {width:7px;height:7px;border-radius:50%;background:var(--road-color)}
-.roads-workspace {
-  display:grid;grid-template-columns:minmax(0,1fr) minmax(230px,300px);
-  min-height:460px;height:calc(100dvh - 135px);
-  overflow:hidden;border:1px solid #c5cdbc;border-radius:16px;background:var(--surface);
-}
-.road-map {position:relative;min-width:0;min-height:0;background:#dbe8e9}
+.road-map {background:#dbe8e9}
 #oldRoadMap {width:100%;height:100%;display:block;cursor:grab;touch-action:none}
 #oldRoadMap:active {cursor:grabbing}
 #oldRoadMap:focus-visible {outline:2px solid var(--teal);outline-offset:-4px}
@@ -78,20 +73,10 @@
 #oldRoadMap .old-stop text {
   fill:#24383a;stroke:#f9f7e9;stroke-width:3px;paint-order:stroke;font:650 12px system-ui,sans-serif;pointer-events:none;
 }
-.road-zoom {position:absolute;right:10px;bottom:10px;display:flex;gap:4px}
-.road-zoom button {
-  min-width:40px;min-height:40px;padding:0 8px;background:var(--surface);
-  border:1px solid #c9d2c6;border-radius:8px;box-shadow:var(--control-shadow);font-weight:650;
-}
-.road-zoom button:not(#roadFit) {font-size:20px}
-.road-zoom button:hover,.road-timetable button:hover {background:#e6eee5}
+.road-timetable button:hover {background:#e6eee5}
 .road-map-credit {position:absolute;left:9px;bottom:12px;padding:2px 6px;border-radius:4px;background:#fcfaf0dc;color:#455451;font-size:10px}
 .road-timetable {min-height:0;overflow:auto;overscroll-behavior:contain;border-left:1px solid #c5cdbc}
-.road-list-heading {
-  position:sticky;top:0;z-index:1;padding:11px 14px 8px;background:var(--surface);border-bottom:1px solid var(--line);
-}
-.road-list-heading h2 {margin:0;font-size:18px}
-.road-list-heading p,#roadStatus {margin:0;color:var(--muted);font-size:12px}
+#roadStatus {margin:0;color:var(--muted);font-size:12px}
 #roadStatus {padding:12px 14px}
 #roadStatus:empty {display:none}
 #roadStops {list-style:none;padding:6px 8px;margin:0}
@@ -118,7 +103,93 @@
   .road-chips {display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:4px;margin:6px 0}
   .road-chips button {justify-content:center;gap:3px;min-height:36px;padding-inline:2px;font-size:clamp(10px,3.05vw,12px);white-space:nowrap}
   .road-chips i {width:6px;height:6px;flex:none}
-  .roads-workspace {grid-template-columns:1fr;grid-template-rows:minmax(235px,3fr) minmax(150px,2fr);height:calc(100dvh - 132px);min-height:420px}
-  .road-timetable {border-left:0;border-top:1px solid #c5cdbc}
-  .road-list-heading {padding:5px 14px}
+}
+
+/* Shared loading treatments and compact map controls. */
+.initial-loading {
+  position:fixed;inset:0;z-index:50;display:grid;place-items:center;
+  background:#e4ece5;color:var(--ink);
+}
+.loading-card {
+  display:grid;justify-items:center;gap:14px;padding:28px 34px;border-radius:24px;
+  background:var(--surface);box-shadow:var(--control-shadow);font-size:15px;
+}
+.loading-ring {
+  width:24px;height:24px;flex:none;border:2px solid #c7d9cf;border-top-color:var(--teal);
+  border-radius:50%;animation:map-load-spin .85s linear infinite;
+}
+@keyframes map-load-spin {to {transform:rotate(1turn)}}
+.skeleton {
+  display:block;height:12px;border-radius:8px;background:#d9dfd9;
+  background-image:linear-gradient(100deg,transparent 25%,#ffffff85 48%,transparent 75%);
+  background-size:230% 100%;animation:map-load-shimmer 1.3s ease-in-out infinite;
+}
+.skeleton-short {width:132px}
+@keyframes map-load-shimmer {from {background-position:110% 0}to {background-position:-120% 0}}
+.map-loading {
+  position:absolute;top:45%;left:50%;z-index:4;transform:translate(-50%,-50%);
+  display:flex;align-items:center;gap:10px;padding:10px 15px;border-radius:24px;
+  background:var(--surface);box-shadow:var(--control-shadow);white-space:nowrap;font-weight:650;pointer-events:none;
+}
+.map-loading .loading-ring {width:18px;height:18px}
+.planner-loading {display:grid;gap:13px;padding:14px 4px}
+.planner-loading .skeleton:nth-child(2) {width:80%}
+.planner-loading .skeleton:nth-child(3) {width:62%}
+@media(prefers-reduced-motion:reduce) {.loading-ring,.skeleton {animation:none}}
+
+.rent-filters {
+  display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;padding-bottom:8px;
+}
+.rent-range,.rent-hourly-fields,.hourly-toggle {display:flex;align-items:center;gap:6px}
+.rent-range select,.rent-hourly-fields input,.planner-limits input {
+  min-height:36px;border:1px solid var(--line);border-radius:8px;padding:3px 6px;
+  background:var(--surface);color:var(--ink);
+}
+.rent-hourly-fields {flex-basis:100%;flex-wrap:wrap;gap:6px 14px}
+.rent-hourly-fields input,.planner-limits input {width:76px;font-variant-numeric:tabular-nums}
+.hourly-toggle {margin-left:auto;min-height:40px;padding:0 8px;border-radius:20px;background:#ecf1eb;cursor:pointer;font-weight:650}
+.hourly-toggle input {accent-color:var(--teal)}
+.profile-legend {display:flex;align-items:center;gap:12px;font-size:12px;color:var(--muted)}
+.profile-legend span::before {content:'';display:inline-block;width:13px;height:2px;margin-right:5px;background:#668775;vertical-align:middle}
+.profile-legend span + span::before {background:#aa6337}
+.suggestion-dock .station-list.profile-cards {height:245px;min-height:245px;overflow:auto}
+.profile-cards svg {display:block;max-width:none}
+
+#stationPlanner {--planner-color:#246660;--planner-light:#eaf2e9;--planner-edge:#d0dfd1}
+#stationPlanner[data-mode="meeting"] {--planner-color:#805115;--planner-light:#fff2cf;--planner-edge:#eddcb1}
+#stationPlanner .planner-form {background:var(--planner-light);border-color:var(--planner-edge)}
+#stationPlanner .planner-primary {background:var(--planner-color);min-height:44px;border-radius:22px;padding-inline:18px}
+#stationPlanner .planner-inputs {grid-template-columns:repeat(auto-fit,minmax(130px,1fr))}
+#stationPlanner .planner-inputs input {border-color:var(--planner-edge);background:#fffefb;border-radius:11px}
+#stationPlanner .planner-stations {grid-template-columns:1fr}
+#stationPlanner .planner-options {border-color:var(--planner-edge)}
+#stationPlanner .planner-results span {color:var(--planner-color)}
+#stationPlanner .planner-results small {grid-column:auto}
+#stationPlanner .planner-results small:last-child {text-align:right}
+.planner-brand {display:flex;align-items:center;gap:10px}
+#plannerGlyph {display:grid;place-items:center;width:38px;height:38px;border-radius:13px;background:var(--planner-light);color:var(--planner-color);font-size:23px}
+.planner-limits {display:flex;flex-wrap:wrap;gap:6px 12px}
+.planner-segment {width:max-content;box-shadow:none}
+.planner-segment button {min-height:36px;padding:0 12px;border:0;border-radius:20px;background:none;font-weight:650}
+.planner-segment button[aria-pressed="true"] {background:var(--planner-light);color:var(--planner-color)}
+
+#roadsView {max-width:none;padding:0}
+#roadsView .road-toolbar {z-index:8}
+#roadsView .road-chips {
+  position:absolute;left:0;right:0;top:55px;width:max-content;max-width:100%;
+  display:flex;flex-wrap:nowrap;overflow:auto;scrollbar-width:none;margin:0;padding:2px 2px 6px;
+}
+#roadsView .road-chips button {flex:none;box-shadow:var(--control-shadow);padding-inline:9px}
+#roadsView .road-chips button[aria-pressed="true"] {border-color:#9cbbad}
+.road-search input {min-height:40px}
+.road-search .station-suggestions button {
+  display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;min-height:34px;
+  padding:0;border:0;background:none;text-align:left;font-size:13px;
+}
+#roadsView .road-timetable {border:0}
+#roadsView .road-map-credit {bottom:calc(var(--actual-sheet-height) + 10px)}
+.road-fit {font-size:11px!important}
+@media(max-width:640px) {
+  #stationPlanner .planner-inputs {grid-template-columns:1fr}
+  #roadsView .road-chips button {box-shadow:0 1px 4px #28635922}
 }

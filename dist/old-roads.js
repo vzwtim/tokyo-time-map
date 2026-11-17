@@ -1,9 +1,14 @@
 'use strict';
 
 const roadMap = $('oldRoadMap');
+const setRoadSheetLevel = bindMapSheet($('roadDock'), $('roadSheetHandle'), $('roadSheetBody'), () => {});
+const roadQuery = $('roadQuery');
+const roadSuggestions = $('roadSuggestions');
 const roadColors = ['#a64e35', '#4f527f', '#3c7861', '#975e24', '#297081'];
 const roadNamespace = 'http://www.w3.org/2000/svg';
-let oldRoadData, oldRoadRequest, activeRoad, activeStop = null, roadDrag;
+let oldRoadData, oldRoadRequest, activeRoad, activeStop = null;
+const roadPointers = new Map();
+let roadMoved = false;
 let roadCamera = {x: 0, y: 0, scale: 1}, roadFitScale = 1;
 let roadWorld, roadStopLayer, roadMarkers = [];
 
@@ -30,6 +35,7 @@ function loadOldRoads() {
   }
   if (oldRoadRequest) return;
   $('roadStatus').textContent = '街道を読み込み中…';
+  $('roadLoading').hidden = false;
   oldRoadRequest = fetch('old-roads.json?v=1').then(response => {
     if (!response.ok) throw Error('roads');
     return response.json();
@@ -51,13 +57,14 @@ function loadOldRoads() {
     if (!$('roadsView').hidden) pickRoad(data.roads[0]);
   }).catch(() => {
     $('roadStatus').textContent = '街道を読み込めませんでした。地図を開き直してください。';
-  }).finally(() => { oldRoadRequest = null; });
+    setRoadSheetLevel(1);
+  }).finally(() => { oldRoadRequest = null; $('roadLoading').hidden = true; });
 }
 
 function pickRoad(road) {
   activeRoad = road;
   activeStop = null;
-  $('roadTitle').textContent = road.name;
+  $('roadsTitle').textContent = road.name;
   $('roadTerminals').textContent = road.stops[0].name + ' → ' + road.stops.at(-1).name;
   $('roadStops').style.setProperty('--road-color', road.color);
   for (const other of oldRoadData.roads) other.button.setAttribute('aria-pressed', other === road);
@@ -76,7 +83,7 @@ function pickRoad(road) {
     stops.append(item);
   }
   $('roadStops').replaceChildren(stops);
-  $('roadStops').parentElement.scrollTop = 0;
+  $('roadSheetBody').scrollTop = 0;
 
   roadWorld = roadNode('g', {});
   roadWorld.append(roadNode('path', {class: 'old-coast', 'fill-rule': 'evenodd', d: oldRoadData.coast}));
@@ -109,7 +116,7 @@ function fitOldRoad() {
   const left = Math.min(...x), right = Math.max(...x), top = Math.min(...y), bottom = Math.max(...y);
   roadFitScale = Math.min(
     Math.max(80, roadMap.clientWidth - 70) / Math.max(.06, right - left),
-    Math.max(80, roadMap.clientHeight - 100) / Math.max(.06, bottom - top)
+    Math.max(80, roadMap.clientHeight - 214) / Math.max(.06, bottom - top)
   );
   roadCamera = {x: (left + right) / 2, y: (top + bottom) / 2, scale: roadFitScale};
   drawRoadCamera();
@@ -121,7 +128,7 @@ function drawRoadCamera() {
   if (!width || !height) return;
   const {x, y, scale} = roadCamera;
   roadMap.setAttribute('viewBox', `0 0 ${width} ${height}`);
-  const dx = width / 2 - x * scale, dy = height / 2 - y * scale;
+  const dx = width / 2 - x * scale, dy = (height + 25) / 2 - y * scale;
   roadWorld.setAttribute('transform', `translate(${dx} ${dy}) scale(${scale})`);
 
   const positions = roadMarkers.map(({point, marker}) => {
@@ -152,13 +159,16 @@ function drawRoadCamera() {
 
 function chooseRoadStop(index, fromMap = false) {
   activeStop = index;
+  const stop = activeRoad.stops[index];
+  $('roadsTitle').textContent = stop.name;
+  $('roadTerminals').textContent = activeRoad.name+' · '+stop.region;
   const items = $('roadStops').children;
   for (const [i, {marker}] of roadMarkers.entries()) {
     marker.setAttribute('aria-pressed', i === index);
     items[i].firstElementChild.setAttribute('aria-pressed', i === index);
   }
   if (fromMap) {
-    const list = $('roadStops').parentElement;
+    const list = $('roadSheetBody');
     list.scrollTop = items[index].offsetTop - items[0].offsetTop;
   } else {
     const [x, y] = roadMarkers[index].point;
@@ -172,7 +182,7 @@ function zoomOldRoad(factor, x = roadMap.clientWidth / 2, y = roadMap.clientHeig
   const {scale} = roadCamera;
   const next = Math.max(roadFitScale / 2.5, Math.min(3500, scale * factor));
   roadCamera.x += (x - roadMap.clientWidth / 2) * (1 / scale - 1 / next);
-  roadCamera.y += (y - roadMap.clientHeight / 2) * (1 / scale - 1 / next);
+  roadCamera.y += (y - (roadMap.clientHeight + 25) / 2) * (1 / scale - 1 / next);
   roadCamera.scale = next;
   drawRoadCamera();
 }
@@ -198,24 +208,80 @@ roadMap.addEventListener('keydown', event => {
   event.preventDefault();
 });
 roadMap.addEventListener('pointerdown', event => {
-  if (!activeRoad || !event.isPrimary || event.button !== 0) return;
-  roadDrag = {id: event.pointerId, x: event.clientX, y: event.clientY, moved: false};
+  if (!activeRoad || event.button !== 0 || roadPointers.size >= 2) return;
+  if (!roadPointers.size) roadMoved = false;
+  roadPointers.set(event.pointerId, [event.clientX, event.clientY]);
+  if (roadPointers.size === 2) {
+    roadMoved = true;
+    for (const id of roadPointers.keys()) roadMap.setPointerCapture(id);
+  }
 });
 roadMap.addEventListener('pointermove', event => {
-  if (roadDrag?.id !== event.pointerId) return;
-  const dx = event.clientX - roadDrag.x, dy = event.clientY - roadDrag.y;
-  if (!roadDrag.moved) {
+  const old = roadPointers.get(event.pointerId);
+  if (!old) return;
+  const x = event.clientX, y = event.clientY, dx = x - old[0], dy = y - old[1];
+  if (!roadMoved) {
     if (Math.hypot(dx, dy) < 5) return;
-    roadDrag.moved = true;
+    roadMoved = true;
     roadMap.setPointerCapture(event.pointerId);
+  }
+  roadPointers.set(event.pointerId, [x, y]);
+  if (roadPointers.size === 2) {
+    const [ox, oy] = [...roadPointers.entries()].find(([id]) => id !== event.pointerId)[1];
+    const bounds = roadMap.getBoundingClientRect();
+    roadCamera.x -= dx / (2 * roadCamera.scale);
+    roadCamera.y -= dy / (2 * roadCamera.scale);
+    zoomOldRoad(Math.hypot(x - ox, y - oy) / Math.max(1, Math.hypot(old[0] - ox, old[1] - oy)),
+      (x + ox) / 2 - bounds.left, (y + oy) / 2 - bounds.top);
+    return;
   }
   roadCamera.x -= dx / roadCamera.scale;
   roadCamera.y -= dy / roadCamera.scale;
-  roadDrag.x = event.clientX;
-  roadDrag.y = event.clientY;
   drawRoadCamera();
 });
 for (const event of ['pointerup', 'pointercancel', 'lostpointercapture', 'pointerleave']) {
-  roadMap.addEventListener(event, e => { if (roadDrag?.id === e.pointerId) roadDrag = null; });
+  roadMap.addEventListener(event, e => roadPointers.delete(e.pointerId));
 }
+function findRoadStops(query) {
+  return (oldRoadData?.roads ?? []).flatMap(road => road.stops.flatMap((stop,index) =>
+    stop.name.includes(query) ? [{road,stop,index}] : [])).slice(0,6);
+}
+
+function selectRoadSuggestion({road,stop,index}) {
+  if (road !== activeRoad) pickRoad(road);
+  roadQuery.value = stop.name;
+  roadSuggestions.hidden = true;
+  roadQuery.blur();
+  chooseRoadStop(index);
+}
+
+roadQuery.addEventListener('input', () => {
+  const query = roadQuery.value.trim();
+  const matches = query ? findRoadStops(query) : [];
+  roadSuggestions.replaceChildren();
+  for (const match of matches) {
+    const li = document.createElement('li');
+    const button = document.createElement('button');
+    const road = document.createElement('small');
+    button.type = 'button';
+    button.textContent = match.stop.name;
+    road.textContent = match.road.name;
+    button.append(road);
+    button.onclick = () => selectRoadSuggestion(match);
+    li.append(button);
+    roadSuggestions.append(li);
+  }
+  roadSuggestions.hidden = !matches.length;
+});
+roadQuery.addEventListener('keydown', event => {
+  if (event.key === 'Escape') roadSuggestions.hidden = true;
+  if (event.key === 'Enter' && !roadSuggestions.hidden) {
+    event.preventDefault();
+    roadSuggestions.querySelector('button')?.click();
+  }
+});
+$('roadsView').addEventListener('pointerdown', event => {
+  if (!event.target.closest('.road-search')) roadSuggestions.hidden = true;
+});
 new ResizeObserver(drawRoadCamera).observe(roadMap);
+

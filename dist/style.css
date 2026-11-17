@@ -534,6 +534,5 @@ header {height:44px;background:var(--surface);border-bottom:0}
 .line-stations .place {width:100%}
 .planner-stations {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px}
 #plannerStations .planner-primary {min-height:44px;margin:0;white-space:nowrap}
-.planner-form:has(#plannerSecondRow:not([hidden])) .planner-stations {grid-template-columns:1fr}
 .planner-options {padding-top:8px}
 .station-planner > .sumu-link {margin-bottom:4px}

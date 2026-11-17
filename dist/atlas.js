@@ -21,15 +21,15 @@ for (const button of [$('mapMenuOpen'), ...document.querySelectorAll('[data-atla
 $('mapSettingsOpen').onclick = () => mapOptions.showModal();
 $('aboutBtn').addEventListener('click', closeMapMenu, {capture:true});
 
-function renderAtlasView(view, line = null, moveFocus = false) {
-  if (view === activeAtlasView && !line) return;
+function renderAtlasView(view, moveFocus = false) {
+  if (view === activeAtlasView) return;
   if (!$('stationPlanner').hidden) closePlanner();
 
   activeAtlasView = view;
   const rail = view === 'rail';
   $('railView').hidden = !rail;
   $('roadsView').hidden = view !== 'roads';
-  if (view === 'living' || view === 'meeting') openPlanner(view, line);
+  if (view === 'living' || view === 'meeting') openPlanner(view);
   if (view === 'roads') loadOldRoads();
   if (rail) resize();
   for (const choice of atlasChoices) choice.setAttribute('aria-pressed', choice.dataset.atlasView === view);
@@ -43,13 +43,13 @@ function renderAtlasView(view, line = null, moveFocus = false) {
   }
 }
 
-function showAtlasView(view, line = null) {
+function showAtlasView(view) {
   atlasPicker.close();
   if (view !== activeAtlasView) {
     // Preserve the existing query string used by links from the commute optimizer.
     history.pushState(null, '', view === 'rail' ? location.pathname + location.search : '#' + view);
   }
-  renderAtlasView(view, line, true);
+  renderAtlasView(view, true);
 }
 
 function readAtlasView() {
@@ -58,5 +58,8 @@ function readAtlasView() {
 }
 
 for (const choice of atlasChoices) choice.onclick = () => showAtlasView(choice.dataset.atlasView);
-window.addEventListener('hashchange', () => renderAtlasView(readAtlasView(), null, true));
-window.addEventListener('DOMContentLoaded', () => renderAtlasView(readAtlasView()));
+window.addEventListener('hashchange', () => renderAtlasView(readAtlasView(), true));
+window.addEventListener('DOMContentLoaded', () => {
+  renderAtlasView(readAtlasView());
+  requestAnimationFrame(() => { $('initialLoading').hidden = true; });
+});

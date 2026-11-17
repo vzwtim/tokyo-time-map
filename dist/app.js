@@ -115,7 +115,7 @@ function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,
  for(const park of parks){path(park.ids,true);ctx.fillStyle='#dce3d4';ctx.fill();}
  for(const river of rivers){path(river.ids);ctx.strokeStyle='#c6dcd6';ctx.lineWidth=river.name==='荒川'?4:2.5;ctx.lineJoin='round';ctx.stroke();}
  if(rentLayer&&layerMode){rentLayer.draw(ctx,projection,depth,rentOpacity);if(depth>.001){for(const ids of linePaths)if(ids)for(const id of ids)lastScreen[id]=projection(world[id],rentLayer.elevation(world[id]));for(let i=0;i<STATIONS.length;i++){const id=stationIndex[i],r=rentLayer.observed[i];lastScreen[id]=projection(world[id],r?rentLayer.height(r.rent):rentLayer.elevation(world[id]));}}}
- const b=lastScreen[stationIndex[origin]],ringBase=projection(world[stationIndex[origin]],0),ringY=Math.cos(pitch*depth);ringTargets=[];if(mix>.97){let lastRadius=0;for(const min of (zoom<.27?[60,120,180,240,360,480,600,720,960,1200]:[10,20,30,40,50,60,70,80,90])){const r=min*.353*17*zoom,active=min===selectedMinute,hot=min===hoverMinute;if(r>Math.hypot(W,H)*1.5)break;if(zoom<.27&&r-lastRadius<34)continue;lastRadius=r;ctx.globalAlpha=active?.95:.55;ctx.setLineDash(active?[]:[2,5]);ctx.lineWidth=active?1.6:hot?1.3:.7;ctx.strokeStyle=active?'#327b78':hot?'#628f82':'#88a69d';ctx.beginPath();ctx.ellipse(ringBase[0],ringBase[1],r,r*ringY,0,0,Math.PI*2);ctx.stroke();ringTargets.push({minute:min,center:ringBase,radius:r,yScale:ringY,rect:null});
+ const b=lastScreen[stationIndex[origin]],ringBase=projection(world[stationIndex[origin]],0),ringY=Math.cos(pitch*depth);ringTargets=[];if(mix>.97){let lastRadius=0;for(const min of (zoom<.27?[60,120,180,240,360,480,600,720,960,1200]:[10,20,30,40,50,60,70,80,90])){const r=min*.353*17*zoom,active=selectedTimeRing(min),hot=min===hoverMinute;if(r>Math.hypot(W,H)*1.5)break;if(zoom<.27&&r-lastRadius<34)continue;lastRadius=r;ctx.globalAlpha=active?.95:.55;ctx.setLineDash(active?[]:[2,5]);ctx.lineWidth=active?1.6:hot?1.3:.7;ctx.strokeStyle=active?'#327b78':hot?'#628f82':'#88a69d';ctx.beginPath();ctx.ellipse(ringBase[0],ringBase[1],r,r*ringY,0,0,Math.PI*2);ctx.stroke();ringTargets.push({minute:min,center:ringBase,radius:r,yScale:ringY,rect:null});
  // Labels follow the ring, with a clear touch target away from the center.
  const label=min>=60&&min%60===0?(min/60)+'時間':min+'分';
  ctx.font='11px system-ui, sans-serif';
@@ -156,7 +156,7 @@ function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,
  if(visible(b)){ctx.beginPath();ctx.arc(...b,12,0,Math.PI*2);ctx.fillStyle='#d8623620';ctx.fill();ctx.beginPath();ctx.arc(...b,5,0,Math.PI*2);ctx.fillStyle='#d86236';ctx.fill();ctx.strokeStyle='#f8f7f1';ctx.lineWidth=2;ctx.stroke();}
  for(const ring of ringTargets){
   if(!ring.rect)continue;
-  const [x,y,w,h]=ring.rect,active=ring.minute===selectedMinute;
+  const [x,y,w,h]=ring.rect,active=selectedTimeRing(ring.minute);
   const label=ring.minute>=60&&ring.minute%60===0?(ring.minute/60)+'時間':ring.minute+'分';
   ctx.globalAlpha=1;ctx.fillStyle=active?'#246660':'#f7f6ef';
   ctx.fillRect(x,y,w,h);
@@ -170,7 +170,8 @@ function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,
 }
 function resize(){const r=canvas.getBoundingClientRect();W=r.width;H=r.height;dpr=Math.min(devicePixelRatio||1,2);canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);requestDraw();}
 function selectOrigin(id){if(id===undefined||id===origin)return;wheelZoom=null;clearTimeout(tapTimer);tapTimer=null;lastTap=null;selected=null;hover=null;hoverMinute=null;$('tip').hidden=true;$('destinationCard').hidden=true;origin=id;profileStation=null;profileLine=null;updateModel(true,true);updateSumuLink();}
-function chooseMinute(minute){selectedMinute=minute;selected=null;$('destinationCard').hidden=true;hoverMinute=null;if(mix<.98)changeMix(1,true);updateCards();$('announce').textContent=STATIONS[origin].name+'から'+minute+'分前後の駅を表示しました。';requestDraw();}
+function selectedTimeRing(minute){return layerMode ? minute>=rentFrom&&minute<=rentTo : minute===selectedMinute;}
+function chooseMinute(minute){if(layerMode){const span=rentTo-rentFrom;rentFrom=Math.max(0,Math.min(90-span,minute-span/2));rentFrom=Math.round(rentFrom/10)*10;rentTo=rentFrom+span;syncRentRange();rentPanelActive=true;updateRentCards();requestDraw();return;}selectedMinute=minute;selected=null;$('destinationCard').hidden=true;hoverMinute=null;if(mix<.98)changeMix(1,true);updateCards();$('announce').textContent=STATIONS[origin].name+'から'+minute+'分前後の駅を表示しました。';requestDraw();}
 function suggestionStations(){const tolerance=selectedMinute<=30?3:4;return STATIONS.filter(s=>s.id!==origin&&Math.abs(result.best[s.id].time-selectedMinute)<=tolerance).sort((a,b)=>Math.abs(result.best[a.id].time-selectedMinute)-Math.abs(result.best[b.id].time-selectedMinute)||km(STATIONS[origin],b)-km(STATIONS[origin],a));}
 function routeChangeLabel(id){const stats=result.summary(id);return stats.transfers?'乗換 '+stats.transfers+'回':stats.through?'直通・乗換なし':'乗換なし';}
 function arrivalLineMark(id){
@@ -208,7 +209,6 @@ function updateCards(){
   list.append(button);
  }
  list.classList.toggle('profile-cards',false);
- $('profileCompare').hidden=true;
  $('profileCaption').hidden=true;$('profileLines').hidden=true;
  $('timeChoices').hidden=false;
  if(!matches.length){
@@ -331,6 +331,7 @@ function syncRentEntry(enabled,pending=false){
   $(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);
  }
  $('rentExplore').setAttribute('aria-busy',pending);
+ $('rentLoading').hidden=!pending;
  $('dockModeHint').textContent=pending?'家賃相場を読み込み中…':enabled?'安い順':'';
 }
 async function setLayer(enabled){
@@ -342,32 +343,68 @@ async function setLayer(enabled){
  }}
  if(ticket!==layerRequest)return;
  layerMode=enabled?1:0;syncRentEntry(!!enabled);
- $('rentLegend').hidden=!enabled;$('rentTabs').hidden=!enabled;$('rentFoot').hidden=!enabled;
+ $('rentLegend').hidden=!enabled;$('rentTabs').hidden=!enabled;$('rentFilters').hidden=!enabled;$('rentFoot').hidden=!enabled;
  $('rentDock').classList.toggle('with-rent',!!enabled);
  // A switch always starts with the station prices, even after a profile view.
  if(changed&&enabled){rentTab='stations';syncRentTabs();}
  if(changed)rentPanelActive=!!enabled;
  if(selected!==null)updateDestRent(selected);updateCards();requestDraw();
- $('announce').textContent=enabled?'家賃表示に切り替えました。下部に同じ時間で行ける駅の家賃を安い順に表示しています。':'時間表示に戻しました。';
+ $('announce').textContent=enabled?'家賃表示に切り替えました。下部のシートで時間帯を指定できます。':'時間表示に戻しました。';
 }
-function updateRentCards(){const all=suggestionStations(),matches=all.filter(s=>rentLayer.observed[s.id]).sort((a,b)=>rentLayer.observed[a.id].rent-rentLayer.observed[b.id].rent);
- $('placesTitle').textContent='家賃';$('dockModeHint').textContent='';$('suggestionMeta').textContent='単身向け相場';$('placeCards').replaceChildren();$('profileCompare').hidden=true;
- $('profileCaption').hidden=true;$('profileLines').hidden=true;$('timeChoices').hidden=rentTab==='profile';$('placeCards').classList.toggle('profile-cards',rentTab==='profile');
- if(rentTab==='profile'){renderStationProfile();}else if(rentTab==='stations'){for(const s of matches){const r=rentLayer.observed[s.id],b=document.createElement('button');b.className='place rent-place';b.dataset.station=s.id;b.innerHTML='<h3>'+s.name+'</h3><div class="mins">'+(r.rent/10000).toFixed(2)+'<small>万円</small></div><span class="comparison">約'+Math.round(result.best[s.id].time)+'分 · '+routeChangeLabel(s.id)+'</span>';b.onclick=()=>showDestination(s.id);$('placeCards').append(b);}}
- else {for(const line of rentLayer.compare(all.map(s=>s.id))){const b=document.createElement('button');b.className='place rent-place line-place';b.innerHTML='<h3><i style="background:'+line.color+'"></i>'+line.name+'</h3><div class="mins">'+(line.median/10000).toFixed(2)+'<small>万円</small></div><span class="comparison">駅相場の中央値 · '+line.count+'/'+line.total+'駅</span>';b.onclick=()=>{
-  const existing=b.nextElementSibling;
-  if(existing?.classList.contains('line-stations')){existing.hidden=!existing.hidden;b.setAttribute('aria-expanded',!existing.hidden);return;}
-  const list=document.createElement('div');list.className='line-stations';
-  for(const id of line.ids){
-   const item=document.createElement('button');item.type='button';item.className='place';
-   item.textContent=STATIONS[id].name+' · '+(rentLayer.observed[id].rent/10000).toFixed(2)+'万円';
-   item.onclick=()=>showDestination(id);list.append(item);
+let rentFrom=20,rentTo=40;
+let rentHourlyEnabled=false,rentHourlyValue=2000,rentCommuteDays=20;
+
+function syncRentRange(){
+ $('rentFrom').value=rentFrom;
+ $('rentTo').value=rentTo;
+}
+
+function commuteRent(rent,time){
+ return rent!==null&&Number.isFinite(time)
+  ? rent+Math.round(time*2*rentCommuteDays*rentHourlyValue/60) : null;
+}
+
+function updateRentCards(keepChartPosition=false){
+ const profile=rentTab==='profile',list=$('placeCards');
+ const previousScroll=list.scrollLeft;
+ $('placesTitle').textContent='家賃';
+ $('suggestionMeta').textContent=profile?'沿線断面':'片道 '+rentFrom+'〜'+rentTo+'分'+(rentHourlyEnabled?' · 時給込み':'');
+ $('dockModeHint').textContent='';
+ $('profileCaption').hidden=true;
+ $('profileLines').hidden=true;
+ $('profileLegend').hidden=!(profile&&rentHourlyEnabled);
+ $('rentRange').hidden=profile;
+ $('timeChoices').hidden=true;
+ list.classList.toggle('profile-cards',profile);
+ list.replaceChildren();
+ if(profile){
+  renderStationProfile();
+  if(keepChartPosition)list.scrollLeft=previousScroll;
+ } else {
+  const matches=STATIONS.flatMap(station=>{
+   const rent=rentLayer.observed[station.id]?.rent;
+   const time=result.best[station.id].time;
+   if(!rent||time<rentFrom||time>rentTo)return [];
+   return [{station,rent,time,total:rentHourlyEnabled?commuteRent(rent,time):rent}];
+  }).sort((a,b)=>a.total-b.total||a.time-b.time);
+  for(const {station,rent,time,total} of matches){
+   const button=document.createElement('button');
+   button.className='place rent-place';button.dataset.station=station.id;
+   const name=document.createElement('h3');name.textContent=station.name;
+   const price=document.createElement('div');price.className='mins';
+   price.textContent=(total/10000).toFixed(2)+'万円';
+   const detail=document.createElement('span');detail.className='comparison';
+   detail.textContent='約'+Math.round(time)+'分 · '+(rentHourlyEnabled?'家賃 '+(rent/10000).toFixed(2)+'万円':routeChangeLabel(station.id));
+   button.append(name);button.append(price);button.append(detail);
+   button.onclick=()=>showDestination(station.id);list.append(button);
   }
-  b.after(list);b.setAttribute('aria-expanded',true);
- };b.setAttribute('aria-expanded',false);$('placeCards').append(b);}}
- if(!$('placeCards').children.length){const e=document.createElement('p');e.className='empty-state';e.textContent=rentTab==='lines'?'この時間帯は比較に必要な3駅以上の相場がある路線がありません。':'この時間帯の家賃相場は未収録です。';$('placeCards').append(e);}
+ }
+ if(!list.children.length){
+  const empty=document.createElement('p');empty.className='empty-state';
+  empty.textContent='この時間帯の家賃相場は未収録です。';list.append(empty);
+ }
  if(typeof updateSheetSummary==='function')updateSheetSummary();
- $('rentFoot').textContent='単身向け / 面積・築年数未補正 · 駅相場と徒歩推定は別';$('placeCards').scrollTop=0;if(rentTab!=='profile')$('placeCards').scrollLeft=0;document.querySelectorAll('[data-minute]').forEach(b=>{const active=Number(b.dataset.minute)===selectedMinute;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active);});
+ $('rentFoot').textContent=rentHourlyEnabled?'時給込み＝家賃＋片道時間 × 往復 × 出社日数 × 時給':'単身向け · 面積・築年数未補正';
 }
 function renderStationProfile(){
  const station=profileStation??origin;
@@ -396,30 +433,88 @@ function renderStationProfile(){
   choices.append(chip);
  }
  drawProfile(station);
- if(typeof openPlanner==='function'){
-  const compare=$('profileCompare');
-  compare.hidden=false;
-  compare.onclick=()=>showAtlasView('living',profileLine);
- }
 }
-function drawProfile(station){const rows=rentLayer.profile(profileLine),w=Math.max(600,rows.length*46),h=105,min=40000,max=220000,y=v=>64-(v-min)/(max-min)*53,ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 '+w+' '+h);svg.setAttribute('width',w);svg.setAttribute('height',h);svg.setAttribute('role','img');svg.setAttribute('aria-label',profileLine+'の駅別家賃相場断面図');
- function node(name,attrs,text){const el=document.createElementNS(ns,name);for(const [k,v]of Object.entries(attrs))el.setAttribute(k,v);if(text!==undefined)el.textContent=text;return el;}
- for(const rent of [60000,120000,180000]){svg.append(node('line',{x1:33,y1:y(rent),x2:w,y2:y(rent),stroke:'#d1d8ca','stroke-dasharray':'2 4'}));svg.append(node('text',{x:0,y:y(rent)+3,fill:'#8b968c','font-size':8},rent/10000+'万'));}
- let segment=[];function flush(){if(segment.length)svg.append(node('polyline',{points:segment.join(' '),fill:'none',stroke:'#7b9181','stroke-width':1.3}));segment=[];}
- rows.forEach((r,i)=>{const x=45+i*(w-65)/Math.max(1,rows.length-1);if(r.rent===null){flush();svg.append(node('text',{x,y:58,'text-anchor':'middle',fill:'#a8b1a3','font-size':9},'—'));}else segment.push(x+','+y(r.rent));});flush();
- for(let i=0;i<rows.length;i++){const r=rows[i],x=45+i*(w-65)/Math.max(1,rows.length-1),g=node('g',{'data-profile-station':r.id,role:'button',tabindex:0,'aria-label':r.name+' '+(r.rent===null?'相場なし':(r.rent/10000).toFixed(2)+'万円')});g.append(node('title',{},r.name+' / '+(r.rent===null?'相場なし':(r.rent/10000).toFixed(2)+'万円 / 月')));
- g.append(node('rect',{x:x-18,y:0,width:36,height:h,fill:'transparent'}));if(r.rent!==null){g.append(node('circle',{cx:x,cy:y(r.rent),r:r.id===station?5:3.2,fill:rentLayer.color(r.rent),stroke:r.id===station?'#223637':'#f1efe7','stroke-width':r.id===station?2:1}));if(r.id===station||rows.length<16||i%2===0)g.append(node('text',{x,y:y(r.rent)-6,'text-anchor':'middle',fill:'#7f7864','font-size':7},(r.rent/10000).toFixed(1)));}
- g.append(node('text',{x:x-3,y:79,fill:r.id===station?'#223637':'#526462','font-weight':r.id===station?700:400,'font-size':10,transform:'rotate(30 '+(x-3)+' 79)'},r.name));g.addEventListener('click',()=>showDestination(r.id,true));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showDestination(r.id,true);}});svg.append(g);}
- $('placeCards').append(svg);
- const index=rows.findIndex(row=>row.id===station);
+function drawProfile(station){
+ const rows=rentLayer.profile(profileLine).map(row=>({...row,total:commuteRent(row.rent,result.best[row.id].time)}));
+ const width=Math.max(540,rows.length*54),height=234,top=24,bottom=178;
+ const largest=Math.max(60000,...rows.map(row=>(rentHourlyEnabled?row.total??row.rent:row.rent)??0));
+ const step=Math.ceil(largest/4/10000)*10000;
+ const y=value=>bottom-value/(4*step)*(bottom-top);
+ const x=index=>53+index*(width-82)/Math.max(1,rows.length-1);
+ function node(name,attrs,label){
+  const el=document.createElementNS('http://www.w3.org/2000/svg',name);
+  for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
+  if(label!==undefined)el.textContent=label;
+  return el;
+ }
+ const svg=node('svg',{viewBox:'0 0 '+width+' '+height,width,height,role:'img','aria-label':profileLine+'の沿線家賃'+(rentHourlyEnabled?'と時給込みの月額':'')});
+ for(let i=0;i<=4;i++){
+  const py=y(i*step);
+  svg.append(node('line',{x1:43,y1:py,x2:width,y2:py,stroke:'#d1d8ca','stroke-dasharray':'2 4'}));
+  svg.append(node('text',{x:0,y:py+4,fill:'#526462','font-size':10},i*step/10000+'万'));
+ }
+ const series=rentHourlyEnabled?[['rent','#668775'],['total','#aa6337']]:[['rent','#31756a']];
+ for(const [key,color] of series){
+  let segment=[];
+  const flush=()=>{
+   if(segment.length>1)svg.append(node('polyline',{points:segment.join(' '),fill:'none',stroke:color,'stroke-width':2}));
+   segment=[];
+  };
+  rows.forEach((row,i)=>{if(row[key]===null)flush();else segment.push(x(i)+','+y(row[key]));});flush();
+ }
+ rows.forEach((row,i)=>{
+  const label=row.name+' · '+(row.rent===null?'相場なし':'家賃 '+(row.rent/10000).toFixed(2)+'万円')+
+   (rentHourlyEnabled&&row.total!==null?' · 時給込み '+(row.total/10000).toFixed(2)+'万円':'');
+  const g=node('g',{'data-profile-station':row.id,role:'button',tabindex:0,'aria-label':label});
+  g.append(node('title',{},label));
+  g.append(node('rect',{x:x(i)-22,y:0,width:44,height,fill:'transparent'}));
+  for(const [key,color] of series){
+   const value=row[key];if(value===null)continue;
+   g.append(node('circle',{cx:x(i),cy:y(value),r:row.id===station?5:3.5,fill:color,stroke:'#fff','stroke-width':1}));
+   if(row.id===station||rows.length<16||i%2===0)g.append(node('text',{x:x(i),y:y(value)-(key==='total'?9:7),'text-anchor':'middle',fill:color,'font-size':9},(value/10000).toFixed(1)));
+  }
+  g.append(node('text',{x:x(i),y:196,fill:row.id===station?'#223637':'#526462','font-weight':row.id===station?700:400,'font-size':11,transform:'rotate(34 '+x(i)+' 196)'},row.name));
+  const pick=()=>showDestination(row.id,true);
+  g.addEventListener('click',pick);
+  g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();pick();}});
+  svg.append(g);
+ });
  const list=$('placeCards');
- if(index>=0)list.scrollLeft=Math.max(0,45+index*(w-65)/Math.max(1,rows.length-1)-list.clientWidth/2);
- const caption=$('profileCaption');
- caption.hidden=false;
- caption.textContent=profileLine+' · '+STATIONS[station].name;}
-function syncRentTabs(){for(const [id,value]of [['rentStations','stations'],['rentLines','lines'],['rentProfile','profile']]){const active=rentTab===value;$(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);}}
+ list.append(svg);
+ const index=rows.findIndex(row=>row.id===station);
+ if(index>=0)list.scrollLeft=Math.max(0,x(index)-list.clientWidth/2);
+ const caption=$('profileCaption');caption.hidden=false;
+ const chosen=rows[index];
+ caption.textContent=profileLine+' · '+STATIONS[station].name+
+  (rentHourlyEnabled&&chosen?.total!=null?'　時給込み '+(chosen.total/10000).toFixed(2)+'万円':'');
+}
+for(const id of ['rentFrom','rentTo']){
+ const input=$(id);
+ for(let minutes=0;minutes<=90;minutes+=10){
+  const option=document.createElement('option');option.value=minutes;option.textContent=minutes+'分';input.append(option);
+ }
+ input.onchange=()=>{
+  if(id==='rentFrom'){rentFrom=Number(input.value);rentTo=Math.max(rentFrom,rentTo);}
+  else{rentTo=Number(input.value);rentFrom=Math.min(rentFrom,rentTo);}
+  syncRentRange();updateRentCards();requestDraw();
+ };
+}
+syncRentRange();
+$('rentHourly').onchange=()=>{
+ rentHourlyEnabled=$('rentHourly').checked;
+ $('rentHourlyFields').hidden=!rentHourlyEnabled;
+ updateRentCards(true);
+};
+for(const id of ['rentHourlyValue','rentCommuteDays'])$(id).oninput=()=>{
+ const input=$(id);
+ if(!input.validity.valid||!Number.isFinite(input.valueAsNumber))return;
+ if(id==='rentHourlyValue')rentHourlyValue=input.valueAsNumber;
+ else rentCommuteDays=input.valueAsNumber;
+ updateRentCards(true);
+};
+function syncRentTabs(){for(const [id,value]of [['rentStations','stations'],['rentProfile','profile']]){const active=rentTab===value;$(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);}}
 $('rentExplore').onclick=()=>setLayer(true);$('timeExplore').onclick=()=>setLayer(false);
-for(const [id,value]of [['rentStations','stations'],['rentLines','lines'],['rentProfile','profile']])$(id).onclick=()=>{rentPanelActive=true;rentTab=value;syncRentTabs();updateCards();};
+for(const [id,value]of [['rentStations','stations'],['rentProfile','profile']])$(id).onclick=()=>{rentPanelActive=true;rentTab=value;syncRentTabs();updateCards();};
 $('stationProfile').onclick=async()=>{
  const station=selected;
  if(station===null)return;
