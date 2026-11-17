@@ -46,6 +46,9 @@ run(`stationTap(S['東京'],500,300,20000);assert.ok(tapTimer!==null);$('closeCa
 down(103,600,300);run(`assert.ok($('destinationCard').hidden);`);up(103,600,300,'lostpointercapture');run(`assert.equal(tapTimer,null);showDestination(S['東京']);`);
 documentHandlers.keydown({key:'Escape'});run(`assert.ok($('destinationCard').hidden);showDestination(S['東京']);`);documentHandlers.pointerdown({target:elements.warpSlider});run(`assert.ok($('destinationCard').hidden);$('view3d').onclick();assert.equal(terrainDepth,1);assert.equal($('view3d').textContent,'2D');`);
 down(104,200,200);move(104,250,230);up(104,250,230);run(`assert.ok(yaw>0);const angleBeforePinch=yaw,tiltBeforePinch=pitch;`);down(105,200,200);down(106,300,200);move(106,360,280);up(106,360,280);up(105,200,200);run(`assert.equal(yaw,angleBeforePinch);assert.equal(pitch,tiltBeforePinch);assert.equal(terrainDepth,1);$('view3d').onclick();assert.equal(terrainDepth,0);assert.equal($('view3d').textContent,'3D');`);
+run(`showDestination(S['東京']);$('railView').hidden=true;`);
+documentHandlers.pointerdown({target:elements.plannerForm??{}});
+run(`assert.equal(selected,S['東京'],'Planner interactions must preserve the map selection');$('railView').hidden=false;dismissDestination();`);
 console.log('PASS: 2D pinch drift never activates 3D; focal zoom and pan; cancellation has no phantom tap; popup dismisses on map/outside/Escape and cancels pending reopen; explicit 3D touch orbit with independent pinch zoom.');
 
 const mapWheel=elements.map.handlers.wheel;
