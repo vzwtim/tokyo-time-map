@@ -4,6 +4,14 @@ const sheet = $('rentDock');
 const sheetHandle = $('sheetHandle');
 const sheetBody = $('sheetBody');
 const layerMenu = $('mapOptions');
+$('mapMenuOpen').onclick = () => layerMenu.showModal();
+layerMenu.addEventListener('click', event => {
+  if (event.target !== layerMenu) return;
+  const bounds = layerMenu.getBoundingClientRect();
+  if (event.clientX < bounds.left || event.clientX > bounds.right ||
+      event.clientY < bounds.top || event.clientY > bounds.bottom) closeMapMenu();
+});
+$('aboutBtn').addEventListener('click', () => closeMapMenu(), {capture:true});
 let sheetLevel = 0;
 let sheetDrag = null;
 let ignoreSheetClick = false;
@@ -31,11 +39,13 @@ function updateSheetSummary() {
     : destination && !profile ? $('destName').textContent
     : $('placesTitle').textContent;
   const meta = planning ? (sheetLevel ? (plannerMode==='living'?'家賃と通勤時間で比較':'集合しやすい駅を比較') : $('plannerStatus').textContent || '駅を探す')
-    : destination && !profile ? $('destTime').textContent + '分 · ' + STATIONS[origin].name + 'から'
+    : destination && !profile ? ($('destTime').textContent === '—' ? '経路なし' : STATIONS[origin].name + 'から 約' + $('destTime').textContent + '分')
     : $('suggestionMeta').textContent;
   $('sheetTitle').textContent = title;
   $('sheetMeta').textContent = meta;
-  sheet.dataset.content = planning ? 'planner' : destination && !profile ? 'station' : 'explore';
+  const content = planning ? 'planner' : destination && !profile ? 'station' : 'explore';
+  if (sheet.dataset.content !== content) sheetBody.scrollTop = 0;
+  sheet.dataset.content = content;
 }
 
 function syncLayerModes() {
@@ -50,7 +60,7 @@ function syncLayerModes() {
 
 function activateBaseLayer(rent) {
   closePlanner();
-  layerMenu.open = false;
+  closeMapMenu();
   set3D(false);
   if (mix < .98) changeMix(1, true);
   setSheetLevel(0);
@@ -65,7 +75,7 @@ $('timeExplore').onclick = () => activateBaseLayer(false);
 $('rentExplore').onclick = () => activateBaseLayer(true);
 for (const [id, kind] of [['livingOpen', 'living'], ['meetingOpen', 'meeting']]) {
   $(id).onclick = () => {
-    layerMenu.open = false;
+    closeMapMenu();
     openPlanner(kind);
   };
 }
@@ -117,5 +127,5 @@ function finishSheetDrag(event) {
 for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
   sheetHandle.addEventListener(event, finishSheetDrag);
 }
-setSheetLevel($('destinationCard').hidden ? 0 : 1);
+setSheetLevel(0);
 syncLayerModes();

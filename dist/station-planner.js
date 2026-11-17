@@ -26,7 +26,7 @@ let plannerMarkers = [];
 let plannerFocusId = null;
 
 function plannerStationLabel(id) {
-  return [...stationOptions].find(([, station]) => station === id)?.[0] ?? STATIONS[id].name;
+  return stationLabels[id] ?? STATIONS[id].name;
 }
 
 function openPlanner(kind, line = null) {
@@ -54,9 +54,6 @@ function openPlanner(kind, line = null) {
   plannerInputs[1].required = !living;
   $('plannerStatus').textContent = '';
   $('plannerRun').disabled = false;
-  $('plannerStations').open = true;
-  $('livingControls').open = false;
-  $('plannerStationSummary').textContent = living ? '職場の駅を選ぶ' : '出発駅を選ぶ';
   $('plannerResults').replaceChildren();
   $('plannerNote').textContent = living
     ? '通勤時間は職場の駅を起点にした片道の概算。家賃は東京圏の単身向け相場（2026年10月取得、面積・築年数未補正）。'
@@ -160,7 +157,6 @@ function renderPlannerResults() {
     if (row.station.id === plannerFocusId) button.setAttribute('aria-current', 'true');
     button.onclick = () => {
       plannerFocusId = row.station.id;
-      setSheetLevel(1);
       focusPlannerStation(row.station.id);
       list.querySelector('[aria-current]')?.removeAttribute('aria-current');
       button.setAttribute('aria-current', 'true');
@@ -221,8 +217,7 @@ $('plannerForm').onsubmit = async event => {
     plannerSearch = {living, ids, journeys, allowed};
     renderPlannerResults();
     if (plannerMarkers.length) {
-      $('plannerStationSummary').textContent = ids.map(id => STATIONS[id].name).join('・') + ' · 変更';
-      $('plannerStations').open = false;
+      $('plannerResults').scrollIntoView({block:'start',inline:'nearest'});
       selectOrigin(ids[0]);
       focusPlannerStation(plannerMarkers[0].station.id);
     }

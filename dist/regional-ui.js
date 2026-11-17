@@ -44,12 +44,12 @@ function updateBulletComparison(id) {
   el.textContent='新幹線あり '+format(withBullet)+' ／ なし '+format(without);
 }
 
-$('regionSelect').onchange=e=>{
-  const value=e.target.value;
+$('regionChoices').onclick=e=>{
+  const value=e.target.dataset.region;
+  if(!value)return;
   if(value==='all')fitRegionalOverview();
-  else if(value)switchRegion(value);
-  e.target.value='';
-  $('mapOptions').open=false;
+  else switchRegion(value);
+  closeMapMenu();
 };
 for(const id of ['geoBtn','timeBtn','warpSlider'])$(id).addEventListener(id==='warpSlider'?'change':'click',()=>{
   if(overviewMode!==null)fitRegionalOverview(overviewMode);
@@ -63,11 +63,10 @@ canvas.addEventListener('pointerdown',()=>{overviewMode=null;});
 
 $('shinkansen').onchange=e=>{
   shinkansen=e.target.checked;
-  const open=$('routeSteps').open;
   updateModel();
-  $('routeSteps').open=open;
 };
 const stationOptions=new Map();
+const stationLabels=[];
 const byName=new Map();
 for(const station of STATIONS) {
   if(!byName.has(station.name))byName.set(station.name,[]);
@@ -77,9 +76,7 @@ for(const station of STATIONS){
   const duplicates=byName.get(station.name);
   const value=duplicates.length===1?station.name:station.name+'（'+station.region+
     (duplicates.filter(s=>s.region===station.region).length>1?' '+(duplicates.indexOf(station)+1):'')+'）';
-  const option=document.createElement('option');
-  option.value=value;
-  $('stationNames').append(option);
+  stationLabels[station.id]=value;
   stationOptions.set(value,station.id);
 }
 function resolveStationInput(value) {
@@ -109,18 +106,12 @@ $('stationSearch').onsubmit=e=>{
 };
 
 
-// Geolocation only runs on request. The position stays in this tab.
-const mapOptions=$('mapOptions');
-document.addEventListener('pointerdown',e=>{
-  if(mapOptions.open&&!mapOptions.contains(e.target))mapOptions.open=false;
-});
-mapOptions.addEventListener('keydown',e=>{
-  if(e.key!=='Escape'||!mapOptions.open)return;
-  e.stopPropagation();
-  mapOptions.open=false;
-  mapOptions.querySelector('summary').focus();
-});
+function closeMapMenu() {
+  const menu=$('mapOptions');
+  if(menu.open)menu.close();
+}
 
+// Geolocation only runs on request. The position stays in this tab.
 let deviceLocation=null;
 let locationStatusTimer;
 function showLocationStatus(message,temporary=false){
