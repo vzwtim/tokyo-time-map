@@ -285,3 +285,54 @@
   padding:0;border:0;margin:0 0 3px;
 }
 #railView #stationPlanner .planner-segment button {min-height:30px;font-size:12px}
+
+#railView #rentDock.with-rent[data-content="explore"]:not([data-sheet-level="0"]) #sheetHandle {
+  height:22px;min-height:22px;padding:0;
+}
+#rentDock.with-rent[data-content="explore"]:not([data-sheet-level="0"]) :is(#sheetTitle,#sheetMeta) {
+  position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap;
+}
+#railView #rentDock.with-rent[data-content="explore"]:not([data-sheet-level="0"]) #sheetChevron {bottom:8px}
+#rentHourlyDialog.top-input-dialog {margin:calc(10px + env(safe-area-inset-top)) auto auto;border-radius:20px}
+#rentHourlyDialog input {font-size:16px}
+
+#plannerTools {position:absolute;inset:0 58px auto 0;width:min(480px,calc(100% - 58px));pointer-events:none;--planner-accent:#246660}
+#plannerTools[data-mode="meeting"] {--planner-accent:#805115}
+#plannerTools .planner-form {
+  pointer-events:auto;margin:0;gap:4px;padding:7px 8px;background:var(--surface);
+  border:1px solid var(--line);border-radius:18px;box-shadow:var(--control-shadow);
+}
+#plannerTools .planner-stations {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px;align-items:start}
+#plannerTools .planner-inputs {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
+#plannerTools .planner-inputs label {position:relative;grid-column:auto;display:grid;gap:2px;font-size:11px;white-space:nowrap}
+#plannerTools .planner-inputs #plannerThirdRow {grid-column:1/-1}
+#plannerTools .planner-inputs input {width:100%;min-height:36px;padding:2px 6px;border-radius:8px;font-size:16px}
+#plannerTools .planner-primary {
+  margin-top:18px;min-height:36px;padding:0 8px;border:0;border-radius:16px;background:var(--planner-accent);
+  color:#fff;font-size:12px;
+}
+#plannerTools .station-suggestions {
+  position:absolute;inset:100% auto auto 0;width:min(240px,65vw);max-height:min(35dvh,180px);
+  z-index:3;font-size:13px;white-space:normal;box-shadow:var(--control-shadow);
+}
+#plannerTools .planner-limits {padding-top:4px;display:block;margin:0}
+#plannerTools .planner-limits summary {width:max-content;color:var(--planner-accent);font-size:12px;font-weight:600}
+.planner-limit-fields {display:flex;flex-wrap:wrap;gap:4px 8px;padding:4px 0;font-size:11px}
+.planner-limit-fields input {width:60px;min-height:32px;font-size:16px}
+
+.road-controls {margin-top:5px;display:flex;align-items:center;gap:4px}
+#railView .road-controls .map-segment button {min-height:32px;padding:0 7px;font-size:12px}
+#railView .road-controls .road-origin {
+  min-height:35px;max-width:105px;overflow:hidden;text-overflow:ellipsis;padding:0 8px;
+  border:0;border-radius:18px;background:var(--surface);box-shadow:var(--control-shadow);font-weight:630;
+}
+.road-members {display:flex;flex-wrap:wrap;gap:4px;margin:0 0 6px}
+.road-members span {padding:2px 7px;background:#e9efea;border-radius:16px;font-size:11px}
+#roadSteps {list-style:none;margin:3px 0 0;padding:0}
+#roadSteps li {display:grid;gap:1px;padding:5px 2px;border-top:1px solid var(--line);font-size:13px}
+#roadSteps small,.road-note {font-size:11px;color:var(--muted)}
+#roadStatus {padding:2px 0 4px}
+.road-detail-bar {display:flex;justify-content:space-between;align-items:flex-start;gap:6px}
+#roadSheetBody .station-actions {flex:none;margin-block:0 3px}
+#roadSheetBody .station-actions button {white-space:nowrap}
+#roadSheetBody .road-note {margin-block:4px}

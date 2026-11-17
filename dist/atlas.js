@@ -104,7 +104,8 @@ function drawAtlasOverlay() {
   const dy = H / 2 + pan[1] - warp.base[1] * scale;
   const bounds = [(-dx-24)/scale,(-dy-24)/scale,(W-dx+24)/scale,(H-dy+24)/scale];
   const project = ([x,y]) => [x * scale + dx, y * scale + dy];
-  const {land, tracks, water, green} = getGeographicPaths();
+  const geographic=getGeographicPaths();
+  const {land, water, green}=mapView==='roads'?(getRoadBackdrop()??geographic):geographic;
   atlasHits = [];
   atlasLabels = [];
   ctx.fillStyle = '#dbe7e4';ctx.fillRect(0,0,W,H);
@@ -116,7 +117,7 @@ function drawAtlasOverlay() {
   ctx.lineWidth = 1.35/scale;ctx.strokeStyle = '#c6dcd6';ctx.stroke(water);
   if (mapView === 'roads') drawRoadLines(bounds,scale);
   else {
-    ctx.lineWidth = .85/scale;ctx.strokeStyle = '#91a89d';ctx.globalAlpha = .55;ctx.stroke(tracks);
+    ctx.lineWidth = .85/scale;ctx.strokeStyle = '#91a89d';ctx.globalAlpha = .55;ctx.stroke(geographic.tracks);
   }
   ctx.restore();
   if (mapView === 'roads') drawRoadStops(bounds,project);
@@ -150,7 +151,8 @@ function hitAtlasOverlay(x,y) {
     if(distance<best){best=distance;pick=item.pick;}
   }
   if(pick)return pick;
-  return atlasHits.findLast(({box})=>box&&x>=box[0]&&x<=box[2]&&y>=box[1]&&y<=box[3])?.pick;
+  return atlasHits.findLast(({box})=>box&&x>=box[0]&&x<=box[2]&&y>=box[1]&&y<=box[3])?.pick
+    ?? (mapView==='roads'?hitRoadRing(x,y):null);
 }
 function centerAtlasPoint(point) {
   wheelZoom = null;

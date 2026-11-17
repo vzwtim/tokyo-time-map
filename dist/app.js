@@ -291,7 +291,7 @@ function endPointer(event){
    if(drag.touch&&!drag.quick)quickTap={x:event.clientX,y:event.clientY,time:performance.now()};
    if(mapView!=='rail'){
     const pick=hitAtlasOverlay(x,y);
-    if(pick)pick();
+    if(pick)pick(drag.quick);
     else if(drag.quick)zoomAround(x,y,zoom*1.5);
    }else{
     const label=hitRing(x,y,true),id=label===null?hit(x,y):null;

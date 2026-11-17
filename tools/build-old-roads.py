@@ -19,7 +19,7 @@ def main(road_file, post_file):
         info = post["properties"]
         lon, lat = post["geometry"]["coordinates"]
         stops_by_road.setdefault(info["road_id"], []).append([
-            info["name"], info["serial"], info["kg"], round(lon, 5), round(lat, 5)
+            info["name"], info["serial"], info["kg"], round(lon, 5), round(lat, 5), info["shukuba_id"]
         ])
 
     result = []

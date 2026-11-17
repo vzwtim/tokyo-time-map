@@ -36,7 +36,9 @@ function openPlanner(kind) {
   planner.dataset.mode = kind;
   $('plannerTitle').textContent = living ? '住む駅' : '飲む駅';
   $('plannerMeta').textContent = '条件を入力';
-  $('plannerConditions').open = true;
+  $('livingControls').open = false;
+  $('plannerTools').dataset.mode = kind;
+  $('plannerTools').hidden = false;
   plannerCandidates = [];
   pickedPlannerId = null;
   $('plannerFirstLabel').textContent = living ? '1人目の職場' : '1人目の出発駅';
@@ -55,12 +57,13 @@ function openPlanner(kind) {
   $('plannerNote').textContent = living ? '東京圏の単身向け相場を使用 · 通勤時間は反対方向の経路を使った概算' : '所要時間は概算 · 新幹線を除く';
   setPlannerLoading(false);
   planner.hidden = false;
-  setPlannerSheetLevel(1);
+  setPlannerSheetLevel(0);
 }
 
 function closePlanner() {
   plannerRevision++;
   planner.hidden = true;
+  $('plannerTools').hidden=true;
 }
 
 function renderPlannerResults() {
@@ -217,13 +220,17 @@ $('plannerForm').onsubmit = async event => {
     const journeys = ids.map(id => calculate(id, 'rail', express, false));
     plannerSearch = {living, ids, journeys};
     renderPlannerResults();
+    setPlannerSheetLevel(1);
     if(plannerCandidates.length){
-      $('plannerConditions').open=false;
+      $('livingControls').open=false;
       $('plannerSheetBody').scrollTop=0;
       focusPlannerResults();
     }
   } catch {
-    if (revision === plannerRevision) $('plannerStatus').textContent = '候補を表示できませんでした。もう一度お試しください。';
+    if (revision === plannerRevision) {
+      $('plannerStatus').textContent = '候補を表示できませんでした。もう一度お試しください。';
+      setPlannerSheetLevel(1);
+    }
   } finally {
     if (revision === plannerRevision) setPlannerLoading(false);
   }
