@@ -486,3 +486,54 @@ header {height:44px;background:var(--surface);border-bottom:0}
 }
 
 #destinationCard .destination-top,#destinationCard #routeOrigin {display:none}
+
+/* One visual system for modes, station actions and route instructions. */
+.map-menu .menu-section:first-child {padding-top:4px}
+.map-menu .menu-head {position:static;border:0;padding:0;margin-bottom:5px}
+.map-menu .menu-head h2 {font-size:17px}
+.map-menu .menu-head button {margin-right:-9px}
+.map-menu .layer-picker {gap:4px}
+.map-menu .layer-picker button {min-height:74px;gap:5px}
+.map-menu .layer-swatch {
+  display:grid;place-items:center;width:46px;height:46px;border:0;
+  border-radius:13px;background:#eef0eb;color:#394c46;
+}
+.map-menu .layer-picker button[aria-pressed="true"] .layer-swatch {
+  outline:none;background:#d9ece4;color:#18594e;box-shadow:inset 0 0 0 1px #90b6a7;
+}
+.layer-swatch svg {width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.65;stroke-linecap:round;stroke-linejoin:round}
+.sheet-handle:has(#sheetMeta:empty) #sheetMeta {display:none}
+.suggestion-dock .destination-card {min-width:0;overflow:visible;padding-top:0;border:0}
+.station-actions {display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) 44px;gap:8px}
+.station-actions button {
+  min-height:42px;padding:0 7px;border:1px solid var(--line);border-radius:10px;
+  background:var(--surface-raised);font-size:12px;font-weight:650;color:var(--ink);
+}
+.station-actions .station-dismiss {font-size:20px;font-weight:400}
+.station-actions button:hover {background:#e4f1e9}
+#routeSteps {min-width:0;padding-top:3px;margin-top:8px;border:0}
+#routeStepsBody .step {
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:1px 10px;
+  align-items:baseline;margin:0;padding:8px 0 8px 10px;border-left:3px solid var(--route-color,#9bad9f);
+  background:#f2f4ef;
+}
+#routeStepsBody .step strong {min-width:0;overflow-wrap:anywhere;font-size:13px;font-weight:650}
+#routeStepsBody .step span {color:var(--muted);font-size:12px}
+#routeStepsBody .step .route-leg-time {grid-column:2;grid-row:1;padding-right:10px;white-space:nowrap;color:var(--ink);font-variant-numeric:tabular-nums}
+#routeStepsBody .step + .step {margin-top:4px}
+#routeStepsBody .route-wait,#routeStepsBody .route-through {margin-left:1px;padding-block:5px}
+.station-rent {
+  display:flex;align-items:baseline;justify-content:space-between;gap:8px;
+  border-top:1px solid var(--line);margin:12px 0 0;padding-top:8px;font-size:12px;
+}
+.station-rent a {color:var(--muted);font-size:11px;text-underline-offset:2px}
+.suggestion-dock .rent-tabs {order:-1;width:100%;gap:0;border-bottom:1px solid var(--line)}
+.suggestion-dock .rent-tabs button {flex:1;min-height:42px;border-radius:0;font-size:13px}
+.profile-caption {margin:6px 0;color:var(--muted);font-size:12px}
+.line-stations {grid-column:1/-1;padding:4px 0 8px 12px;border-left:2px solid var(--line)}
+.line-stations .place {width:100%}
+.planner-stations {display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:end;gap:8px}
+#plannerStations .planner-primary {min-height:44px;margin:0;white-space:nowrap}
+.planner-form:has(#plannerSecondRow:not([hidden])) .planner-stations {grid-template-columns:1fr}
+.planner-options {padding-top:8px}
+.station-planner > .sumu-link {margin-bottom:4px}

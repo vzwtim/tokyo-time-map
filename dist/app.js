@@ -29,7 +29,7 @@ function currentPan(now=performance.now()){if(!animation)return [...pan];const t
 function settleMotion(){if(!animation)return;const now=performance.now(),c=currentPan(now),remaining=animation?Math.max(150,animation.duration-(now-animation.start)):0;for(const p of points)p.from=currentPoint(p,now);pan=c;if(animation)animation={start:performance.now(),duration:remaining,panFrom:c};}
 function startMotion(camera,animate,duration=1050){if(animate&&!reduced)animation={start:performance.now(),duration,panFrom:camera};else{animation=null;for(const p of points)p.from=[...p.target];}}
 function updateModel(animate=true,recenter=false){const now=performance.now(),camera=currentPan(now);for(const p of points)p.from=currentPoint(p,now);pan=recenter?[0,0]:camera;modelRevision++;result=calculate(origin,mode,express,shinkansen);warp=makeWarp(origin,result);const stationLookup=new Map(stationIndex.map((id,j)=>[id,j]));for(let i=0;i<points.length;i++){const p=points[i],station=stationLookup.get(i)??-1;const t=station>=0?warp.station(station):warp.point(p.geo);p.warped=t;p.target=[p.geo[0]-warp.base[0]+(t[0]-p.geo[0])*mix,p.geo[1]-warp.base[1]+(t[1]-p.geo[1])*mix];}
- $('originName').textContent=STATIONS[origin].name;updateCards();if(selected!==null)showDestination(selected);$('announce').textContent=STATIONS[origin].name+'を中心に地図を更新しました。';startMotion(camera,animate);requestDraw();}
+ $('originName').textContent=STATIONS[origin].name;updateCards();if(selected!==null)showDestination(selected,rentPanelActive);$('announce').textContent=STATIONS[origin].name+'を中心に地図を更新しました。';startMotion(camera,animate);requestDraw();}
 function changeMix(v,animate=false){const now=performance.now(),camera=currentPan(now);for(const p of points)p.from=currentPoint(p,now);pan=camera;mix=v;modelRevision++;$('warpSlider').value=Math.round(v*100);$('warpSlider').style.setProperty('--pct',v*100+'%');$('geoBtn').classList.toggle('active',v<.5);$('timeBtn').classList.toggle('active',v>=.5);$('geoBtn').setAttribute('aria-pressed',v<.5);$('timeBtn').setAttribute('aria-pressed',v>=.5);for(const p of points){const t=p.warped;p.target=[p.geo[0]-warp.base[0]+(t[0]-p.geo[0])*mix,p.geo[1]-warp.base[1]+(t[1]-p.geo[1])*mix];}startMotion(camera,animate,900);requestDraw();}
 function baseScreen(){return [W/2,H/2];}
 function project(p,now=performance.now()){return sceneProjection(now)(p);}
@@ -210,7 +210,7 @@ function updateCards(){
  }
  list.classList.toggle('profile-cards',false);
  $('profileCompare').hidden=true;
- $('profileLines').hidden=true;
+ $('profileCaption').hidden=true;$('profileLines').hidden=true;
  $('timeChoices').hidden=false;
  if(!matches.length){
   const empty=document.createElement('p');empty.className='empty-state';
@@ -223,16 +223,28 @@ function updateCards(){
   b.classList.toggle('active',active);b.setAttribute('aria-pressed',active);
  });
 }
-function showDestination(id){clearTimeout(tapTimer);tapTimer=null;selected=id;profileStation=id;updateSumuLink();document.querySelectorAll('[data-station]').forEach(b=>b.classList.toggle('active',Number(b.dataset.station)===id));$('destinationCard').hidden=false;$('routeOrigin').textContent=STATIONS[origin].name+'から · 発車後の概算';$('destName').textContent=STATIONS[id].name;updateDestRent(id);const minutes=result.best[id].time;$('destTime').textContent=Number.isFinite(minutes)?Math.round(minutes):'—';
+let rentPanelActive=false;
+function showDestination(id, keepRentPanel=false){
+ if(!keepRentPanel)rentPanelActive=false;
+ clearTimeout(tapTimer);tapTimer=null;selected=id;profileStation=id;updateSumuLink();document.querySelectorAll('[data-station]').forEach(b=>b.classList.toggle('active',Number(b.dataset.station)===id));$('destinationCard').hidden=false;$('routeOrigin').textContent=STATIONS[origin].name+'から · 発車後の概算';$('destName').textContent=STATIONS[id].name;updateDestRent(id);const minutes=result.best[id].time;$('destTime').textContent=Number.isFinite(minutes)?Math.round(minutes):'—';
  if(typeof updateBulletComparison==='function')updateBulletComparison(id);const steps=result.route(id),stats=result.summary(id);$('destSummary').textContent='乗車 '+Math.round(stats.ride)+'分 / 乗換待ち '+Math.round(stats.boardingWait)+'分 / 乗換移動 '+Math.round(stats.transferWalk)+'分'+(stats.walk?' / 徒歩 '+Math.round(stats.walk)+'分':'');
  const routeBody=$('routeStepsBody');routeBody.replaceChildren();const groups=[];for(const step of steps){const last=groups.at(-1);if(last&&last.type===step.type&&last.line===step.line&&!step.boarding){last.to=step.to;last.t+=step.t;}else groups.push({...step});}
  if(!groups.length){const p=document.createElement('p');p.className='step';p.textContent=id===origin?'ここが中心駅です。':'現在の条件では経路がありません。';routeBody.append(p);}
  for(const group of groups){
   if(group.type==='rail'&&group.wait>0){const wait=document.createElement('div');wait.className='route-wait';wait.textContent=STATIONS[group.from].name+'で'+(group.transfer?'乗換':'乗車待ち')+' · '+(group.transferTime?'移動 '+group.transferTime+'分 ＋ ':'')+'待ち '+group.boardWait+'分';routeBody.append(wait);}
   if(group.through){const through=document.createElement('div');through.className='route-through';through.textContent=STATIONS[group.from].name+'から直通・乗換なし';routeBody.append(through);}
-  const row=document.createElement('div');row.className='step';row.innerHTML='<i style="background:'+(group.type==='rail'?LINES[group.line].color:'#768579')+'"></i><div>'+STATIONS[group.from].name+' → '+STATIONS[group.to].name+'<small>'+(group.type==='rail'?LINES[group.line].name:'徒歩')+' · 約'+Math.round(group.t)+'分</small></div>';routeBody.append(row);
+  const row=document.createElement('div');row.className='step';
+  const line=group.type==='rail'?LINES[group.line]:null;
+  row.style.setProperty('--route-color',line?.color??'#768579');
+  const stations=document.createElement('strong');
+  stations.textContent=STATIONS[group.from].name+' → '+STATIONS[group.to].name;
+  const service=document.createElement('span');
+  service.textContent=line?.name??'徒歩';
+  const time=document.createElement('span');
+  time.className='route-leg-time';time.textContent='約'+Math.round(group.t)+'分';
+  row.append(stations);row.append(time);row.append(service);routeBody.append(row);
  }
- if(layerMode&&rentTab==='profile'&&rentLayer)updateRentCards();
+ if(layerMode&&rentPanelActive&&rentTab==='profile'&&rentLayer)updateRentCards();
  if(typeof updateSheetSummary==='function')updateSheetSummary();
  requestDraw();}
 function hit(x,y){const ids=zoom<.12?[...majorStations,...(selected===null?[]:[selected])]:null;
@@ -294,7 +306,18 @@ for(let minute=10;minute<=90;minute+=10){const b=document.createElement('button'
 $('aboutBtn').onclick=()=>$('about').showModal();$('closeAbout').onclick=()=>$('about').close();$('about').addEventListener('click',e=>{if(e.target===$('about')){const r=$('about').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('about').close();}});
 
 function rentTooltip(id){if(!layerMode||!rentLayer)return '';const r=rentLayer.observed[id];return '<small>'+ (r?'単身相場 '+(r.rent/10000).toFixed(2)+'万円 / 月':'家賃相場なし')+'</small>';}
-function updateDestRent(id){const el=$('destRent');el.hidden=!layerMode;el.textContent='';if(!layerMode||!rentLayer)return;const r=rentLayer.observed[id];if(!r){el.textContent='家賃相場なし';return;}const a=document.createElement('a');a.href=rentLayer.source(r).url;a.target='_blank';a.rel='noopener';a.textContent='単身相場 '+(r.rent/10000).toFixed(2)+'万円 / 月 ↗';el.append(a);}
+function updateDestRent(id){
+ const el=$('destRent');el.hidden=!layerMode;el.textContent='';
+ if(!layerMode||!rentLayer)return;
+ const record=rentLayer.observed[id];
+ if(!record){el.textContent='家賃相場なし';return;}
+ const amount=document.createElement('span');
+ amount.textContent='単身家賃 '+(record.rent/10000).toFixed(2)+'万円／月';
+ const source=document.createElement('a');
+ source.href=rentLayer.source(record).url;
+ source.target='_blank';source.rel='noopener';source.textContent='出典 ↗';
+ el.append(amount);el.append(source);
+}
 async function loadRent(){if(rentPromise)return rentPromise;rentPromise=(async()=>{
  const data=await fetch('rent-data.json?v=9').then(r=>{if(!r.ok)throw Error('data');return r.json();});
  await new Promise((resolve,reject)=>{const script=document.createElement('script');script.src='rent-layer.js?v=11';script.onload=resolve;script.onerror=reject;document.head.append(script);});
@@ -325,14 +348,25 @@ async function setLayer(enabled){
  $('rentDock').classList.toggle('with-rent',!!enabled);
  // A switch always starts with the station prices, even after a profile view.
  if(changed&&enabled){rentTab='stations';syncRentTabs();}
+ if(changed)rentPanelActive=!!enabled;
  if(selected!==null)updateDestRent(selected);updateCards();requestDraw();
  $('announce').textContent=enabled?'家賃表示に切り替えました。下部に同じ時間で行ける駅の家賃を安い順に表示しています。':'時間表示に戻しました。';
 }
-function updateRentCards(){const all=suggestionStations(),matches=all.filter(s=>rentLayer.observed[s.id]).sort((a,b)=>rentLayer.observed[a.id].rent-rentLayer.observed[b.id].rent),tol=selectedMinute<=30?3:4;
- $('placesTitle').textContent=rentTab==='profile'?'沿線の家賃断面':selectedMinute+'分前後の家賃'+(rentTab==='lines'?' · 沿線比較':' · 安い順');$('dockModeHint').textContent=rentTab==='profile'?'路線に沿って、家賃の変化を見る':rentTab==='lines'?'同じ時間帯の沿線を相場中央値で比較':'↓ 下の駅を家賃の安い順に表示';$('suggestionMeta').textContent=STATIONS[origin].name+'から ±'+tol+'分 · 相場 '+matches.length+'/'+all.length+'駅';$('placeCards').replaceChildren();$('profileCompare').hidden=true;
- $('profileLines').hidden=true;$('timeChoices').hidden=rentTab==='profile';$('placeCards').classList.toggle('profile-cards',rentTab==='profile');
+function updateRentCards(){const all=suggestionStations(),matches=all.filter(s=>rentLayer.observed[s.id]).sort((a,b)=>rentLayer.observed[a.id].rent-rentLayer.observed[b.id].rent);
+ $('placesTitle').textContent='家賃';$('dockModeHint').textContent='';$('suggestionMeta').textContent='単身向け相場';$('placeCards').replaceChildren();$('profileCompare').hidden=true;
+ $('profileCaption').hidden=true;$('profileLines').hidden=true;$('timeChoices').hidden=rentTab==='profile';$('placeCards').classList.toggle('profile-cards',rentTab==='profile');
  if(rentTab==='profile'){renderStationProfile();}else if(rentTab==='stations'){for(const s of matches){const r=rentLayer.observed[s.id],b=document.createElement('button');b.className='place rent-place';b.dataset.station=s.id;b.innerHTML='<h3>'+s.name+'</h3><div class="mins">'+(r.rent/10000).toFixed(2)+'<small>万円</small></div><span class="comparison">約'+Math.round(result.best[s.id].time)+'分 · '+routeChangeLabel(s.id)+'</span>';b.onclick=()=>showDestination(s.id);$('placeCards').append(b);}}
- else {for(const line of rentLayer.compare(all.map(s=>s.id))){const b=document.createElement('button');b.className='place rent-place line-place';b.innerHTML='<h3><i style="background:'+line.color+'"></i>'+line.name+'</h3><div class="mins">'+(line.median/10000).toFixed(2)+'<small>万円</small></div><span class="comparison">駅相場の中央値 · '+line.count+'/'+line.total+'駅</span>';b.onclick=()=>{rentTab='stations';syncRentTabs();updateRentCards();const ids=new Set(line.ids);for(const el of $('placeCards').children)if(!ids.has(Number(el.dataset.station)))el.hidden=true;$('suggestionMeta').textContent=line.name+' · '+line.count+'駅 / '+STATIONS[origin].name+'から ±'+tol+'分';};$('placeCards').append(b);}}
+ else {for(const line of rentLayer.compare(all.map(s=>s.id))){const b=document.createElement('button');b.className='place rent-place line-place';b.innerHTML='<h3><i style="background:'+line.color+'"></i>'+line.name+'</h3><div class="mins">'+(line.median/10000).toFixed(2)+'<small>万円</small></div><span class="comparison">駅相場の中央値 · '+line.count+'/'+line.total+'駅</span>';b.onclick=()=>{
+  const existing=b.nextElementSibling;
+  if(existing?.classList.contains('line-stations')){existing.hidden=!existing.hidden;b.setAttribute('aria-expanded',!existing.hidden);return;}
+  const list=document.createElement('div');list.className='line-stations';
+  for(const id of line.ids){
+   const item=document.createElement('button');item.type='button';item.className='place';
+   item.textContent=STATIONS[id].name+' · '+(rentLayer.observed[id].rent/10000).toFixed(2)+'万円';
+   item.onclick=()=>showDestination(id);list.append(item);
+  }
+  b.after(list);b.setAttribute('aria-expanded',true);
+ };b.setAttribute('aria-expanded',false);$('placeCards').append(b);}}
  if(!$('placeCards').children.length){const e=document.createElement('p');e.className='empty-state';e.textContent=rentTab==='lines'?'この時間帯は比較に必要な3駅以上の相場がある路線がありません。':'この時間帯の家賃相場は未収録です。';$('placeCards').append(e);}
  if(typeof updateSheetSummary==='function')updateSheetSummary();
  $('rentFoot').textContent='単身向け / 面積・築年数未補正 · 駅相場と徒歩推定は別';$('placeCards').scrollTop=0;if(rentTab!=='profile')$('placeCards').scrollLeft=0;document.querySelectorAll('[data-minute]').forEach(b=>{const active=Number(b.dataset.minute)===selectedMinute;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active);});
@@ -343,11 +377,10 @@ function renderStationProfile(){
  const choices=$('profileLines');
  choices.replaceChildren();
  choices.hidden=lines.length<2;
- $('placesTitle').textContent=STATIONS[station].name+'の沿線家賃';
+
  $('dockModeHint').textContent='';
  if(!lines.length){
   profileLine=null;
-  $('suggestionMeta').textContent='';
   const message=document.createElement('p');
   message.className='empty-state';
   message.textContent='この駅の沿線家賃は未収録です。家賃データがある東京圏の駅を選んでください。';
@@ -378,20 +411,23 @@ function drawProfile(station){const rows=rentLayer.profile(profileLine),w=Math.m
  rows.forEach((r,i)=>{const x=45+i*(w-65)/Math.max(1,rows.length-1);if(r.rent===null){flush();svg.append(node('text',{x,y:58,'text-anchor':'middle',fill:'#a8b1a3','font-size':9},'—'));}else segment.push(x+','+y(r.rent));});flush();
  for(let i=0;i<rows.length;i++){const r=rows[i],x=45+i*(w-65)/Math.max(1,rows.length-1),g=node('g',{'data-profile-station':r.id,role:'button',tabindex:0,'aria-label':r.name+' '+(r.rent===null?'相場なし':(r.rent/10000).toFixed(2)+'万円')});g.append(node('title',{},r.name+' / '+(r.rent===null?'相場なし':(r.rent/10000).toFixed(2)+'万円 / 月')));
  g.append(node('rect',{x:x-18,y:0,width:36,height:h,fill:'transparent'}));if(r.rent!==null){g.append(node('circle',{cx:x,cy:y(r.rent),r:r.id===station?5:3.2,fill:rentLayer.color(r.rent),stroke:r.id===station?'#223637':'#f1efe7','stroke-width':r.id===station?2:1}));if(r.id===station||rows.length<16||i%2===0)g.append(node('text',{x,y:y(r.rent)-6,'text-anchor':'middle',fill:'#7f7864','font-size':7},(r.rent/10000).toFixed(1)));}
- g.append(node('text',{x:x-3,y:79,fill:r.id===station?'#223637':'#526462','font-weight':r.id===station?700:400,'font-size':10,transform:'rotate(30 '+(x-3)+' 79)'},r.name));g.addEventListener('click',()=>showDestination(r.id));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showDestination(r.id);}});svg.append(g);}
+ g.append(node('text',{x:x-3,y:79,fill:r.id===station?'#223637':'#526462','font-weight':r.id===station?700:400,'font-size':10,transform:'rotate(30 '+(x-3)+' 79)'},r.name));g.addEventListener('click',()=>showDestination(r.id,true));g.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();showDestination(r.id,true);}});svg.append(g);}
  $('placeCards').append(svg);
  const index=rows.findIndex(row=>row.id===station);
  const list=$('placeCards');
  if(index>=0)list.scrollLeft=Math.max(0,45+index*(w-65)/Math.max(1,rows.length-1)-list.clientWidth/2);
- $('suggestionMeta').textContent=profileLine+' · '+rows.filter(r=>r.rent!==null).length+'/'+rows.length+'駅 · 駅を選ぶと地図に表示';}
+ const caption=$('profileCaption');
+ caption.hidden=false;
+ caption.textContent=profileLine+' · '+STATIONS[station].name;}
 function syncRentTabs(){for(const [id,value]of [['rentStations','stations'],['rentLines','lines'],['rentProfile','profile']]){const active=rentTab===value;$(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);}}
 $('rentExplore').onclick=()=>setLayer(true);$('timeExplore').onclick=()=>setLayer(false);
-for(const [id,value]of [['rentStations','stations'],['rentLines','lines'],['rentProfile','profile']])$(id).onclick=()=>{rentTab=value;syncRentTabs();updateCards();};
+for(const [id,value]of [['rentStations','stations'],['rentLines','lines'],['rentProfile','profile']])$(id).onclick=()=>{rentPanelActive=true;rentTab=value;syncRentTabs();updateCards();};
 $('stationProfile').onclick=async()=>{
  const station=selected;
  if(station===null)return;
  await setLayer(true);
  if(!layerMode||selected!==station)return;
+ rentPanelActive=true;
  rentTab='profile';
  syncRentTabs();
  updateRentCards();

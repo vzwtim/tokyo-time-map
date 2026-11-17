@@ -33,17 +33,17 @@ function setSheetLevel(level) {
 
 function updateSheetSummary() {
   const planning = !$('stationPlanner').hidden;
-  const profile = layerMode && rentTab === 'profile';
-  const destination = !$('destinationCard').hidden;
+  const stationDetails = !$('destinationCard').hidden && !(layerMode && rentPanelActive);
   const title = planning ? $('plannerTitle').textContent
-    : destination && !profile ? $('destName').textContent
+    : stationDetails ? STATIONS[origin].name + ' → ' + $('destName').textContent
     : $('placesTitle').textContent;
-  const meta = planning ? (sheetLevel ? (plannerMode==='living'?'家賃と通勤時間で比較':'集合しやすい駅を比較') : $('plannerStatus').textContent || '駅を探す')
-    : destination && !profile ? ($('destTime').textContent === '—' ? '経路なし' : STATIONS[origin].name + 'から 約' + $('destTime').textContent + '分')
+  const duration = $('destTime').textContent;
+  const meta = planning ? (plannerMode === 'living' ? plannerLine || '' : '')
+    : stationDetails ? (duration === '—' ? '経路なし' : '約' + duration + '分 · ' + routeChangeLabel(selected))
     : $('suggestionMeta').textContent;
   $('sheetTitle').textContent = title;
   $('sheetMeta').textContent = meta;
-  const content = planning ? 'planner' : destination && !profile ? 'station' : 'explore';
+  const content = planning ? 'planner' : stationDetails ? 'station' : 'explore';
   if (sheet.dataset.content !== content) sheetBody.scrollTop = 0;
   sheet.dataset.content = content;
 }

@@ -34,14 +34,10 @@ function openPlanner(kind, line = null) {
   plannerSearch = null;
   plannerMarkers = [];
   plannerFocusId = null;
-  $('plannerIntro').hidden = false;
   plannerMode = kind;
   plannerLine = line;
   const living = kind === 'living';
   $('plannerTitle').textContent = living ? '住む駅' : '飲む駅';
-  $('plannerIntro').textContent = living
-    ? (line ? line + 'の家賃と通勤時間を比べる' : '家賃と通勤時間から、暮らす駅を探す')
-    : '出発駅を入れて、みんなが集まりやすい駅を探す';
   $('plannerFirstLabel').textContent = living ? '職場の駅' : '1人目の出発駅';
   $('plannerSecondRow').hidden = living;
   $('plannerThirdRow').hidden = living;
@@ -55,9 +51,7 @@ function openPlanner(kind, line = null) {
   $('plannerStatus').textContent = '';
   $('plannerRun').disabled = false;
   $('plannerResults').replaceChildren();
-  $('plannerNote').textContent = living
-    ? '通勤時間は職場の駅を起点にした片道の概算。家賃は東京圏の単身向け相場（2026年10月取得、面積・築年数未補正）。'
-    : '所要時間は駅から駅までの概算（新幹線を除く）。終電やお店の営業時間は別途ご確認ください。';
+  $('plannerNote').textContent = living ? '単身向け家賃・通勤時間は概算' : '所要時間は概算・新幹線を除く';
   updateTimeValue();
   planner.hidden = false;
   $('explorePanel').hidden = true;
@@ -133,7 +127,6 @@ function renderPlannerResults() {
     if (plannerMarkers.length === 8) break;
   }
   if (!plannerMarkers.some(row => row.station.id === plannerFocusId)) plannerFocusId = null;
-  $('plannerIntro').hidden = rows.length > 0;
   const list = $('plannerResults');
   list.replaceChildren();
   $('plannerStatus').textContent = rows.length
@@ -150,7 +143,7 @@ function renderPlannerResults() {
     const nearbyDuplicates = sameName?.every(station => station.region === row.station.region && distance(station,row.station)<.75);
     name.textContent = (index + 1) + '　' + (nearbyDuplicates ? row.station.name : plannerStationLabel(row.station.id));
     detail.textContent = living
-      ? '家賃 ' + yen.format(row.rent) + '円 ＋ 通勤 ' + yen.format(row.timeCost) + '円 · 片道約' + Math.round(row.minutes) + '分'
+      ? '家賃 ' + yen.format(row.rent) + '円 ＋ 時間換算 ' + yen.format(row.timeCost) + '円 · 片道約' + Math.round(row.minutes) + '分'
       : row.minutes.map((minutes, i) => STATIONS[ids[i]].name + 'から ' + Math.round(minutes) + '分').join(' / ');
     amount.textContent = living ? yen.format(row.total) + '円／月' : '最長 ' + Math.round(row.longest) + '分';
     button.append(name, amount, detail);
