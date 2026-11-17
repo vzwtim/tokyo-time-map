@@ -37,7 +37,7 @@ function findStationSuggestions(query) {
   return results;
 }
 
-function attachSuggestions(input) {
+function attachSuggestions(input, onChoose) {
   const list = document.createElement('ul');
   list.className = 'station-suggestions';
   list.id = input.id + '-suggestions';
@@ -68,6 +68,7 @@ function attachSuggestions(input) {
     input.dispatchEvent(new Event('input', {bubbles:true}));
     choosing = false;
     close();
+    onChoose?.(match.station.id);
   }
 
   function refresh() {
@@ -106,9 +107,9 @@ function attachSuggestions(input) {
       close();
       return;
     }
-    if (event.key === 'Enter' && active >= 0) {
+    if (event.key === 'Enter' && (active >= 0 || onChoose)) {
       event.preventDefault();
-      choose(active);
+      choose(Math.max(0, active));
       return;
     }
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
@@ -122,4 +123,5 @@ function attachSuggestions(input) {
   });
 }
 
-for (const id of ['stationInput', 'plannerFirst', 'plannerSecond', 'plannerThird']) attachSuggestions($(id));
+attachSuggestions($('stationInput'));
+attachSuggestions($('plannerInput'), addPlannerStation);

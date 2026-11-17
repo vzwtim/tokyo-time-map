@@ -121,7 +121,7 @@ function drawAtlasOverlay() {
   }
   ctx.restore();
   if (mapView === 'roads') drawRoadStops(bounds,project);
-  else drawPlannerMap(project);
+  else drawPlannerMap(project,bounds);
   if (typeof drawDeviceLocation === 'function') {
     drawDeviceLocation(([x,y]) => project([x+warp.base[0], y+warp.base[1]]));
   }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "node --check dist/app.js && node --check dist/engine.js && node --check dist/routing-data.js && node --check dist/rent-layer.js && node --check dist/regions.js && node --check dist/regional-ui.js && node --check dist/station-planner.js && node --check dist/map-sheet.js && node --check dist/atlas.js && node --check dist/old-roads.js && node --check dist/road-routing.js",
+    "build": "node --check dist/app.js && node --check dist/engine.js && node --check dist/routing-data.js && node --check dist/rent-layer.js && node --check dist/regions.js && node --check dist/regional-ui.js && node --check dist/planner-guide.js && node --check dist/station-suggest.js && node --check dist/station-planner.js && node --check dist/map-sheet.js && node --check dist/atlas.js && node --check dist/old-roads.js && node --check dist/road-routing.js",
     "test": "node tests/interaction.cjs && node tests/rent-interaction.cjs && node tests/rent.cjs && node tests/routing.cjs && node tests/transfers.cjs && node tests/model.cjs && node tests/timing.cjs && node tests/timing-audit.cjs && node tests/central-coverage.cjs && node tests/metro-stops.cjs && node tests/regions.cjs && node tests/old-roads.cjs",
     "deploy": "wrangler deploy"
   }

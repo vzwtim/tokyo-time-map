@@ -7,6 +7,20 @@ const transferColor='#8d5533';
 let oldRoadData, oldRoadRequest, roadNetwork, roadJourneys, roadStart, roadDestination;
 let roadSpeed=4, roadTimeView=false, roadSearchingOrigin=false, roadHour=null, roadRings=[];
 let roadTrip=[], roadWarp=null, roadTimeShapes=null, roadTripShape=null;
+const cyclingEpisodes=[
+  ['R002','日本橋','高崎','LTbuy5TDnkM'],
+  ['R002','高崎','岩村田','p7tof_9LEGA'],
+  ['R002','塩名田','下諏訪','PohYcbxYwqU'],
+  ['R002','下諏訪','福島','oTAyAkobTko'],
+  ['R002','福島','馬籠','AV41DNDRaMk'],
+  ['R002','馬籠','太田','seXxnPMgR0E'],
+  ['R002','太田','鳥居本','FBEtIdYx5T0'],
+  ['R002','高宮','三条大橋','vdv1KIftjIU'],
+  ['R004','宇都宮','白河','2v_vI3E9cts'],
+];
+let roadCycling=false;
+const cyclingByHub=new Map();
+let cyclingSegments=[],cyclingGeoShapes;
 setRoadSheetLevel(0);
 
 function roadShape(paths) {
@@ -27,18 +41,58 @@ function loadOldRoads() {
     if (!response.ok) throw Error('roads');
     return response.json();
   }).then(entries => {
-    oldRoadData = entries.map(([,name,lines,stops],index)=>{
+    oldRoadData = entries.map(([id,name,lines,stops],index)=>{
       const paths=lines.map(line=>line.map(geoXY));
-      return {name,paths,color:roadColors[index<5?index:5],...roadShape(paths),
+      return {id,name,paths,color:roadColors[index<5?index:5],...roadShape(paths),
         stops:stops.map(([name,,region,lon,lat,hub])=>({name,region,hub,point:geoXY([lon,lat])}))};
     });
     roadNetwork=buildRoadGraph(oldRoadData);
+    indexCyclingEpisodes();
     setRoadStart(roadNetwork.stops.find(stop=>stop.name==='日本橋'),false);
+    if(document.activeElement===roadQuery&&roadQuery.value.trim())renderRoadSuggestions();
   }).catch(() => {
     oldRoadData=null;
     $('roadStatus').textContent = '街道を読み込めませんでした。地図を切り替えてから開き直してください。';
     setRoadSheetLevel(1);
   }).finally(() => {oldRoadRequest=null;$('roadLoading').hidden=true;});
+}
+
+function indexCyclingEpisodes(){
+  cyclingByHub.clear();
+  cyclingSegments=[];
+  cyclingGeoShapes=null;
+  for(const [roadId,first,last,video] of cyclingEpisodes){
+    const road=oldRoadData.find(entry=>entry.id===roadId);
+    const stops=road?.stopsByPath.find(path=>path.some(stop=>stop.name===first)&&path.some(stop=>stop.name===last));
+    if(!stops)continue;
+    const endpoints=[first,last].map(name=>stops.findIndex(stop=>stop.name===name)).sort((a,b)=>a-b);
+    const visited=stops.slice(endpoints[0],endpoints[1]+1);
+    for(const stop of visited){
+      const episodes=cyclingByHub.get(stop.hub)??[];
+      episodes.push({name:road.name+' '+first+' → '+last,video});
+      cyclingByHub.set(stop.hub,episodes);
+    }
+    cyclingSegments.push(visited.slice(1).map((to,i)=>({road,from:visited[i],to})));
+  }
+}
+
+function cyclingShapes(warp){
+  return cyclingSegments.map(edges=>roadShape(edges.map(edge=>roadTripPoints(edge,warp))));
+}
+
+function renderCyclingVideos(){
+  const list=$('roadVideos');
+  const videos=roadCycling&&roadDestination?(cyclingByHub.get(roadDestination.hub)??[]):[];
+  list.replaceChildren();
+  list.hidden=!videos.length;
+  for(const {name,video} of videos){
+    const link=document.createElement('a');
+    link.href='https://www.youtube.com/watch?v='+video;
+    link.target='_blank';
+    link.rel='noopener';
+    link.textContent='▶ '+name+' ↗';
+    list.append(link);
+  }
 }
 
 function roadMinutes(stop) {return roadJourneys.distances[stop.index]/roadSpeed*60;}
@@ -75,6 +129,7 @@ function updateRoadTrip() {
 
 function renderRoadSheet() {
   if(!roadStart)return;
+  renderCyclingVideos();
   const focus=roadDestination??roadStart;
   const minutes=roadMinutes(focus), connected=Number.isFinite(minutes);
   const members=roadNetwork.groups.get(focus.hub);
@@ -207,8 +262,14 @@ function drawRoadLines(bounds,scale) {
   for(const [i,road] of oldRoadData.entries()){
     if(!roadIntersects(shapes[i].box,bounds))continue;
     ctx.strokeStyle=road.color;ctx.lineWidth=(scale>3?1.9:1.35)/scale;
-    ctx.globalAlpha=roadTrip.length?.58:.86;ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.globalAlpha=roadCycling?.22:roadTrip.length?.58:.86;ctx.lineCap='round';ctx.lineJoin='round';
     ctx.stroke(shapes[i].shape);
+  }
+  if(roadCycling){
+    const warp=roadTimeView?getRoadWarp():null;
+    const highlights=warp?(warp.cycling??=cyclingShapes(warp)):(cyclingGeoShapes??=cyclingShapes(null));
+    ctx.globalAlpha=1;ctx.strokeStyle='#88461c';ctx.lineWidth=(scale>3?2.8:2.4)/scale;
+    for(const {shape,box} of highlights)if(roadIntersects(box,bounds))ctx.stroke(shape);
   }
   if(roadTrip.length){
     if(!roadTripShape){
@@ -292,6 +353,13 @@ for(const [id,key] of [['roadGeo',false],['roadTime',true]])$(id).onclick=()=>{
   if(roadStart)updateRoadTrip();
 };
 $('setRoadOrigin').onclick=()=>{if(roadDestination)setRoadStart(roadDestination);};
+$('roadCycling').onclick=()=>{
+  roadCycling=!roadCycling;
+  $('roadCycling').setAttribute('aria-pressed',roadCycling);
+  $('roadCyclingNote').hidden=!roadCycling;
+  renderCyclingVideos();
+  requestDraw();
+};
 $('roadOrigin').onclick=()=>{
   roadSearchingOrigin=true;roadQuery.value='';roadQuery.placeholder='起点の宿場を検索';
   roadQuery.setAttribute('aria-label','起点の宿場を検索');roadSuggestions.hidden=true;roadQuery.focus();
@@ -300,7 +368,7 @@ function closeRoadSearch(){
   roadSuggestions.hidden=true;roadSearchingOrigin=false;
   roadQuery.placeholder='宿場を検索';roadQuery.setAttribute('aria-label','宿場を検索');
 }
-roadQuery.addEventListener('input',()=>{
+function renderRoadSuggestions(){
   const query=roadQuery.value.trim(),matches=[],seen=new Set();
   if(query){
     for(const stop of roadNetwork?.stops??[]){
@@ -323,7 +391,8 @@ roadQuery.addEventListener('input',()=>{
     li.append(button);roadSuggestions.append(li);
   }
   roadSuggestions.hidden=!matches.length;
-});
+}
+roadQuery.addEventListener('input',renderRoadSuggestions);
 roadQuery.addEventListener('keydown',event=>{
   if(event.key==='Escape')closeRoadSearch();
   if(event.key==='Enter'&&!roadSuggestions.hidden){
