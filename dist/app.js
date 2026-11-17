@@ -175,10 +175,11 @@ function selectedTimeRing(minute){return layerMode ? minute>=rentFrom&&minute<=r
 function chooseMinute(minute){if(layerMode){const span=rentTo-rentFrom;rentFrom=Math.max(0,Math.min(90-span,minute-span/2));rentFrom=Math.round(rentFrom/10)*10;rentTo=rentFrom+span;syncRentRange();rentPanelActive=true;updateRentCards();requestDraw();return;}selectedMinute=minute;selected=null;$('destinationCard').hidden=true;hoverMinute=null;if(mix<.98)changeMix(1,true);updateCards();$('announce').textContent=STATIONS[origin].name+'から'+minute+'分前後の駅を表示しました。';requestDraw();}
 function suggestionStations(){const tolerance=selectedMinute<=30?3:4;return STATIONS.filter(s=>s.id!==origin&&Math.abs(result.best[s.id].time-selectedMinute)<=tolerance).sort((a,b)=>Math.abs(result.best[a.id].time-selectedMinute)-Math.abs(result.best[b.id].time-selectedMinute)||km(STATIONS[origin],b)-km(STATIONS[origin],a));}
 function routeChangeLabel(id){const stats=result.summary(id);return stats.transfers?'乗換 '+stats.transfers+'回':stats.through?'直通・乗換なし':'乗換なし';}
-function arrivalLineMark(id){
+function arrivalLineMark(id,fallback=false){
  const step=result.route(id).findLast(s=>s.type==='rail');
- if(!step)return null;
- const line=LINES[step.line],mark=document.createElement('span');
+ const line=step?LINES[step.line]:fallback?LINES.find(line=>line.stops.includes(id)):null;
+ if(!line)return null;
+ const mark=document.createElement('span');
  mark.className='station-line-mark';
  mark.style.setProperty('--line-color',line.color);
  mark.title=line.name;
@@ -435,7 +436,9 @@ function updateRentCards(keepChartPosition=false){
   for(const {station,rent,time,total} of matches){
    const button=document.createElement('button');
    button.className='place rent-place';button.dataset.station=station.id;
-   const name=document.createElement('h3');name.textContent=station.name;
+   const name=document.createElement('h3'),mark=arrivalLineMark(station.id,true);
+   if(mark)name.append(mark);
+   name.append(station.name);
    const price=document.createElement('div');price.className='mins';
    price.textContent=(total/10000).toFixed(2)+'万円';
    const detail=document.createElement('span');detail.className='comparison';
@@ -486,6 +489,7 @@ function drawProfile(station){
  const step=Math.ceil(largest/4/10000)*10000;
  const y=value=>bottom-value/(4*step)*(bottom-top);
  const x=index=>53+index*(width-82)/Math.max(1,rows.length-1);
+ const lineColor=rentLayer.profileLines(station).find(line=>line.name===profileLine)?.color??'#31756a';
  function node(name,attrs,label){
   const el=document.createElementNS('http://www.w3.org/2000/svg',name);
   for(const [key,value] of Object.entries(attrs))el.setAttribute(key,value);
@@ -518,7 +522,8 @@ function drawProfile(station){
    g.append(node('circle',{cx:x(i),cy:y(value),r:row.id===station?5:3.5,fill:color,stroke:'#fff','stroke-width':1}));
    if(row.id===station||rows.length<16||i%2===0)g.append(node('text',{x:x(i),y:y(value)-(key==='total'?9:7),'text-anchor':'middle',fill:color,'font-size':9},(value/10000).toFixed(1)));
   }
-  g.append(node('text',{x:x(i),y:196,fill:row.id===station?'#223637':'#526462','font-weight':row.id===station?700:400,'font-size':11,transform:'rotate(34 '+x(i)+' 196)'},row.name));
+  g.append(node('circle',{cx:x(i),cy:188,r:3,fill:lineColor}));
+  g.append(node('text',{x:x(i),y:201,fill:row.id===station?'#223637':'#526462','font-weight':row.id===station?700:400,'font-size':11,transform:'rotate(34 '+x(i)+' 201)'},row.name));
   const pick=()=>showDestination(row.id,true);
   g.addEventListener('click',pick);
   g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();pick();}});

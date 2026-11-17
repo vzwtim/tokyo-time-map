@@ -8,18 +8,20 @@ let oldRoadData, oldRoadRequest, roadNetwork, roadJourneys, roadStart, roadDesti
 let roadSpeed=4, roadTimeView=false, roadSearchingOrigin=false, roadHour=null, roadRings=[];
 let roadTrip=[], roadWarp=null, roadTimeShapes=null, roadTripShape=null;
 const cyclingEpisodes=[
-  ['R002','日本橋','高崎','LTbuy5TDnkM'],
-  ['R002','高崎','岩村田','p7tof_9LEGA'],
-  ['R002','塩名田','下諏訪','PohYcbxYwqU'],
-  ['R002','下諏訪','福島','oTAyAkobTko'],
-  ['R002','福島','馬籠','AV41DNDRaMk'],
-  ['R002','馬籠','太田','seXxnPMgR0E'],
-  ['R002','太田','鳥居本','FBEtIdYx5T0'],
-  ['R002','高宮','三条大橋','vdv1KIftjIU'],
-  ['R004','宇都宮','白河','2v_vI3E9cts'],
+  ['R002','日本橋','高崎','LTbuy5TDnkM',{日本橋:'0:33', 板橋:'1:49', 蕨:'2:40', 浦和:'3:29', 大宮:'3:54', 上尾:'4:45', 桶川:'4:56', 鴻巣:'5:29', 熊谷:'6:47', 深谷:'7:41', 本庄:'8:49', 新町:'9:35', 倉賀野:'10:03', 高崎:'10:16'}],
+  ['R002','高崎','岩村田','p7tof_9LEGA',{高崎:'0:46', 板鼻:'1:16', 安中:'1:49', 松井田:'2:52', 坂本:'6:02', 軽井沢:'11:02', 沓掛:'11:50', 追分:'12:11', 小田井:'13:29', 岩村田:'13:59'}],
+  ['R002','塩名田','下諏訪','PohYcbxYwqU',{塩名田:'1:21', 八幡:'1:53', 望月:'3:07', 芦田:'4:50', 長久保:'6:48', 和田:'8:00', 下諏訪:'17:00'}],
+  ['R002','下諏訪','福島','oTAyAkobTko',{下諏訪:'1:08', 塩尻:'2:34', 洗馬:'3:14', 本山:'3:37', 贄川:'4:43', 奈良井:'7:00', 藪原:'11:15', 宮ノ越:'12:47', 福島:'14:43'}],
+  ['R002','福島','馬籠','AV41DNDRaMk',{福島:'1:08', 上松:'2:34', 須原:'5:54', 野尻:'7:44', 三留野:'9:31', 妻籠:'11:29', 馬籠:'15:54'}],
+  ['R002','馬籠','太田','seXxnPMgR0E',{馬籠:'0:56', 落合:'1:43', 中津川:'2:32', 大井:'3:44', 大湫:'8:02', 細久手:'9:09', 御嶽:'13:41', 伏見:'14:27', 太田:'15:53'}],
+  ['R002','太田','鳥居本','FBEtIdYx5T0',{太田:'0:46', 鵜沼:'2:04', 加納:'3:02', 河渡:'3:21', 美江寺:'3:41', 赤坂:'4:20', 垂井:'4:40', 関ヶ原:'5:11', 今須:'5:38', 柏原:'6:52', 醒井:'7:31', 番場:'7:57', 鳥居本:'8:11'}],
+  ['R002','高宮','三条大橋','vdv1KIftjIU',{高宮:'0:50', 愛知川:'1:17', 武佐:'2:16', 守山:'3:44', 草津:'4:21', 大津:'6:48', 三条大橋:'8:28'}],
+  ['R004','宇都宮','白河','2v_vI3E9cts',{}],
 ];
 let roadCycling=false;
 const cyclingByHub=new Map();
+const riddenRoads=new Set(['R001','R002','R003','R005','R303']);
+const riddenHubs=new Set();
 let cyclingSegments=[],cyclingGeoShapes;
 setRoadSheetLevel(0);
 
@@ -59,38 +61,56 @@ function loadOldRoads() {
 
 function indexCyclingEpisodes(){
   cyclingByHub.clear();
-  cyclingSegments=[];
+  riddenHubs.clear();
   cyclingGeoShapes=null;
-  for(const [roadId,first,last,video] of cyclingEpisodes){
-    const road=oldRoadData.find(entry=>entry.id===roadId);
-    const stops=road?.stopsByPath.find(path=>path.some(stop=>stop.name===first)&&path.some(stop=>stop.name===last));
-    if(!stops)continue;
-    const endpoints=[first,last].map(name=>stops.findIndex(stop=>stop.name===name)).sort((a,b)=>a-b);
-    const visited=stops.slice(endpoints[0],endpoints[1]+1);
-    for(const stop of visited){
+  const osuStops=cyclingSection('R004','日本橋','白河');
+  cyclingSegments=osuStops.slice(1).map((to,i)=>({road:to.road,from:osuStops[i],to}));
+  for(const road of oldRoadData)if(riddenRoads.has(road.id)){
+    for(const stop of road.stops)riddenHubs.add(stop.hub);
+  }
+  for(const stop of osuStops)riddenHubs.add(stop.hub);
+  for(const [roadId,first,last,video,chapters] of cyclingEpisodes){
+    for(const stop of cyclingSection(roadId,first,last)){
       const episodes=cyclingByHub.get(stop.hub)??[];
-      episodes.push({name:road.name+' '+first+' → '+last,video});
+      episodes.push({video,chapter:chapters[stop.name],road:stop.road.name,first,last});
       cyclingByHub.set(stop.hub,episodes);
     }
-    cyclingSegments.push(visited.slice(1).map((to,i)=>({road,from:visited[i],to})));
   }
+}
+function cyclingSection(roadId,first,last){
+    const road=oldRoadData.find(entry=>entry.id===roadId);
+    const stops=road?.stopsByPath.find(path=>path.some(stop=>stop.name===first)&&path.some(stop=>stop.name===last));
+    if(!stops)return [];
+    const endpoints=[first,last].map(name=>stops.findIndex(stop=>stop.name===name)).sort((a,b)=>a-b);
+    return stops.slice(endpoints[0],endpoints[1]+1);
 }
 
 function cyclingShapes(warp){
-  return cyclingSegments.map(edges=>roadShape(edges.map(edge=>roadTripPoints(edge,warp))));
+  return roadShape(cyclingSegments.map(edge=>roadTripPoints(edge,warp)));
 }
 
 function renderCyclingVideos(){
   const list=$('roadVideos');
-  const videos=roadCycling&&roadDestination?(cyclingByHub.get(roadDestination.hub)??[]):[];
+  const stop=roadDestination??roadStart;
+  const videos=roadCycling&&stop?(cyclingByHub.get(stop.hub)??[]):[];
   list.replaceChildren();
   list.hidden=!videos.length;
-  for(const {name,video} of videos){
+  for(const {video,chapter,road,first,last} of [...videos].sort((a,b)=>Number(!!b.chapter)-Number(!!a.chapter))){
     const link=document.createElement('a');
-    link.href='https://www.youtube.com/watch?v='+video;
+    const seconds=chapter?.split(':').reduce((total,part)=>total*60+Number(part),0);
+    link.href='https://www.youtube.com/watch?v='+video+(chapter?'&t='+seconds+'s':'');
     link.target='_blank';
     link.rel='noopener';
-    link.textContent='▶ '+name+' ↗';
+    link.className='road-video-link';
+    link.setAttribute('aria-label',(chapter?stop.name+'の場面 '+chapter:'区間の動画')+'をYouTubeで見る（'+road+' '+first+'〜'+last+'）');
+    link.title=road+' '+first+'〜'+last;
+    link.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 4v16l13-8Z"/></svg>';
+    link.append(chapter?'宿場の場面を見る':'区間の動画を見る');
+    if(chapter){
+      const time=document.createElement('small');
+      time.textContent=chapter;
+      link.append(time);
+    }
     list.append(link);
   }
 }
@@ -118,6 +138,7 @@ function selectRoadStop(stop,center=false) {
   roadDestination=stop;
   roadHour=null;
   updateRoadTrip();
+  $('roadSheetBody').scrollTop=0;
   if(center)centerAtlasPoint(roadDisplayPoint(stop));
 }
 function updateRoadTrip() {
@@ -260,16 +281,25 @@ function drawRoadLines(bounds,scale) {
   if (!oldRoadData||!roadStart) return;
   const shapes=roadTimeView?getRoadTimeShapes():oldRoadData;
   for(const [i,road] of oldRoadData.entries()){
+    if(roadCycling&&riddenRoads.has(road.id))continue;
     if(!roadIntersects(shapes[i].box,bounds))continue;
-    ctx.strokeStyle=road.color;ctx.lineWidth=(scale>3?1.9:1.35)/scale;
-    ctx.globalAlpha=roadCycling?.22:roadTrip.length?.58:.86;ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.strokeStyle=roadCycling?'#87938a':road.color;ctx.lineWidth=(scale>3?1.9:1.35)/scale;
+    ctx.globalAlpha=roadCycling?.45:roadTrip.length?.58:.86;ctx.lineCap='round';ctx.lineJoin='round';
+    if(roadCycling)ctx.setLineDash([2/scale,4/scale]);
     ctx.stroke(shapes[i].shape);
   }
+  ctx.setLineDash([]);
   if(roadCycling){
     const warp=roadTimeView?getRoadWarp():null;
     const highlights=warp?(warp.cycling??=cyclingShapes(warp)):(cyclingGeoShapes??=cyclingShapes(null));
-    ctx.globalAlpha=1;ctx.strokeStyle='#88461c';ctx.lineWidth=(scale>3?2.8:2.4)/scale;
-    for(const {shape,box} of highlights)if(roadIntersects(box,bounds))ctx.stroke(shape);
+    const riddenShapes=shapes.filter((_,i)=>riddenRoads.has(oldRoadData[i].id));
+    riddenShapes.push(highlights);
+    const onScreen=riddenShapes.filter(({box})=>roadIntersects(box,bounds));
+    ctx.globalAlpha=1;
+    ctx.strokeStyle='#faf9f2';ctx.lineWidth=6.4/scale;
+    for(const {shape} of onScreen)ctx.stroke(shape);
+    ctx.strokeStyle='#145c4c';ctx.lineWidth=3.9/scale;
+    for(const {shape} of onScreen)ctx.stroke(shape);
   }
   if(roadTrip.length){
     if(!roadTripShape){
@@ -277,8 +307,15 @@ function drawRoadLines(bounds,scale) {
       const warp=roadTimeView?getRoadWarp():null;
       for(const edge of roadTrip)atlasPath(roadTripShape,roadTripPoints(edge,warp));
     }
-    ctx.globalAlpha=.95;ctx.strokeStyle='#fbf7eb';ctx.lineWidth=6.4/scale;ctx.stroke(roadTripShape);
-    ctx.strokeStyle=transferColor;ctx.lineWidth=3.5/scale;ctx.stroke(roadTripShape);
+    ctx.globalAlpha=.95;
+    if(roadCycling){
+      ctx.setLineDash([1/scale,5/scale]);
+      ctx.strokeStyle='#f4c66f';ctx.lineWidth=1.6/scale;ctx.stroke(roadTripShape);
+    }else{
+      ctx.strokeStyle='#fbf7eb';ctx.lineWidth=6.4/scale;ctx.stroke(roadTripShape);
+      ctx.strokeStyle=transferColor;ctx.lineWidth=3.5/scale;ctx.stroke(roadTripShape);
+    }
+    ctx.setLineDash([]);
   }
   ctx.globalAlpha=1;
 }
@@ -334,8 +371,11 @@ function drawRoadStops(bounds,project) {
     if(x<bounds[0]||x>bounds[2]||y<bounds[1]||y>bounds[3])continue;
     plotted.add(stop.hub);
     const hub=roadNetwork.groups.get(stop.hub).length>1;
-    atlasDot(project([x,y]),{label:hub||i%density===0?stop.name:null,color:stop.road.color,radius:hub?3.6:zoom<.12?1.8:2.8,
+    const ridden=roadCycling&&riddenHubs.has(stop.hub);
+    if(roadCycling&&!ridden)ctx.globalAlpha=.48;
+    atlasDot(project([x,y]),{label:hub||i%density===0?stop.name:null,color:roadCycling?(ridden?'#145c4c':'#87938a'):stop.road.color,radius:hub?3.6:zoom<.12?1.8:2.8,
       action:origin=>origin?setRoadStart(stop):selectRoadStop(stop)});
+    ctx.globalAlpha=1;
   }
 }
 function focusSelectedRoad(){

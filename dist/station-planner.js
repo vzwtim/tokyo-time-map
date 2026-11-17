@@ -27,7 +27,7 @@ function rankPlannerStations(stations, journeys, {rents, cap, budget, order}) {
 function setPlannerLoading(loading) {
   $('plannerLoading').hidden = !loading;
   $('plannerRun').disabled = loading;
-  $('plannerRun').textContent = loading ? '計算中…' : '候補を探す';
+  $('plannerRun').textContent = loading ? '計算中…' : '候補を見る';
 }
 
 function openPlanner(kind) {

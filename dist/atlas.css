@@ -298,25 +298,6 @@
 
 #plannerTools {position:absolute;inset:0 58px auto 0;width:min(480px,calc(100% - 58px));pointer-events:none;--planner-accent:#246660}
 #plannerTools[data-mode="meeting"] {--planner-accent:#805115}
-#plannerTools .planner-form {
-  pointer-events:auto;margin:0;gap:4px;padding:7px 8px;background:var(--surface);
-  border:1px solid var(--line);border-radius:18px;box-shadow:var(--control-shadow);
-}
-#plannerTools .planner-stations {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px;align-items:start}
-#plannerTools .planner-inputs {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}
-#plannerTools .planner-inputs label {position:relative;grid-column:auto;display:grid;gap:2px;font-size:11px;white-space:nowrap}
-#plannerTools .planner-inputs #plannerThirdRow {grid-column:1/-1}
-#plannerTools .planner-inputs input {width:100%;min-height:36px;padding:2px 6px;border-radius:8px;font-size:16px}
-#plannerTools .planner-primary {
-  margin-top:18px;min-height:36px;padding:0 8px;border:0;border-radius:16px;background:var(--planner-accent);
-  color:#fff;font-size:12px;
-}
-#plannerTools .station-suggestions {
-  position:absolute;inset:100% auto auto 0;width:min(240px,65vw);max-height:min(35dvh,180px);
-  z-index:3;font-size:13px;white-space:normal;box-shadow:var(--control-shadow);
-}
-#plannerTools .planner-limits {padding-top:4px;display:block;margin:0}
-#plannerTools .planner-limits summary {width:max-content;color:var(--planner-accent);font-size:12px;font-weight:600}
 .planner-limit-fields {display:flex;flex-wrap:wrap;gap:4px 8px;padding:4px 0;font-size:11px}
 .planner-limit-fields input {width:60px;min-height:32px;font-size:16px}
 
@@ -337,33 +318,41 @@
 #roadSheetBody .station-actions button {white-space:nowrap}
 #roadSheetBody .road-note {margin-block:4px}
 
-/* Keep search consistent with the map and let the people list scroll independently. */
 #plannerTools .station-search {
-  width:100%;min-height:48px;margin:0;padding:4px;border:0;border-radius:26px;
+  width:100%;height:48px;margin:0;padding:4px;gap:2px;border:0;border-radius:24px;
   background:var(--surface);box-shadow:var(--control-shadow);
 }
-#plannerTools .station-search input {min-height:40px}
-#plannerTools .station-search button {width:37px;min-height:36px;padding:0;font-size:18px;border:0}
-#plannerTools .station-search .station-suggestions {
-  inset:100% 2px auto 2px;width:auto;max-height:min(42dvh,220px);
+#plannerTools .station-search input {min-height:40px;padding-inline:7px}
+#plannerTools .station-search button {
+  display:grid;place-items:center;flex:none;width:40px;height:40px;min-height:40px;
+  padding:0;border:0;border-radius:50%;color:var(--planner-accent)
 }
-#plannerTools .planner-tray {display:flex;align-items:center;gap:4px;margin-top:5px;pointer-events:auto}
-.planner-people {display:flex;flex:1;gap:3px;min-width:0;overflow:auto;scrollbar-width:none}
+#plannerTools .station-search button svg,#roadCycling svg,.road-video-link svg,.planner-decision-links svg {
+  width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round
+}
+#plannerTools .station-search:has(input:placeholder-shown) .planner-search-add {display:none}
+#plannerTools .planner-map-pick[aria-pressed="true"] {background:#dceee5}
+#plannerTools[data-mode="meeting"] .planner-map-pick[aria-pressed="true"] {background:#f5e9cf}
+#plannerTools .station-suggestions {inset:calc(100% + 4px) 0 auto;width:auto;max-height:min(42dvh,220px);z-index:2}
+#plannerTools .planner-tray {
+  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;pointer-events:auto
+}
+#plannerTools .planner-tray:not(:has(.planner-person)) {display:none}
+.planner-people {display:flex;gap:5px;min-width:0;overflow:auto;scrollbar-width:none}
 #plannerTools .planner-tray button {
-  min-height:35px;flex:none;border:0;border-radius:18px;padding:0 7px;font-size:11px;
-  background:var(--surface);box-shadow:0 1px 4px #1c3b292b;font-weight:650;
+  min-height:38px;flex:none;border:0;border-radius:19px;padding:0 10px;font-size:12px;
+  background:var(--surface);box-shadow:var(--control-shadow);font-weight:650;
 }
-#plannerTools .planner-tray .planner-primary {background:var(--planner-accent);color:white;margin:0}
-#plannerTools .planner-tray .planner-primary:disabled {background:#e9ece6;color:#53635d;opacity:1}
-#plannerTools .planner-pill[aria-pressed="true"] {color:var(--planner-accent);background:#e0efe5}
-#plannerTools[data-mode="meeting"] .planner-pill[aria-pressed="true"] {background:#f5e9cf}
-#plannerTools .planner-person {display:flex;align-items:center;gap:4px}
-.planner-person i {width:6px;height:6px;border-radius:50%;flex:none}
-.planner-person span {font-size:13px;font-weight:400;color:var(--muted)}
+#plannerTools .planner-tray .planner-primary {background:var(--planner-accent);color:white}
+#plannerTools .planner-tray .planner-primary:disabled {visibility:hidden}
+#plannerTools .planner-person {display:flex;align-items:center;gap:6px}
+.planner-person i {width:7px;height:7px;border-radius:50%;flex:none}
+.planner-person span {font-size:15px;font-weight:400;color:var(--muted)}
 #plannerTools .planner-limits {
-  display:block;width:max-content;max-width:100%;padding:3px 7px;margin:5px 0 0;border:0;border-radius:11px;
-  background:var(--surface);box-shadow:0 1px 4px #1c3b292b;pointer-events:auto;
+  display:block;width:max-content;max-width:100%;padding:0 10px;margin:8px 0 0;border:0;border-radius:16px;
+  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
 }
+#plannerTools .planner-limits summary {min-height:36px;align-content:center;font-size:12px;font-weight:600}
 .planner-limit-fields label {display:flex;align-items:center;gap:4px}
 .planner-limit-fields select {border:1px solid var(--line);border-radius:7px;font-size:12px;min-height:32px}
 .planner-feedback {margin:5px 0 0;padding:4px 8px;border-radius:8px;width:max-content;max-width:100%;background:var(--surface);color:var(--ink)}
@@ -375,18 +364,30 @@
   min-height:30px;border:1px solid var(--line);border-radius:14px;padding:1px 8px;background:var(--surface);font-size:12px
 }
 .drink-options button[aria-pressed="true"] {background:var(--planner-light);color:var(--planner-color);border-color:#d8ba81}
-.planner-decision {padding:7px 8px 9px;background:#f2f4ed;border-radius:8px;margin:2px 3px 6px;font-size:12px}
+.planner-decision {padding:10px 12px 12px;background:#f2f4ed;border-radius:12px;margin:4px 0 8px;font-size:13px}
 [data-mode="meeting"] .planner-decision {background:#f8f2e6}
-.planner-decision p {margin:2px 0 4px;line-height:1.55}
+.planner-decision strong {font-size:14px;line-height:1.4}
+.planner-decision p {margin:4px 0;line-height:1.55}
 .planner-decision .planner-tradeoff {font-size:11px;color:var(--muted)}
-.planner-decision-links {display:flex;flex-wrap:wrap;gap:4px 10px;padding-top:2px}
-.planner-decision-links a,.road-videos a {color:var(--planner-color,var(--teal));font-weight:650;text-underline-offset:2px}
-#roadCycling {
-  min-height:30px;background:none;border:0;color:var(--muted);padding:0 5px 0 0;
-  text-decoration:underline;text-underline-offset:2px;font-size:11px
+.planner-decision-links {display:flex;flex-wrap:wrap;gap:6px;margin-top:9px}
+.planner-decision-links a,.road-video-link {
+  display:inline-flex;align-items:center;justify-content:center;gap:5px;min-height:38px;padding:0 9px;
+  border:1px solid #ccd6cd;border-radius:20px;background:var(--surface);
+  color:var(--planner-color,var(--teal));font-size:11px;font-weight:650;text-decoration:none
 }
-#roadCycling[aria-pressed="true"] {color:#ad532e;font-weight:650}
-.road-cycling-row {display:flex;align-items:center;flex-wrap:wrap;gap:0 6px}
-#roadCyclingNote {font-size:11px;color:var(--muted)}
-.road-videos {display:grid;gap:3px;margin:5px 0;font-size:12px}
-.road-videos[hidden] {display:none}
+.planner-decision-links svg {width:16px;height:16px}
+#roadCycling {
+  display:inline-flex;align-items:center;gap:6px;min-height:38px;background:var(--surface);
+  border:1px solid var(--line);border-radius:20px;color:var(--ink);padding:0 10px;font-size:12px
+}
+#roadCycling[aria-pressed="true"] {background:#e1ece4;color:#145c4c;border-color:#9ab8a9}
+.road-cycling-row {display:flex;align-items:center;flex-wrap:wrap;gap:6px;margin:8px 0}
+.road-cycling-key {display:flex;gap:8px;font-size:11px;color:var(--muted)}
+.road-cycling-key span {display:flex;align-items:center;gap:4px}
+.road-cycling-key span::before {content:"";width:13px;border-top:3px solid #145c4c;border-radius:2px}
+.road-cycling-key span+span::before {border-top:2px dashed #8b948d}
+.road-videos {display:flex;flex-wrap:wrap;gap:6px;margin:3px 0 8px}
+.road-video-link {color:#9a291f;border-color:#e2c4bd}
+.road-video-link svg {width:17px;height:17px;fill:currentColor;stroke:none}
+.road-video-link small {color:#705952;font-variant-numeric:tabular-nums}
+.road-videos[hidden],.road-cycling-key[hidden] {display:none}
