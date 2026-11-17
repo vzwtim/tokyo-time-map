@@ -3,15 +3,6 @@
 const sheet = $('rentDock');
 const sheetHandle = $('sheetHandle');
 const sheetBody = $('sheetBody');
-const layerMenu = $('mapOptions');
-$('mapMenuOpen').onclick = () => layerMenu.showModal();
-layerMenu.addEventListener('click', event => {
-  if (event.target !== layerMenu) return;
-  const bounds = layerMenu.getBoundingClientRect();
-  if (event.clientX < bounds.left || event.clientX > bounds.right ||
-      event.clientY < bounds.top || event.clientY > bounds.bottom) closeMapMenu();
-});
-$('aboutBtn').addEventListener('click', () => closeMapMenu(), {capture:true});
 let sheetLevel = 0;
 let sheetDrag = null;
 let ignoreSheetClick = false;
@@ -32,52 +23,17 @@ function setSheetLevel(level) {
 }
 
 function updateSheetSummary() {
-  const planning = !$('stationPlanner').hidden;
   const stationDetails = !$('destinationCard').hidden && !(layerMode && rentPanelActive);
-  const title = planning ? $('plannerTitle').textContent
-    : stationDetails ? STATIONS[origin].name + ' → ' + $('destName').textContent
+  const title = stationDetails ? STATIONS[origin].name + ' → ' + $('destName').textContent
     : $('placesTitle').textContent;
   const duration = $('destTime').textContent;
-  const meta = planning ? (plannerMode === 'living' ? plannerLine || '' : '')
-    : stationDetails ? (duration === '—' ? '経路なし' : '約' + duration + '分 · ' + routeChangeLabel(selected))
+  const meta = stationDetails ? (duration === '—' ? '経路なし' : '約' + duration + '分 · ' + routeChangeLabel(selected))
     : $('suggestionMeta').textContent;
   $('sheetTitle').textContent = title;
   $('sheetMeta').textContent = meta;
-  const content = planning ? 'planner' : stationDetails ? 'station' : 'explore';
+  const content = stationDetails ? 'station' : 'explore';
   if (sheet.dataset.content !== content) sheetBody.scrollTop = 0;
   sheet.dataset.content = content;
-}
-
-function syncLayerModes() {
-  const planning = !$('stationPlanner').hidden;
-  for (const [id, active] of [
-    ['timeExplore', !planning && !layerMode],
-    ['rentExplore', !planning && !!layerMode],
-    ['livingOpen', planning && plannerMode === 'living'],
-    ['meetingOpen', planning && plannerMode === 'meeting'],
-  ]) $(id).setAttribute('aria-pressed', active);
-}
-
-function activateBaseLayer(rent) {
-  closePlanner();
-  closeMapMenu();
-  set3D(false);
-  if (mix < .98) changeMix(1, true);
-  setSheetLevel(0);
-  setLayer(rent).then(() => {
-    if (rent && !layerMode && $('stationPlanner').hidden && $('dockModeHint').textContent.includes('読み込めません')) {
-      setSheetLevel(1);
-    }
-  });
-}
-
-$('timeExplore').onclick = () => activateBaseLayer(false);
-$('rentExplore').onclick = () => activateBaseLayer(true);
-for (const [id, kind] of [['livingOpen', 'living'], ['meetingOpen', 'meeting']]) {
-  $(id).onclick = () => {
-    closeMapMenu();
-    openPlanner(kind);
-  };
 }
 
 sheetHandle.onclick = () => {
@@ -128,4 +84,3 @@ for (const event of ['pointerup', 'pointercancel', 'lostpointercapture']) {
   sheetHandle.addEventListener(event, finishSheetDrag);
 }
 setSheetLevel(0);
-syncLayerModes();

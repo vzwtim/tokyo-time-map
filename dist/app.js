@@ -164,7 +164,6 @@ function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,
   ctx.fillText(label,x+6,y+13);
  }
  if(mix<.99){const pxPerKm=17*zoom, unit=10**Math.floor(Math.log10(80/pxPerKm)), distance=[5,2,1].map(m=>m*unit).find(k=>k*pxPerKm<=100)??unit, len=distance*pxPerKm,x=18,y=H-(typeof sheetLevel==='number'?93:17);ctx.globalAlpha=1-mix;ctx.strokeStyle='#65766e';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(x,y-3);ctx.lineTo(x,y+3);ctx.moveTo(x,y);ctx.lineTo(x+len,y);ctx.moveTo(x+len,y-3);ctx.lineTo(x+len,y+3);ctx.stroke();ctx.fillStyle='#65766e';ctx.font='9px Arial';ctx.fillText(distance+' km',x,y-7);ctx.globalAlpha=1;}
- if(typeof drawPlannerMarkers==='function')drawPlannerMarkers();
  if(typeof drawDeviceLocation==='function')drawDeviceLocation(projection);
  if(viewMotion){if(now-viewMotion.start<650)requestDraw();else viewMotion=null;}
  if(animation){if(now-animation.start<animation.duration)requestDraw();else{animation=null;for(const p of points)p.from=p.target;if(layerMode)requestDraw();}}
@@ -252,8 +251,8 @@ function hit(x,y){const ids=zoom<.12?[...majorStations,...(selected===null?[]:[s
 function hitRing(x,y,labelsOnly=false){if(mix<.98)return null;for(const ring of ringTargets){const r=ring.rect;if(r&&x>=r[0]-5&&x<=r[0]+r[2]+5&&y>=r[1]-5&&y<=r[1]+r[3]+5)return ring.minute;}if(labelsOnly)return null;let minute=null,best=10;for(const ring of ringTargets){const d=Math.abs(Math.hypot(x-ring.center[0],(y-ring.center[1])/(ring.yScale||1))-ring.radius);if(d<best){best=d;minute=ring.minute;}}return minute;}
 const pointers=new Map();let drag=null,pinch=null,lastTap=null,tapTimer=null;
 function dismissDestination(){clearTimeout(tapTimer);tapTimer=null;lastTap=null;selected=null;hover=null;$('tip').hidden=true;$('destinationCard').hidden=true;document.querySelectorAll('[data-station]').forEach(b=>b.classList.toggle('active',false));updateSumuLink();if(typeof updateSheetSummary==='function')updateSheetSummary();requestDraw();}
-document.addEventListener('pointerdown',e=>{if(e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('regionTools').contains(e.target)&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('mapOptions').open){dismissDestination();}});
+document.addEventListener('pointerdown',e=>{if(e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('regionTools').contains(e.target)&&!e.target.closest?.('dialog, [data-atlas-picker]')&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('mapOptions').open&&!$('atlasPicker').open&&!$('railView').hidden){dismissDestination();}});
 function stationTap(id,x,y,now=performance.now()){if(lastTap&&lastTap.id===id&&now-lastTap.time<380&&Math.hypot(x-lastTap.x,y-lastTap.y)<24){clearTimeout(tapTimer);tapTimer=null;lastTap=null;selectOrigin(id);return 'center';}if(tapTimer)clearTimeout(tapTimer);lastTap={id,x,y,time:now};tapTimer=setTimeout(()=>{tapTimer=null;showDestination(id);},380);return 'destination';}
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
 canvas.addEventListener('pointerdown',e=>{wheelZoom=null;settleMotion();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);$('tip').hidden=true;if(selected!==null)dismissDestination();
@@ -332,7 +331,6 @@ function syncRentEntry(enabled,pending=false){
   $(id).classList.toggle('active',active);$(id).setAttribute('aria-pressed',active);
  }
  $('rentExplore').setAttribute('aria-busy',pending);
- if(typeof syncLayerModes==='function')syncLayerModes();
  $('dockModeHint').textContent=pending?'家賃相場を読み込み中…':enabled?'安い順':'';
 }
 async function setLayer(enabled){
@@ -401,7 +399,7 @@ function renderStationProfile(){
  if(typeof openPlanner==='function'){
   const compare=$('profileCompare');
   compare.hidden=false;
-  compare.onclick=()=>openPlanner('living',profileLine);
+  compare.onclick=()=>showAtlasView('living',profileLine);
  }
 }
 function drawProfile(station){const rows=rentLayer.profile(profileLine),w=Math.max(600,rows.length*46),h=105,min=40000,max=220000,y=v=>64-(v-min)/(max-min)*53,ns='http://www.w3.org/2000/svg',svg=document.createElementNS(ns,'svg');svg.setAttribute('viewBox','0 0 '+w+' '+h);svg.setAttribute('width',w);svg.setAttribute('height',h);svg.setAttribute('role','img');svg.setAttribute('aria-label',profileLine+'の駅別家賃相場断面図');
@@ -435,10 +433,10 @@ $('stationProfile').onclick=async()=>{
 $('rentInfo').onclick=()=>{$('about').showModal();$('rentMethod').scrollIntoView({block:'start'});};
 window.addEventListener('resize',resize);if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(canvas);resize();mix=0;updateModel(false);changeMix(1,true);
 
-function updateSumuLink(){const base='https://sumu-eki.yudai-grex4.chatgpt.site/',params=new URLSearchParams(location.search);let target;
+function updateSumuLink(workplace=origin){const base='https://sumu-eki.yudai-grex4.chatgpt.site/',params=new URLSearchParams(location.search);let target;
  try{const url=new URL(params.get('return'));if(url.origin===new URL(base).origin&&url.pathname==='/')target=url;}catch{}
  if(target&&selected!==null&&target.hash.startsWith('#v1=')){try{const data=JSON.parse(decodeURIComponent(target.hash.slice(4)));data.pins=[...(Array.isArray(data.pins)?data.pins.filter(n=>n!==STATIONS[selected].name):[]),STATIONS[selected].name].slice(-3);target.hash='v1='+encodeURIComponent(JSON.stringify(data));}catch{}}
- if(!target){target=new URL(base);const other=origin===S['大手町']?S['新宿']:S['大手町'];const data={v:1,config:{people:[{station:STATIONS[origin].name,days:5,limit:45,officeWalk:5},{station:STATIONS[other].name,days:5,limit:45,officeWalk:5}],layout:'1LDK',budget:250000,useBudget:false,homeWalk:10,maxTransfers:2,express:true,costWeight:.35,fairness:.55},pins:selected!==null?[STATIONS[selected].name]:[]};target.hash='v1='+encodeURIComponent(JSON.stringify(data));}
+ if(!target){target=new URL(base);const other=workplace===S['大手町']?S['新宿']:S['大手町'];const data={v:1,config:{people:[{station:STATIONS[workplace].name,days:5,limit:45,officeWalk:5},{station:STATIONS[other].name,days:5,limit:45,officeWalk:5}],layout:'1LDK',budget:250000,useBudget:false,homeWalk:10,maxTransfers:2,express:true,costWeight:.35,fairness:.55},pins:selected!==null?[STATIONS[selected].name]:[]};target.hash='v1='+encodeURIComponent(JSON.stringify(data));}
  $('sumuLink').href=target.href;$('sumuLink').textContent=params.has('return')?'住む駅の比較に戻る ↗':'複数の勤務地で比較 ↗';
 }
 const crossQuery=new URLSearchParams(location.search);if(Number.isInteger(S[crossQuery.get('origin')])){origin=S[crossQuery.get('origin')];mix=1;updateModel(false);animation=null;}if(Number.isInteger(S[crossQuery.get('station')]))showDestination(S[crossQuery.get('station')]);updateSumuLink();
