@@ -204,17 +204,22 @@ function drawPlannerMap(project,bounds) {
       label:STATIONS[pendingPlannerId].name,color,radius:7,priority:true,action:()=>stagePlannerStation(pendingPlannerId)});
   }
   const candidateIds=new Set(plannerCandidates.map(row=>row.station.id));
-  for(const id of nearbyPlannerStations(bounds)){
-    if(ids.includes(id)||id===pendingPlannerId||candidateIds.has(id))continue;
-    const point=project(points[stationIndex[id]].geo);
-    atlasDot(point,{label:zoom>.42||majorStations.has(id)?STATIONS[id].name:null,color:'#647f72',radius:2.6,
-      action:()=>stagePlannerStation(id)});
+  for(const {station} of plannerCandidates){
+    const [x,y]=project(points[stationIndex[station.id]].geo);
+    atlasLabels.push([x-11,y-11,x+11,y+11]);
   }
   for(const [index,{station}] of plannerCandidates.entries()){
     if(station.id===pendingPlannerId)continue;
     const point=project(points[stationIndex[station.id]].geo);
-    atlasDot(point,{label:(index+1)+' '+station.name,color,radius:station.id===pickedPlannerId?6:4,
-      priority:station.id===pickedPlannerId,action:()=>selectPlannerCandidate(station.id)});
+    atlasDot(point,{label:(index+1)+' '+station.name,rank:index+1,color,radius:station.id===pickedPlannerId?10:8.5,
+      priority:true,action:()=>selectPlannerCandidate(station.id)});
+  }
+  for(const id of nearbyPlannerStations(bounds)){
+    if(ids.includes(id)||id===pendingPlannerId||candidateIds.has(id))continue;
+    const point=project(points[stationIndex[id]].geo);
+    if(atlasLabels.some(b=>point[0]>=b[0]-2&&point[0]<=b[2]+2&&point[1]>=b[1]-2&&point[1]<=b[3]+2))continue;
+    atlasDot(point,{label:zoom>(plannerCandidates.length?.9:.55)?STATIONS[id].name:null,color:'#91a499',radius:1.3,subtle:true,
+      action:()=>stagePlannerStation(id)});
   }
 }
 

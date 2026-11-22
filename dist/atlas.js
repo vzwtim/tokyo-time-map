@@ -126,21 +126,44 @@ function drawAtlasOverlay() {
     drawDeviceLocation(([x,y]) => project([x+warp.base[0], y+warp.base[1]]));
   }
 }
-function atlasDot(point, {label, color, radius, priority=false, action}) {
+function atlasDot(point, {label, color, radius, priority=false, subtle=false, rank, action}) {
   const [x,y] = point;
   if (!visible(point,12)) return;
   ctx.beginPath();ctx.arc(x,y,radius,0,Math.PI*2);
-  ctx.fillStyle = priority ? color : '#fbf9ef';ctx.fill();
-  ctx.lineWidth = priority ? 1.8 : 1.15;ctx.strokeStyle = priority ? '#fbf9ef' : color;ctx.stroke();
+  ctx.fillStyle = priority || subtle ? color : '#fbf9ef';ctx.fill();
+  if(!subtle){
+    ctx.lineWidth = priority ? 1.8 : 1.15;ctx.strokeStyle = priority ? '#fbf9ef' : color;ctx.stroke();
+  }
+  if(rank!==undefined){
+    ctx.font='650 10px system-ui,sans-serif';
+    ctx.fillStyle='#fff';
+    ctx.fillText(String(rank),x-ctx.measureText(String(rank)).width/2,y+3.5);
+  }
   if (action) atlasHits.push({x,y,pick:action});
   if (!label || x<0 || y<(mapView==='roads'?105:23) || y>H-45) return;
   ctx.font = (priority?'650 12':'11')+'px system-ui,sans-serif';
   const width = ctx.measureText(label).width;
-  const left = x+width+10>W ? x-width-8 : x+8;
-  const box = [left-2,y-21,left+width+2,y-5];
+  let left = x+width+10>W ? x-width-8 : x+8;
+  let baseline=y-7;
+  let box = [left-2,baseline-14,left+width+2,baseline+2];
+  if(rank!==undefined){
+    const offsets=[[13,-10],[13,5],[13,21],[-width-13,-10],[-width-13,5],[-width-13,21],[-width/2,-25],[-width/2,35]];
+    const placement=offsets.map(([dx,dy])=>{
+      const bounds=[x+dx-2,y+dy-14,x+dx+width+2,y+dy+2];
+      const overlaps=atlasLabels.filter(b=>bounds[0]<b[2]&&bounds[2]>b[0]&&bounds[1]<b[3]&&bounds[3]>b[1]).length;
+      const clipped=bounds[0]<2||bounds[2]>W-2||bounds[1]<23||bounds[3]>H-45;
+      return {dx,dy,bounds,cost:overlaps+Number(clipped)*100};
+    }).sort((a,b)=>a.cost-b.cost)[0];
+    left=x+placement.dx;baseline=y+placement.dy;box=placement.bounds;
+    if(placement.dy===35||placement.dy===-25){
+      ctx.beginPath();ctx.moveTo(x,y+(placement.dy>0?radius:-radius));
+      ctx.lineTo(x,baseline+(placement.dy>0?-14:3));
+      ctx.lineWidth=1;ctx.strokeStyle=color;ctx.stroke();
+    }
+  }
   if (!priority && atlasLabels.some(b=>box[0]<b[2]&&box[2]>b[0]&&box[1]<b[3]&&box[3]>b[1])) return;
   ctx.lineJoin = 'round';ctx.lineWidth = 3;ctx.strokeStyle = '#f7f6ef';
-  ctx.strokeText(label,left,y-7);ctx.fillStyle = '#30483e';ctx.fillText(label,left,y-7);
+  ctx.strokeText(label,left,baseline);ctx.fillStyle = '#30483e';ctx.fillText(label,left,baseline);
   atlasLabels.push(box);
   if(action)atlasHits.at(-1).box=box;
 }
