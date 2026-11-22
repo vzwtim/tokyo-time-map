@@ -320,7 +320,7 @@
 
 #plannerTools .station-search {
   width:100%;height:48px;margin:0;padding:4px;gap:2px;border:0;border-radius:24px;
-  background:var(--surface);box-shadow:var(--control-shadow);
+  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
 }
 #plannerTools .station-search input {min-height:40px;padding-inline:7px}
 #plannerTools .station-search button {
@@ -334,6 +334,17 @@
 #plannerTools .planner-map-pick[aria-pressed="true"] {background:#dceee5}
 #plannerTools[data-mode="meeting"] .planner-map-pick[aria-pressed="true"] {background:#f5e9cf}
 #plannerTools .station-suggestions {inset:calc(100% + 4px) 0 auto;width:auto;max-height:min(42dvh,220px);z-index:2}
+#plannerTools .planner-selection {
+  display:flex;align-items:center;gap:8px;min-height:48px;padding:5px 6px 5px 14px;margin-top:8px;
+  border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto
+}
+#plannerTools .planner-selection[hidden] {display:none}
+.planner-selection > div {flex:1;min-width:0;display:grid;gap:1px}
+.planner-selection strong {font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.planner-selection small {font-size:10px;color:var(--muted)}
+#plannerTools .planner-selection button {flex:none;border:0;border-radius:20px;min-height:38px;padding:0 12px;font-size:13px}
+#plannerTools #plannerConfirmAdd {background:var(--planner-accent);color:white;font-weight:650}
+#plannerTools #plannerCancelAdd {width:38px;padding:0;background:none;font-size:21px;color:var(--muted)}
 #plannerTools .planner-tray {
   display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;pointer-events:auto
 }

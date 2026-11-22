@@ -124,4 +124,4 @@ function attachSuggestions(input, onChoose) {
 }
 
 attachSuggestions($('stationInput'));
-attachSuggestions($('plannerInput'), addPlannerStation);
+attachSuggestions($('plannerInput'), stagePlannerStation);

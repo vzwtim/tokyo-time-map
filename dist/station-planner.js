@@ -4,6 +4,7 @@ const planner = $('stationPlanner');
 const plannerInput = $('plannerInput');
 const plannerPeople = {living:[],meeting:[]};
 let plannerPickMode = true, plannerDecisionId = null, householdRentPromise;
+let pendingPlannerId = null;
 const yen = new Intl.NumberFormat('ja-JP');
 let plannerMode = 'living', plannerSearch = null, plannerRevision = 0;
 let meetingOrder = 'longest';
@@ -46,6 +47,7 @@ function openPlanner(kind) {
   plannerInput.placeholder = living ? '職場の駅を追加' : '出発駅を追加';
   plannerInput.setAttribute('aria-label',plannerInput.placeholder);
   plannerInput.value = '';
+  clearPlannerSelection();
   plannerInput.setCustomValidity('');
   $('livingControls').hidden = !living;
   $('meetingControls').hidden = living;
@@ -67,6 +69,7 @@ function openPlanner(kind) {
 
 function closePlanner() {
   plannerRevision++;
+  clearPlannerSelection();
   planner.hidden = true;
   $('plannerTools').hidden=true;
 }
@@ -190,14 +193,18 @@ function drawPlannerMap(project,bounds) {
   }
   for(const [i,id] of ids.entries()){
     atlasDot(project(points[stationIndex[id]].geo),{label:STATIONS[id].name,color:plannerColor(i),radius:5,priority:true,
-      action:plannerPickMode?()=>addPlannerStation(id):null});
+      action:plannerPickMode?()=>stagePlannerStation(id):null});
   }
   if(plannerPickMode){
+    if(pendingPlannerId!==null){
+      atlasDot(project(points[stationIndex[pendingPlannerId]].geo),{
+        label:STATIONS[pendingPlannerId].name,color,radius:7,priority:true,action:()=>stagePlannerStation(pendingPlannerId)});
+    }
     for(const id of nearbyPlannerStations(bounds)){
-      if(ids.includes(id))continue;
+      if(ids.includes(id)||id===pendingPlannerId)continue;
       const point=project(points[stationIndex[id]].geo);
       atlasDot(point,{label:zoom>.42||majorStations.has(id)?STATIONS[id].name:null,color:'#647f72',radius:2.6,
-        action:()=>addPlannerStation(id)});
+        action:()=>stagePlannerStation(id)});
     }
     return;
   }
@@ -229,6 +236,7 @@ function renderPlannerPeople(){
   $('plannerRun').disabled=ids.length<2;
 }
 function invalidatePlanner(){
+  clearPlannerSelection();
   plannerRevision++;
   plannerSearch=null;
   plannerCandidates=[];
@@ -243,6 +251,28 @@ function invalidatePlanner(){
   renderPlannerPeople();
   requestDraw();
 }
+function clearPlannerSelection(){
+  pendingPlannerId=null;
+  $('plannerSelection').hidden=true;
+  requestDraw();
+}
+function stagePlannerStation(id){
+  if(!Number.isInteger(id)||!STATIONS[id])return;
+  if(plannerMode==='living'&&plannerPeople.living.length>=2){
+    showPlannerMessage('職場を変えるには、駅名の × を押してください。');
+    return;
+  }
+  pendingPlannerId=id;
+  $('plannerSelectionName').textContent=STATIONS[id].name;
+  $('plannerSelectionArea').textContent=stationLabels[id]===STATIONS[id].name
+    ?STATIONS[id].region??'':stationLabels[id];
+  $('plannerSelection').hidden=false;
+  plannerInput.value='';
+  plannerInput.setCustomValidity('');
+  plannerInput.blur();
+  showPlannerMessage('');
+  requestDraw();
+}
 function addPlannerStation(id){
   const people=plannerPeople[plannerMode];
   if(plannerMode==='living'&&people.length>=2){
@@ -250,6 +280,7 @@ function addPlannerStation(id){
     return;
   }
   people.push(id);
+  clearPlannerSelection();
   plannerInput.value='';plannerInput.setCustomValidity('');plannerInput.blur();
   invalidatePlanner();
   $('plannerPeople').scrollLeft=$('plannerPeople').scrollWidth;
@@ -257,14 +288,19 @@ function addPlannerStation(id){
 $('plannerForm').onsubmit=event=>{
   event.preventDefault();
   const id=resolveStationInput(plannerInput.value);
-  if(Number.isInteger(id))addPlannerStation(id);
+  if(Number.isInteger(id))stagePlannerStation(id);
   else if(plannerInput.value.trim()){
     plannerInput.setCustomValidity('駅名を候補から選んでください。');plannerInput.reportValidity();
   }
 };
-plannerInput.oninput=()=>{plannerInput.setCustomValidity(''); showPlannerMessage('');};
+plannerInput.oninput=()=>{clearPlannerSelection();plannerInput.setCustomValidity('');showPlannerMessage('');};
+$('plannerConfirmAdd').onclick=()=>{
+  if(pendingPlannerId!==null)addPlannerStation(pendingPlannerId);
+};
+$('plannerCancelAdd').onclick=clearPlannerSelection;
 $('plannerMapPick').onclick=()=>{
   plannerPickMode=!plannerPickMode;
+  clearPlannerSelection();
   $('plannerMapPick').setAttribute('aria-pressed',plannerPickMode);
   showPlannerMessage('');
   requestDraw();
@@ -298,6 +334,7 @@ $('plannerRun').onclick = async () => {
   const living = plannerMode === 'living';
   const ids = [...plannerPeople[plannerMode]];
   if(ids.length<2)return;
+  clearPlannerSelection();
 
   plannerInput.blur();
   const revision = ++plannerRevision;
