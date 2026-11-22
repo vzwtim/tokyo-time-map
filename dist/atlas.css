@@ -298,6 +298,10 @@
 
 #plannerTools {position:absolute;inset:0 58px auto 0;width:min(480px,calc(100% - 58px));pointer-events:none;--planner-accent:#246660}
 #plannerTools[data-mode="meeting"] {--planner-accent:#805115}
+#plannerTools {border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow)}
+#plannerTools:has(#plannerSelection:not([hidden])) #plannerForm {display:none}
+#plannerTools[data-complete="true"] #plannerForm {display:none}
+#plannerTools[data-complete="true"] .planner-tray {padding-top:8px}
 .planner-limit-fields {display:flex;flex-wrap:wrap;gap:4px 8px;padding:4px 0;font-size:11px}
 .planner-limit-fields input {width:60px;min-height:32px;font-size:16px}
 
@@ -320,7 +324,7 @@
 
 #plannerTools .station-search {
   width:100%;height:48px;margin:0;padding:4px;gap:2px;border:0;border-radius:24px;
-  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
+  background:var(--surface);box-shadow:none;pointer-events:auto;
 }
 #plannerTools .station-search input {min-height:40px;padding-inline:7px}
 #plannerTools .station-search button {
@@ -331,12 +335,10 @@
   width:20px;height:20px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round
 }
 #plannerTools .station-search:has(input:placeholder-shown) .planner-search-add {display:none}
-#plannerTools .planner-map-pick[aria-pressed="true"] {background:#dceee5}
-#plannerTools[data-mode="meeting"] .planner-map-pick[aria-pressed="true"] {background:#f5e9cf}
 #plannerTools .station-suggestions {inset:calc(100% + 4px) 0 auto;width:auto;max-height:min(42dvh,220px);z-index:2}
 #plannerTools .planner-selection {
-  display:flex;align-items:center;gap:8px;min-height:48px;padding:5px 6px 5px 14px;margin-top:8px;
-  border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto
+  display:flex;align-items:center;gap:8px;min-height:48px;padding:5px 6px 5px 14px;margin-top:0;
+  border-radius:24px;background:var(--surface);box-shadow:none;pointer-events:auto
 }
 #plannerTools .planner-selection[hidden] {display:none}
 .planner-selection > div {flex:1;min-width:0;display:grid;gap:1px}
@@ -346,31 +348,36 @@
 #plannerTools #plannerConfirmAdd {background:var(--planner-accent);color:white;font-weight:650}
 #plannerTools #plannerCancelAdd {width:38px;padding:0;background:none;font-size:21px;color:var(--muted)}
 #plannerTools .planner-tray {
-  display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:8px;pointer-events:auto
+  display:flex;align-items:center;gap:6px;padding:0 10px 8px;margin:0;pointer-events:auto
 }
 #plannerTools .planner-tray:not(:has(.planner-person)) {display:none}
 .planner-people {display:flex;gap:5px;min-width:0;overflow:auto;scrollbar-width:none}
-#plannerTools .planner-tray button {
-  min-height:38px;flex:none;border:0;border-radius:19px;padding:0 10px;font-size:12px;
-  background:var(--surface);box-shadow:var(--control-shadow);font-weight:650;
+#plannerTools .planner-person {
+  display:inline-flex;align-items:center;flex:none;gap:0;border-radius:16px;background:#f0f2ee;
+  border:1px solid transparent;
 }
-#plannerTools .planner-tray .planner-primary {background:var(--planner-accent);color:white}
-#plannerTools .planner-tray .planner-primary:disabled {visibility:hidden}
-#plannerTools .planner-person {display:flex;align-items:center;gap:6px}
+#plannerTools[data-mode="meeting"] .planner-person {background:#f7f0e2}
+#plannerTools .planner-person.is-editing {border-color:var(--planner-accent)}
+#plannerTools .planner-person button {
+  display:flex;align-items:center;gap:5px;min-height:32px;padding:0 7px;border:0;
+  border-radius:16px;font-size:12px;white-space:nowrap;background:transparent;box-shadow:none
+}
+#plannerTools .planner-person button+button {width:30px;justify-content:center;padding:0;font-size:17px;color:var(--muted)}
 .planner-person i {width:7px;height:7px;border-radius:50%;flex:none}
-.planner-person span {font-size:15px;font-weight:400;color:var(--muted)}
+#plannerTools .planner-primary {border:0;border-radius:16px;min-height:32px;padding:0 10px;background:var(--planner-accent);color:white}
+#plannerTools .planner-primary[hidden],#plannerTools .station-search button[hidden] {display:none}
 #plannerTools .planner-limits {
-  display:block;width:max-content;max-width:100%;padding:0 10px;margin:8px 0 0;border:0;border-radius:16px;
-  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
+  display:block;width:max-content;max-width:100%;padding:0 10px;margin:0;border:0;border-radius:16px;
+  background:var(--surface);box-shadow:none;pointer-events:auto;
 }
 #plannerTools .planner-limits summary {min-height:36px;align-content:center;font-size:12px;font-weight:600}
 .planner-limit-fields label {display:flex;align-items:center;gap:4px}
 .planner-limit-fields select {border:1px solid var(--line);border-radius:7px;font-size:12px;min-height:32px}
 .planner-feedback {margin:5px 0 0;padding:4px 8px;border-radius:8px;width:max-content;max-width:100%;background:var(--surface);color:var(--ink)}
 
-.drink-preferences {margin:2px 0 4px;font-size:12px;color:var(--muted)}
-.drink-preferences summary {width:max-content;min-height:23px;padding:3px 4px;color:var(--planner-color);font-weight:650}
-.drink-options {display:flex;flex-wrap:wrap;gap:4px;margin:2px 0 5px}
+.drink-preferences {display:flex;gap:8px;margin:6px 0 9px;font-size:12px;color:var(--muted);overflow:auto;scrollbar-width:none}
+.drink-preferences[hidden] {display:none}
+.drink-options {display:flex;flex:none;gap:4px;margin:0}
 .drink-options button {
   min-height:30px;border:1px solid var(--line);border-radius:14px;padding:1px 8px;background:var(--surface);font-size:12px
 }
@@ -402,3 +409,8 @@
 .road-video-link svg {width:17px;height:17px;fill:currentColor;stroke:none}
 .road-video-link small {color:#705952;font-variant-numeric:tabular-nums}
 .road-videos[hidden],.road-cycling-key[hidden] {display:none}
+
+#railView #stationPlanner .planner-results {margin:0}
+#railView #stationPlanner .planner-results li > button {padding:8px 4px;min-height:48px}
+#railView #stationPlanner .planner-status:empty {display:none}
+#railView #stationPlanner .planner-note {margin:8px 0 4px;font-size:10px}

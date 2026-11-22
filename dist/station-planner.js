@@ -3,8 +3,9 @@
 const planner = $('stationPlanner');
 const plannerInput = $('plannerInput');
 const plannerPeople = {living:[],meeting:[]};
-let plannerPickMode = true, plannerDecisionId = null, householdRentPromise;
+let plannerDecisionId = null, householdRentPromise;
 let pendingPlannerId = null;
+let plannerEditingIndex = null;
 const yen = new Intl.NumberFormat('ja-JP');
 let plannerMode = 'living', plannerSearch = null, plannerRevision = 0;
 let meetingOrder = 'longest';
@@ -28,7 +29,8 @@ function rankPlannerStations(stations, journeys, {rents, cap, budget, order}) {
 function setPlannerLoading(loading) {
   $('plannerLoading').hidden = !loading;
   $('plannerRun').disabled = loading;
-  $('plannerRun').textContent = loading ? '計算中…' : '候補を見る';
+  $('plannerRun').hidden = true;
+  planner.setAttribute('aria-busy',loading);
 }
 
 function openPlanner(kind) {
@@ -44,19 +46,15 @@ function openPlanner(kind) {
   $('plannerTools').hidden = false;
   plannerCandidates = [];
   pickedPlannerId = null;
-  plannerInput.placeholder = living ? '職場の駅を追加' : '出発駅を追加';
-  plannerInput.setAttribute('aria-label',plannerInput.placeholder);
+  plannerEditingIndex=null;
   plannerInput.value = '';
   clearPlannerSelection();
   plannerInput.setCustomValidity('');
   $('livingControls').hidden = !living;
   $('meetingControls').hidden = living;
   $('drinkPreferences').hidden = living;
-  $('drinkPreferences').open = false;
   $('plannerFeedback').hidden=true;
   plannerDecisionId=null;
-  plannerPickMode=true;
-  $('plannerMapPick').setAttribute('aria-pressed','true');
   $('plannerStatus').textContent = '';
   $('plannerResults').replaceChildren();
   $('sumuLink').hidden = !living;
@@ -65,10 +63,12 @@ function openPlanner(kind) {
   renderPlannerPeople();
   planner.hidden = false;
   setPlannerSheetLevel(0);
+  if(plannerPeople[kind].length>=2)updatePlannerCandidates();
 }
 
 function closePlanner() {
   plannerRevision++;
+  plannerEditingIndex=null;
   clearPlannerSelection();
   planner.hidden = true;
   $('plannerTools').hidden=true;
@@ -94,11 +94,10 @@ function renderPlannerResults() {
   plannerCandidates = candidates;
   if (!candidates.some(row=>row.station.id===pickedPlannerId)) pickedPlannerId = candidates[0]?.station.id ?? null;
   const list = $('plannerResults');
-  $('plannerMeta').textContent = candidates.length ? '候補 '+candidates.length+'駅' : '条件を調整';
+  updatePlannerSummary();
   if(!candidates.some(row=>row.station.id===plannerDecisionId))plannerDecisionId=null;
   list.replaceChildren();
-  $('plannerStatus').textContent = rows.length
-    ? (order === 'total' ? '合計が短い順' : '最長が短い順') + ' · ' + candidates.length + '駅'
+  $('plannerStatus').textContent = rows.length ? ''
     : (living ? '条件に合う家賃データがありません。家賃か片道の上限を調整してください。' : '全員が鉄道で行ける駅が見つかりませんでした。');
   for (const [index, {station, minutes, longest, total, rent}] of candidates.entries()) {
     const li = document.createElement('li');
@@ -119,7 +118,7 @@ function renderPlannerResults() {
     button.setAttribute('aria-pressed',station.id===pickedPlannerId);
     button.setAttribute('aria-expanded',station.id===plannerDecisionId);
     button.append(name,amount,detail,other);
-    button.onclick = () => selectPlannerCandidate(station.id,true, true);
+    button.onclick = () => selectPlannerCandidate(station.id,false,true);
     if(station.id===plannerDecisionId)button.setAttribute('aria-controls','plannerDecision');
     li.append(button);
     list.append(li);
@@ -138,11 +137,16 @@ function selectPlannerCandidate(id,center=false,toggle=false) {
     if(expanded)b.setAttribute('aria-controls','plannerDecision');
     else b.removeAttribute('aria-controls');
   }
-  const row=plannerCandidates.find(entry=>entry.station.id===id);
-  if(row)$('plannerMeta').textContent = row.station.name;
+  updatePlannerSummary();
   updatePlannerDecision();
   if(center)centerAtlasPoint(points[stationIndex[id]].geo);
   else requestDraw();
+}
+function updatePlannerSummary(){
+  const row=plannerCandidates.find(entry=>entry.station.id===pickedPlannerId);
+  $('plannerMeta').textContent=row
+    ?row.station.name+' · '+(plannerMode==='meeting'&&meetingOrder==='total'?'合計 '+Math.round(row.total):'最長 '+Math.round(row.longest))+'分'
+    :'条件を調整';
 }
 function focusPlannerResults(){
   if(!plannerCandidates.length)return false;
@@ -193,22 +197,21 @@ function drawPlannerMap(project,bounds) {
   }
   for(const [i,id] of ids.entries()){
     atlasDot(project(points[stationIndex[id]].geo),{label:STATIONS[id].name,color:plannerColor(i),radius:5,priority:true,
-      action:plannerPickMode?()=>stagePlannerStation(id):null});
+      action:()=>stagePlannerStation(id)});
   }
-  if(plannerPickMode){
-    if(pendingPlannerId!==null){
-      atlasDot(project(points[stationIndex[pendingPlannerId]].geo),{
-        label:STATIONS[pendingPlannerId].name,color,radius:7,priority:true,action:()=>stagePlannerStation(pendingPlannerId)});
-    }
-    for(const id of nearbyPlannerStations(bounds)){
-      if(ids.includes(id)||id===pendingPlannerId)continue;
-      const point=project(points[stationIndex[id]].geo);
-      atlasDot(point,{label:zoom>.42||majorStations.has(id)?STATIONS[id].name:null,color:'#647f72',radius:2.6,
-        action:()=>stagePlannerStation(id)});
-    }
-    return;
+  if(pendingPlannerId!==null){
+    atlasDot(project(points[stationIndex[pendingPlannerId]].geo),{
+      label:STATIONS[pendingPlannerId].name,color,radius:7,priority:true,action:()=>stagePlannerStation(pendingPlannerId)});
+  }
+  const candidateIds=new Set(plannerCandidates.map(row=>row.station.id));
+  for(const id of nearbyPlannerStations(bounds)){
+    if(ids.includes(id)||id===pendingPlannerId||candidateIds.has(id))continue;
+    const point=project(points[stationIndex[id]].geo);
+    atlasDot(point,{label:zoom>.42||majorStations.has(id)?STATIONS[id].name:null,color:'#647f72',radius:2.6,
+      action:()=>stagePlannerStation(id)});
   }
   for(const [index,{station}] of plannerCandidates.entries()){
+    if(station.id===pendingPlannerId)continue;
     const point=project(points[stationIndex[station.id]].geo);
     atlasDot(point,{label:(index+1)+' '+station.name,color,radius:station.id===pickedPlannerId?6:4,
       priority:station.id===pickedPlannerId,action:()=>selectPlannerCandidate(station.id)});
@@ -223,17 +226,29 @@ function renderPlannerPeople(){
   const ids=plannerPeople[plannerMode], list=$('plannerPeople');
   list.replaceChildren();
   for(const [index,id] of ids.entries()){
-    const button=document.createElement('button'),dot=document.createElement('i'),remove=document.createElement('span');
-    button.type='button';button.className='planner-person';
+    const person=document.createElement('span'),button=document.createElement('button'),dot=document.createElement('i'),remove=document.createElement('button');
+    person.className='planner-person';
+    person.classList.toggle('is-editing',index===plannerEditingIndex);
+    button.type=remove.type='button';
     dot.style.background=plannerColor(index);dot.setAttribute('aria-hidden','true');
-    remove.textContent='×';remove.setAttribute('aria-hidden','true');
+    remove.textContent='×';
     const name=STATIONS[id].name;
-    button.setAttribute('aria-label',(index+1)+'人目の'+name+'を外す');
-    button.append(dot,name,remove);
-    button.onclick=()=>{ids.splice(index,1);invalidatePlanner();};
-    list.append(button);
+    button.setAttribute('aria-label',(index+1)+'人目の'+name+'を変更');
+    remove.setAttribute('aria-label',(index+1)+'人目の'+name+'を外す');
+    button.append(dot,name);
+    button.onclick=()=>{
+      clearPlannerSelection();plannerEditingIndex=index;plannerInput.value='';
+      renderPlannerPeople();plannerInput.focus();
+    };
+    remove.onclick=()=>{plannerEditingIndex=null;ids.splice(index,1);invalidatePlanner();};
+    person.append(button,remove);list.append(person);
   }
   $('plannerRun').disabled=ids.length<2;
+  const number=plannerEditingIndex===null?ids.length+1:plannerEditingIndex+1;
+  plannerInput.placeholder=number+'人目の'+(plannerMode==='living'?'職場の駅':'出発駅');
+  plannerInput.setAttribute('aria-label',plannerInput.placeholder);
+  $('plannerCancelEdit').hidden=plannerEditingIndex===null;
+  $('plannerTools').dataset.complete=plannerMode==='living'&&ids.length>=2&&plannerEditingIndex===null;
 }
 function invalidatePlanner(){
   clearPlannerSelection();
@@ -241,15 +256,14 @@ function invalidatePlanner(){
   plannerSearch=null;
   plannerCandidates=[];
   pickedPlannerId=plannerDecisionId=null;
-  plannerPickMode=true;
-  $('plannerMapPick').setAttribute('aria-pressed','true');
   $('plannerResults').replaceChildren();
   $('plannerStatus').textContent='';
-  $('plannerMeta').textContent='駅を追加';
+  $('plannerMeta').textContent=plannerPeople[plannerMode].length?'あと1人の駅を追加':'出発駅を選ぶ';
   showPlannerMessage('');
   setPlannerLoading(false);
   renderPlannerPeople();
   requestDraw();
+  if(plannerPeople[plannerMode].length>=2)updatePlannerCandidates();
 }
 function clearPlannerSelection(){
   pendingPlannerId=null;
@@ -258,8 +272,8 @@ function clearPlannerSelection(){
 }
 function stagePlannerStation(id){
   if(!Number.isInteger(id)||!STATIONS[id])return;
-  if(plannerMode==='living'&&plannerPeople.living.length>=2){
-    showPlannerMessage('職場を変えるには、駅名の × を押してください。');
+  if(plannerMode==='living'&&plannerPeople.living.length>=2&&plannerEditingIndex===null){
+    showPlannerMessage('変更する職場の駅をタップしてください。');
     return;
   }
   pendingPlannerId=id;
@@ -267,6 +281,7 @@ function stagePlannerStation(id){
   $('plannerSelectionArea').textContent=stationLabels[id]===STATIONS[id].name
     ?STATIONS[id].region??'':stationLabels[id];
   $('plannerSelection').hidden=false;
+  $('plannerConfirmAdd').textContent=plannerEditingIndex===null?'追加する':'変更する';
   plannerInput.value='';
   plannerInput.setCustomValidity('');
   plannerInput.blur();
@@ -275,11 +290,13 @@ function stagePlannerStation(id){
 }
 function addPlannerStation(id){
   const people=plannerPeople[plannerMode];
-  if(plannerMode==='living'&&people.length>=2){
-    showPlannerMessage('職場を変えるには、駅名の × を押してください。');
+  if(plannerMode==='living'&&people.length>=2&&plannerEditingIndex===null){
+    showPlannerMessage('変更する職場の駅をタップしてください。');
     return;
   }
-  people.push(id);
+  if(plannerEditingIndex===null)people.push(id);
+  else people[plannerEditingIndex]=id;
+  plannerEditingIndex=null;
   clearPlannerSelection();
   plannerInput.value='';plannerInput.setCustomValidity('');plannerInput.blur();
   invalidatePlanner();
@@ -297,14 +314,14 @@ plannerInput.oninput=()=>{clearPlannerSelection();plannerInput.setCustomValidity
 $('plannerConfirmAdd').onclick=()=>{
   if(pendingPlannerId!==null)addPlannerStation(pendingPlannerId);
 };
-$('plannerCancelAdd').onclick=clearPlannerSelection;
-$('plannerMapPick').onclick=()=>{
-  plannerPickMode=!plannerPickMode;
+function cancelPlannerSelection(){
+  plannerEditingIndex=null;
+  plannerInput.value='';
   clearPlannerSelection();
-  $('plannerMapPick').setAttribute('aria-pressed',plannerPickMode);
-  showPlannerMessage('');
-  requestDraw();
-};
+  renderPlannerPeople();
+}
+$('plannerCancelAdd').onclick=cancelPlannerSelection;
+$('plannerCancelEdit').onclick=cancelPlannerSelection;
 function loadHouseholdRents(){
   if(!householdRentPromise)householdRentPromise=fetch('household-rents.json?v=1').then(response=>{
     if(!response.ok)throw Error('家賃');return response.json();
@@ -330,7 +347,7 @@ for (const id of ['plannerBudget', 'plannerCap']) $(id).oninput = () => {
   if ($(id).validity.valid) renderPlannerResults();
 };
 $('plannerLayout').onchange=renderPlannerResults;
-$('plannerRun').onclick = async () => {
+async function updatePlannerCandidates(){
   const living = plannerMode === 'living';
   const ids = [...plannerPeople[plannerMode]];
   if(ids.length<2)return;
@@ -339,6 +356,7 @@ $('plannerRun').onclick = async () => {
   plannerInput.blur();
   const revision = ++plannerRevision;
   $('plannerStatus').textContent = '候補を計算中…';
+  $('plannerMeta').textContent='候補を計算中…';
   $('plannerResults').replaceChildren();
   setPlannerLoading(true);
   try {
@@ -347,24 +365,18 @@ $('plannerRun').onclick = async () => {
     if (revision !== plannerRevision || planner.hidden) return;
     const journeys = ids.map(id => calculate(id, 'rail', express, false));
     plannerSearch = {living, ids, journeys, household};
-    plannerPickMode=false;
-    $('plannerMapPick').setAttribute('aria-pressed','false');
     renderPlannerResults();
-    setPlannerSheetLevel(1);
-    if(plannerCandidates.length){
-      $('livingControls').open=false;
-      $('plannerSheetBody').scrollTop=0;
-      focusPlannerResults();
-    }
   } catch {
     if (revision === plannerRevision) {
       $('plannerStatus').textContent = '候補を表示できませんでした。もう一度お試しください。';
-      setPlannerSheetLevel(1);
+      $('plannerMeta').textContent='再計算してください';
     }
   } finally {
     if (revision === plannerRevision) {
       setPlannerLoading(false);
+      $('plannerRun').hidden=!$('plannerStatus').textContent.includes('もう一度');
       renderPlannerPeople();
     }
   }
-};
+}
+$('plannerRun').onclick=updatePlannerCandidates;
