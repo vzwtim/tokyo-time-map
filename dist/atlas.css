@@ -209,7 +209,14 @@
 #railView .sheet-grip {top:5px;width:27px;height:3px}
 #railView .sheet-chevron {right:18px;bottom:16px;width:7px;height:7px}
 #railView .sheet-body {padding-inline:14px}
-#railView .map-toolbar .map-menu-open {margin-left:auto}
+#railView .map-toolbar .map-menu-open {
+  margin-left:auto;display:flex;align-items:center;justify-content:center;gap:5px;
+  width:76px;height:48px;border-radius:24px;background:#246660;color:#fff;
+  font-size:13px;font-weight:700;box-shadow:0 2px 9px #123b3540;
+}
+#railView .map-toolbar .map-menu-open:hover {background:#194f4b}
+#railView .map-toolbar .map-menu-open:focus-visible {outline:3px solid #83c6b9;outline-offset:3px}
+#railView #stationSearch {width:min(480px,calc(100% - 88px))}
 #railView .map-toolbar .map-segment :is(#timeExplore,#rentExplore) {width:41px;padding:0;display:grid;place-items:center}
 #railView .map-segment svg {width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linejoin:round;stroke-linecap:round}
 #railView .station-actions {display:flex;justify-content:flex-end;gap:4px;margin-top:-1px}
@@ -250,7 +257,7 @@
 #railView .profile-legend {flex-basis:100%;font-size:11px}
 #railView .profile-caption {margin-block:2px 0;min-height:0}
 
-#roadTools {position:absolute;inset:0 58px auto 0;pointer-events:none}
+#roadTools {position:absolute;inset:0 88px auto 0;pointer-events:none}
 #roadTools > * {pointer-events:auto}
 #roadTools .road-search {width:min(480px,100%);min-height:48px}
 #roadFilter {
@@ -296,7 +303,7 @@
 #rentHourlyDialog.top-input-dialog {margin:calc(10px + env(safe-area-inset-top)) auto auto;border-radius:20px}
 #rentHourlyDialog input {font-size:16px}
 
-#plannerTools {position:absolute;inset:0 58px auto 0;width:min(480px,calc(100% - 58px));pointer-events:none;--planner-accent:#246660}
+#plannerTools {position:absolute;inset:0 88px auto 0;width:min(480px,calc(100% - 88px));pointer-events:none;--planner-accent:#246660}
 #plannerTools[data-mode="meeting"] {--planner-accent:#805115}
 #plannerTools {border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow)}
 #plannerTools:has(#plannerSelection:not([hidden])) #plannerForm {display:none}
@@ -382,6 +389,8 @@
   min-height:30px;border:1px solid var(--line);border-radius:14px;padding:1px 8px;background:var(--surface);font-size:12px
 }
 .drink-options button[aria-pressed="true"] {background:var(--planner-light);color:var(--planner-color);border-color:#d8ba81}
+.drink-reset {flex:none;min-height:30px;padding:1px 8px;border:1px solid var(--line);border-radius:14px;font-size:12px;background:var(--surface)}
+.drink-reset[aria-pressed="true"] {background:var(--planner-light);color:var(--planner-color);border-color:#d8ba81}
 .planner-decision {padding:10px 12px 12px;background:#f2f4ed;border-radius:12px;margin:4px 0 8px;font-size:13px}
 [data-mode="meeting"] .planner-decision {background:#f8f2e6}
 .planner-decision strong {font-size:14px;line-height:1.4}

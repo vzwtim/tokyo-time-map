@@ -28,15 +28,50 @@ const stationAreas = {
   横浜: ['駅ビルや大型商業施設が集まります。東西で景色が異なるので、使う改札側で生活動線を確認できます。','東口・西口の両側に飲食店があります。最初にどちら側で集まるかを決めるとスムーズです。','https://www.welcome.city.yokohama.jp/spot/area/area02.php', ['東西に大型商業施設','出口を決めて集合']],
 };
 
+// Vibes describe the area in its linked guide. Drink tags refer to documented venues.
+const stationMeetingProfiles={
+  新宿: {vibes:['ワイワイ'],drinks:['ビール','日本酒','ワイン'],source:tokyoYokocho},
+  神楽坂: {vibes:['ゆったり'],drinks:['ワイン'],source:'https://www.gotokyo.org/book/wp-content/uploads/2025/06/2506_shinjuku_plus17_JP_low.pdf'},
+  高円寺: {vibes:['ワイワイ'],drinks:['ビール'],source:'https://www.gotokyo.org/book/wp-content/uploads/2025/03/2503_suginamisavour_JP_low.pdf'},
+  中野: {vibes:['ワイワイ'],drinks:[],source:stationAreas.中野[2]},
+  下北沢: {vibes:['ゆったり'],drinks:[],source:stationAreas.下北沢[2]},
+  上野: {vibes:['ワイワイ'],drinks:[],source:stationAreas.上野[2]},
+  赤羽: {vibes:['ワイワイ'],drinks:['ビール','日本酒'],source:'https://www.gotokyo.org/jp/destinations/northern-tokyo/akabane/index.html'},
+  吉祥寺: {vibes:['ワイワイ'],drinks:[],source:stationAreas.吉祥寺[2]},
+  恵比寿: {vibes:['ワイワイ','ゆったり'],drinks:['ビール','ワイン','日本酒'],source:'https://ebisu-daikantei.com/'},
+  新橋: {vibes:['ワイワイ'],drinks:['ビール','日本酒'],source:'https://www.gotokyo.org/book/wp-content/uploads/2026/03/AO_2603_minato-rurubu_low_EN.pdf'},
+  渋谷: {vibes:['ワイワイ'],drinks:['ワイン'],source:'https://www.gotokyo.org/jp/new-and-now/new-and-trending/250728/topics.html'},
+  五反田: {vibes:['ワイワイ'],drinks:[],source:stationAreas.五反田[2]},
+  大井町: {vibes:['ワイワイ'],drinks:[],source:stationAreas.大井町[2]},
+  自由が丘: {vibes:['ゆったり'],drinks:[],source:stationAreas.自由が丘[2]},
+  中目黒: {vibes:['ゆったり'],drinks:['ワイン','日本酒'],source:'https://www.gotokyo.org/jp/story/guide/standing-sake-bars/index.html'},
+};
 const drinkPreference={vibe:'',drink:''};
+function meetingProfile(station){
+  return station.region==='東京圏'||!station.region?stationMeetingProfiles[station.name]:null;
+}
+function matchesDrinkPreferences(station){
+  const {vibe,drink}=drinkPreference;
+  if(!vibe&&!drink)return true;
+  const profile=meetingProfile(station);
+  return !!profile&&(!vibe||profile.vibes.includes(vibe))&&(!drink||profile.drinks.includes(drink));
+}
+function syncDrinkPreferences(){
+  for(const button of $('drinkPreferences').querySelectorAll('[data-preference]')){
+    button.setAttribute('aria-pressed',button.dataset.value===drinkPreference[button.dataset.preference]);
+  }
+  $('drinkReset').setAttribute('aria-pressed',!drinkPreference.vibe&&!drinkPreference.drink);
+  if(plannerSearch)renderPlannerResults();
+}
+$('drinkReset').onclick=()=>{
+  drinkPreference.vibe=drinkPreference.drink='';
+  syncDrinkPreferences();
+};
 for(const button of $('drinkPreferences').querySelectorAll('[data-preference]')){
   button.onclick=()=>{
     const {preference,value}=button.dataset;
     drinkPreference[preference]=drinkPreference[preference]===value?'':value;
-    for(const peer of $('drinkPreferences').querySelectorAll('[data-preference="'+preference+'"]')){
-      peer.setAttribute('aria-pressed',peer.dataset.value===drinkPreference[preference]);
-    }
-    updatePlannerDecision();
+    syncDrinkPreferences();
   };
 }
 function stationAreaLinks(station) {
@@ -91,6 +126,13 @@ function updatePlannerDecision() {
   const links=document.createElement('div');links.className='planner-decision-links';
   for(const [label,url,icon] of stationAreaLinks(station))links.append(plannerExternalLink(label,url,icon));
   if(guide)links.append(plannerExternalLink('街ガイド',guide[2],'guide'));
+  const profile=!living&&meetingProfile(station);
+  if(profile){
+    const tags=document.createElement('p');tags.className='planner-tradeoff';
+    tags.textContent=[...profile.vibes,...profile.drinks].join(' · ');
+    section.append(tags);
+    links.append(plannerExternalLink('お店の参考',profile.source,'guide'));
+  }
   section.append(links);
   if(living){
     const rent=householdRecord(plannerSearch.household,station);

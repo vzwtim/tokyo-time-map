@@ -78,7 +78,8 @@ function renderPlannerResults() {
   if (!plannerSearch) return;
   const {living, ids, journeys, household} = plannerSearch;
   const order = living ? 'longest' : meetingOrder;
-  const rows = rankPlannerStations(STATIONS, journeys, {
+  const available=living?STATIONS:STATIONS.filter(matchesDrinkPreferences);
+  const rows = rankPlannerStations(available, journeys, {
     rents: living ? STATIONS.map(station=>householdRecord(household,station)) : null,
     budget: ($('plannerBudget').valueAsNumber || Infinity) * 10000,
     cap: $('plannerCap').valueAsNumber || Infinity,
@@ -98,7 +99,11 @@ function renderPlannerResults() {
   if(!candidates.some(row=>row.station.id===plannerDecisionId))plannerDecisionId=null;
   list.replaceChildren();
   $('plannerStatus').textContent = rows.length ? ''
-    : (living ? '条件に合う家賃データがありません。家賃か片道の上限を調整してください。' : '全員が鉄道で行ける駅が見つかりませんでした。');
+    : (living ? '条件に合う家賃データがありません。家賃か片道の上限を調整してください。'
+      :drinkPreference.vibe||drinkPreference.drink?'この条件に合う収録済みの街がありません。「すべて」で条件を戻せます。'
+      :'全員が鉄道で行ける駅が見つかりませんでした。');
+  if(!living)$('plannerNote').textContent=(drinkPreference.vibe||drinkPreference.drink
+    ?'街ガイド・店舗情報のある駅で絞り込み · 雰囲気は街の傾向':'所要時間は概算 · 新幹線を除く');
   for (const [index, {station, minutes, longest, total, rent}] of candidates.entries()) {
     const li = document.createElement('li');
     const button = document.createElement('button');
