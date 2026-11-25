@@ -58,7 +58,13 @@ const SEGMENT_TIMINGS=[
  ['埼京線','新宿','池袋',5,5,0.4,0.4],
  ['湘南新宿ライン','新宿','池袋',5,5,0.6,0.6],
  ['小田急線快速急行','新宿','代々木上原',5,5,0,0],
- ['小田急線快速急行','代々木上原','下北沢',2,2,0,0]
+ ['小田急線快速急行','代々木上原','下北沢',2,2,0,0],
+ // Seibu Ikebukuro express: Yahoo sample 2026-11-25, Tokorozawa 10:08 -> Ikebukuro 10:33
+ // (25 min through-ride). Segment runs split in proportion to schematic segment
+ // distance so the three calibrated segments sum to the observed 25 min.
+ ['西武池袋線急行','池袋','石神井公園',10.6,10.6,0,0],
+ ['西武池袋線急行','石神井公園','ひばりヶ丘',6.2,6.2,0,0],
+ ['西武池袋線急行','ひばりヶ丘','所沢',8.2,8.2,0,0]
 ];
 const SEGMENT_TIMING_INDEX=new Map();
 for(const [line,a,b,ab,ba,ad,bd] of SEGMENT_TIMINGS){
