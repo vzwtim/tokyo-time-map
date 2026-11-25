@@ -12,6 +12,12 @@ const stationSearchRecords = STATIONS.map(station => ({
   label: normalizeStationQuery(stationLabels[station.id]),
 }));
 
+// First serving line per station; tells same-name stations apart in results.
+const stationFirstLines = new Map();
+for (const line of LINES) for (const id of line.stops) {
+  if (!stationFirstLines.has(id)) stationFirstLines.set(id, line.name);
+}
+
 function findStationSuggestions(query) {
   const key = normalizeStationQuery(query.trim());
   if (!key) return [];
@@ -26,13 +32,12 @@ function findStationSuggestions(query) {
   }
   matches.sort((a,b) => a.score-b.score || Number(b.main)-Number(a.main) || a.record.station.id-b.record.station.id);
 
+  // Every station carrying the queried name stays selectable: exact matches
+  // are never dropped or cut off, only looser matches fill the remaining slots.
   const results = [];
-  for (const {record} of matches) {
-    const duplicate = results.some(({station}) => station.name === record.station.name &&
-      station.region === record.station.region && distance(station, record.station) < .75);
-    if (duplicate && record.label !== key) continue;
+  for (const {record, score} of matches) {
+    if (score > 0 && results.length >= suggestionLimit) break;
     results.push(record);
-    if (results.length === suggestionLimit) break;
   }
   return results;
 }
@@ -83,7 +88,9 @@ function attachSuggestions(input, onChoose) {
       const name = document.createElement('span');
       name.textContent = match.station.name;
       const area = document.createElement('small');
-      area.textContent = match.value === match.station.name ? match.station.region : match.value.slice(match.station.name.length+1,-1);
+      const firstLine = stationFirstLines.get(match.station.id);
+      area.textContent = match.value === match.station.name ? match.station.region
+        : match.station.region + (firstLine ? ' · ' + firstLine : '');
       option.append(name, area);
       option.addEventListener('pointerdown', event => event.preventDefault());
       option.addEventListener('click', () => choose(index));

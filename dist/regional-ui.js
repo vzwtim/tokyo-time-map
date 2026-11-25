@@ -74,8 +74,9 @@ for(const station of STATIONS) {
 }
 for(const station of STATIONS){
   const duplicates=byName.get(station.name);
+  const sameRegion=duplicates.filter(s=>s.region===station.region);
   const value=duplicates.length===1?station.name:station.name+'（'+station.region+
-    (duplicates.filter(s=>s.region===station.region).length>1?' '+(duplicates.indexOf(station)+1):'')+'）';
+    (sameRegion.length>1?' '+(sameRegion.indexOf(station)+1):'')+'）';
   stationLabels[station.id]=value;
   stationOptions.set(value,station.id);
 }
