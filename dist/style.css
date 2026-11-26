@@ -97,6 +97,12 @@ canvas:active {cursor:grabbing}
 .location-status:empty {display:none}
 .tooltip {position:absolute;z-index:2;pointer-events:none;background:var(--ink);color:white;padding:5px 8px;border-radius:3px;font-size:12px}
 .tooltip small {display:block;margin-top:2px;color:#d2e2da;font-size:10px}
+.center-tip {position:absolute;z-index:4;display:flex;gap:6px;max-width:calc(100% - 16px);padding:6px;background:var(--paper);border:1px solid #9faf9e;border-radius:6px;box-shadow:0 3px 10px #22363726}
+.center-tip button {min-height:40px;padding:7px 12px;border:1px solid var(--line);border-radius:5px;background:transparent;font-size:13px;white-space:nowrap}
+.center-tip button:hover {background:#e8eee5}
+.center-tip .center-tip-set {background:var(--teal);border-color:var(--teal);color:#fff;font-weight:650;max-width:62vw;overflow:hidden;text-overflow:ellipsis}
+.center-tip .center-tip-set:hover {background:var(--teal)}
+.center-tip .center-tip-close {min-width:40px;padding:7px 8px;font-size:16px}
 .rent-legend {position:absolute;top:10px;right:12px;z-index:2;width:136px;padding:6px 8px;background:var(--paper);border:1px solid var(--line);font-size:9px}
 .rent-caption {padding:0;border:0;background:none;font-size:10px;text-decoration:underline;text-underline-offset:2px}
 .rent-scale {height:5px;margin-top:5px;background:linear-gradient(90deg,#63998f,#cbbc99,#bc6449)}

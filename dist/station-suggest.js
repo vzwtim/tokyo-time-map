@@ -114,9 +114,12 @@ function attachSuggestions(input, onChoose) {
       close();
       return;
     }
-    if (event.key === 'Enter' && (active >= 0 || onChoose)) {
-      event.preventDefault();
+    if (event.key === 'Enter' && matches.length) {
       choose(Math.max(0, active));
+      // With a chooser (planner) the pick completes the action. Without one
+      // (main search) the filled-in exact label is left for the form submit,
+      // which applies it as the origin: Enter means "make it the center".
+      if (onChoose) event.preventDefault();
       return;
     }
     if (event.key !== 'ArrowDown' && event.key !== 'ArrowUp') return;
