@@ -112,3 +112,22 @@ assert.ok(Math.abs(zoom-Math.exp(-.36))<.002);
 assert.ok(Math.hypot(project(focalPoint)[0]-357,project(focalPoint)[1]-293)<1e-7);
 `);
 console.log('PASS: wheel input accumulates, eases through intermediate scales, and holds the cursor anchor.');
+
+// A direct roads entry must not compute the nationwide rail model before it is used.
+const roadBoot={...c,location:{hash:'#roads',search:''},requestAnimationFrame:()=>1};
+vm.createContext(roadBoot);
+for(const f of ['data.js','routing-data.js','network-expansion.js','transfer-data.js','engine.js','app.js']){
+ vm.runInContext(fs.readFileSync(root+'dist/'+f,'utf8'),roadBoot,{filename:f});
+}
+vm.runInContext(`
+ assert.equal(mapView,'roads');
+ assert.equal(railModelReady,false);
+ assert.equal(result,undefined);
+ assert.ok(warp.base.every(Number.isFinite));
+ assert.equal(ROUTING_RESULT_CACHE.size,0);
+ draw(performance.now());
+ updateModel(false);
+ assert.equal(railModelReady,true);
+ assert.ok(Number.isFinite(result.best[origin].time));
+`,roadBoot);
+console.log('PASS: direct road entry defers rail routing and warp until the rail model is requested.');

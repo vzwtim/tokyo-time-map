@@ -42,6 +42,7 @@ function retainAtlasCamera(from, to) {
 }
 
 function renderAtlasView(view, moveFocus = false) {
+  if(view==='rail'&&!railModelReady)updateModel(false);
   if (view !== mapView) retainAtlasCamera(mapView, view);
   if (!$('stationPlanner').hidden) closePlanner();
   mapView = view;
@@ -84,18 +85,23 @@ function atlasPath(path, coords, close = false) {
   for (let i = 1; i < coords.length; i++) path.lineTo(...coords[i]);
   if (close) path.closePath();
 }
-function getGeographicPaths() {
-  if (geographicPaths) return geographicPaths;
-  const land = new Path2D(), tracks = new Path2D(), water = new Path2D(), green = new Path2D();
-  const coordinates = ids => ids.map(id => points[id].geo);
-  for (const ids of regionCoast) atlasPath(land, coordinates(ids), true);
-  for (const ids of linePaths) if (ids) atlasPath(tracks, coordinates(ids));
-  for (const {line, from, to} of regionalPaths) if (!LINES[line].bullet) {
-    tracks.moveTo(...points[stationIndex[from]].geo);tracks.lineTo(...points[stationIndex[to]].geo);
+function getGeographicPaths(includeTracks=true) {
+  const coordinates=ids=>ids.map(id=>points[id].geo);
+  if(!geographicPaths){
+    const land=new Path2D(),water=new Path2D(),green=new Path2D();
+    for(const ids of regionCoast)atlasPath(land,coordinates(ids),true);
+    for(const river of rivers)atlasPath(water,coordinates(river.ids));
+    for(const park of parks)atlasPath(green,coordinates(park.ids),true);
+    geographicPaths={land,water,green};
   }
-  for (const river of rivers) atlasPath(water, coordinates(river.ids));
-  for (const park of parks) atlasPath(green, coordinates(park.ids), true);
-  geographicPaths = {land, tracks, water, green};
+  if(includeTracks&&!geographicPaths.tracks){
+    const tracks=new Path2D();
+    for(const ids of linePaths)if(ids)atlasPath(tracks,coordinates(ids));
+    for(const {line,from,to} of regionalPaths)if(!LINES[line].bullet){
+      tracks.moveTo(...points[stationIndex[from]].geo);tracks.lineTo(...points[stationIndex[to]].geo);
+    }
+    geographicPaths.tracks=tracks;
+  }
   return geographicPaths;
 }
 function drawAtlasOverlay() {
@@ -104,8 +110,8 @@ function drawAtlasOverlay() {
   const dy = H / 2 + pan[1] - warp.base[1] * scale;
   const bounds = [(-dx-24)/scale,(-dy-24)/scale,(W-dx+24)/scale,(H-dy+24)/scale];
   const project = ([x,y]) => [x * scale + dx, y * scale + dy];
-  const geographic=getGeographicPaths();
-  const {land, water, green}=mapView==='roads'?(getRoadBackdrop()??geographic):geographic;
+  const geographic=getGeographicPaths(mapView!=='roads');
+  const {land, water, green}=geographic;
   atlasHits = [];
   atlasLabels = [];
   ctx.fillStyle = '#dbe7e4';ctx.fillRect(0,0,W,H);
@@ -174,8 +180,7 @@ function hitAtlasOverlay(x,y) {
     if(distance<best){best=distance;pick=item.pick;}
   }
   if(pick)return pick;
-  return atlasHits.findLast(({box})=>box&&x>=box[0]&&x<=box[2]&&y>=box[1]&&y<=box[3])?.pick
-    ?? (mapView==='roads'?hitRoadRing(x,y):null);
+  return atlasHits.findLast(({box})=>box&&x>=box[0]&&x<=box[2]&&y>=box[1]&&y<=box[3])?.pick;
 }
 function centerAtlasPoint(point) {
   wheelZoom = null;
