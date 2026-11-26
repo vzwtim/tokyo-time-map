@@ -296,6 +296,83 @@
       "name": "北総線",
       "line": "北総線",
       "url": "https://www.homes.co.jp/chintai/chiba/hokusotetsudo-line/price/"
+    },
+    {
+      "id": "osakametromidosuji",
+      "name": "Osaka Metro御堂筋線",
+      "url": "https://www.homes.co.jp/chintai/osaka/osakametromidosuji-line/price/",
+      "line": "Osaka Metro 御堂筋線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "osakakanjo",
+      "name": "JR大阪環状線",
+      "url": "https://www.homes.co.jp/chintai/osaka/osakakanjo-line/price/",
+      "line": "JR西日本 大阪環状線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "hankyukyotohonsen",
+      "name": "阪急京都本線",
+      "url": "https://www.homes.co.jp/chintai/osaka/hankyukyotohonsen-line/price/",
+      "line": "阪急 京都線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "hankyukobehonsen",
+      "name": "阪急神戸本線",
+      "url": "https://www.homes.co.jp/chintai/osaka/hankyukobehonsen-line/price/",
+      "line": "阪急 神戸線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "keihanhonsen",
+      "name": "京阪本線",
+      "url": "https://www.homes.co.jp/chintai/osaka/keihanhonsen-line/price/",
+      "line": "京阪 京阪本線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "kintetsunara",
+      "name": "近鉄奈良線",
+      "url": "https://www.homes.co.jp/chintai/osaka/kintetsunara-line/price/",
+      "line": "近鉄 奈良線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "kintetsunara-nara",
+      "name": "近鉄奈良線（奈良県内）",
+      "url": "https://www.homes.co.jp/chintai/nara/kintetsunara-line/price/",
+      "line": "近鉄 奈良線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "hanshinhonsen",
+      "name": "阪神本線",
+      "url": "https://www.homes.co.jp/chintai/osaka/hanshinhonsen-line/price/",
+      "line": "阪神 本線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "nankai",
+      "name": "南海線",
+      "url": "https://www.homes.co.jp/chintai/osaka/nankai-line/price/",
+      "line": "南海 南海本線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "osakametrotanimachi",
+      "name": "Osaka Metro谷町線",
+      "url": "https://www.homes.co.jp/chintai/osaka/osakametrotanimachi-line/price/",
+      "line": "Osaka Metro 谷町線",
+      "retrieved": "2026-11-26"
+    },
+    {
+      "id": "osakametrochuo",
+      "name": "Osaka Metro中央線",
+      "url": "https://www.homes.co.jp/chintai/osaka/osakametrochuo-line/price/",
+      "line": "Osaka Metro 中央線",
+      "retrieved": "2026-11-26"
     }
   ],
   "records": [
@@ -5483,6 +5560,1261 @@
       "name": "白井",
       "rent": 77900,
       "source": "hokusotetsudo"
+    },
+    {
+      "name": "江坂",
+      "rent": 79400,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "東三国",
+      "rent": 73000,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "新大阪",
+      "rent": 71800,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "西中島南方",
+      "rent": 71600,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "中津",
+      "rent": 80500,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "梅田",
+      "rent": 85100,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "淀屋橋",
+      "rent": 90600,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "本町",
+      "rent": 86300,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "心斎橋",
+      "rent": 82600,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "なんば",
+      "rent": 75500,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "大国町",
+      "rent": 75500,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "動物園前",
+      "rent": 60200,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "天王寺",
+      "rent": 68300,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "昭和町",
+      "rent": 64900,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "西田辺",
+      "rent": 59800,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "長居",
+      "rent": 59600,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "あびこ",
+      "rent": 55000,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "北花田",
+      "rent": 59700,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "新金岡",
+      "rent": 63700,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "なかもず",
+      "rent": 62000,
+      "source": "osakametromidosuji"
+    },
+    {
+      "name": "大阪",
+      "rent": 87500,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "福島",
+      "rent": 79300,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "野田",
+      "rent": 75400,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "西九条",
+      "rent": 77900,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "弁天町",
+      "rent": 64600,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "大正",
+      "rent": 69500,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "芦原橋",
+      "rent": 77400,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "今宮",
+      "rent": 76300,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "新今宮",
+      "rent": 62000,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "天王寺",
+      "rent": 68300,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "寺田町",
+      "rent": 71800,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "桃谷",
+      "rent": 74000,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "鶴橋",
+      "rent": 67300,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "玉造",
+      "rent": 69500,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "森ノ宮",
+      "rent": 71400,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "大阪城公園",
+      "rent": 74500,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "京橋",
+      "rent": 71800,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "桜ノ宮",
+      "rent": 70400,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "天満",
+      "rent": 72400,
+      "source": "osakakanjo"
+    },
+    {
+      "name": "京都河原町",
+      "rent": 68500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "烏丸",
+      "rent": 65000,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "大宮",
+      "rent": 64800,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "西院",
+      "rent": 63000,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "西京極",
+      "rent": 69300,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "桂",
+      "rent": 57400,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "洛西口",
+      "rent": 74200,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "東向日",
+      "rent": 60500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "西向日",
+      "rent": 66700,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "長岡天神",
+      "rent": 58100,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "西山天王山",
+      "rent": 81500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "大山崎",
+      "rent": 35000,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "水無瀬",
+      "rent": 73600,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "上牧",
+      "rent": 71400,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "高槻市",
+      "rent": 67300,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "富田",
+      "rent": 65600,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "総持寺",
+      "rent": 56400,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "茨木市",
+      "rent": 62500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "南茨木",
+      "rent": 67200,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "摂津市",
+      "rent": 67300,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "正雀",
+      "rent": 63200,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "相川",
+      "rent": 58000,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "上新庄",
+      "rent": 61600,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "淡路",
+      "rent": 69600,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "崇禅寺",
+      "rent": 67200,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "南方",
+      "rent": 70500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "十三",
+      "rent": 71500,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "大阪梅田",
+      "rent": 80400,
+      "source": "hankyukyotohonsen"
+    },
+    {
+      "name": "大阪梅田",
+      "rent": 80400,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "中津",
+      "rent": 76700,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "十三",
+      "rent": 71500,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "神崎川",
+      "rent": 62700,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "園田",
+      "rent": 61400,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "塚口",
+      "rent": 62800,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "武庫之荘",
+      "rent": 57700,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "西宮北口",
+      "rent": 67700,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "夙川",
+      "rent": 57900,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "芦屋川",
+      "rent": 64100,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "岡本",
+      "rent": 57500,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "御影",
+      "rent": 58600,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "六甲",
+      "rent": 56700,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "王子公園",
+      "rent": 58500,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "春日野道",
+      "rent": 68200,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "神戸三宮",
+      "rent": 70400,
+      "source": "hankyukobehonsen"
+    },
+    {
+      "name": "淀屋橋",
+      "rent": 90600,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "北浜",
+      "rent": 82400,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "天満橋",
+      "rent": 78000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "京橋",
+      "rent": 71800,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "野江",
+      "rent": 67100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "関目",
+      "rent": 62700,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "森小路",
+      "rent": 62200,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "千林",
+      "rent": 53700,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "滝井",
+      "rent": 55000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "土居",
+      "rent": 55000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "守口市",
+      "rent": 67300,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "西三荘",
+      "rent": 59400,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "門真市",
+      "rent": 55900,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "古川橋",
+      "rent": 51700,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "大和田",
+      "rent": 45200,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "萱島",
+      "rent": 45100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "寝屋川市",
+      "rent": 53000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "香里園",
+      "rent": 56500,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "光善寺",
+      "rent": 56000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "枚方公園",
+      "rent": 57000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "枚方市",
+      "rent": 64500,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "御殿山",
+      "rent": 55900,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "牧野",
+      "rent": 49400,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "樟葉",
+      "rent": 58900,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "橋本",
+      "rent": 58300,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "石清水八幡宮",
+      "rent": 56100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "淀",
+      "rent": 65000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "中書島",
+      "rent": 51100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "伏見桃山",
+      "rent": 60100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "丹波橋",
+      "rent": 52000,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "墨染",
+      "rent": 57700,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "藤森",
+      "rent": 58100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "龍谷大前深草",
+      "rent": 55100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "伏見稲荷",
+      "rent": 55100,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "鳥羽街道",
+      "rent": 62200,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "東福寺",
+      "rent": 56900,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "七条",
+      "rent": 59900,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "清水五条",
+      "rent": 64600,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "祇園四条",
+      "rent": 66700,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "三条",
+      "rent": 64600,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "神宮丸太町",
+      "rent": 64400,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "出町柳",
+      "rent": 60300,
+      "source": "keihanhonsen"
+    },
+    {
+      "name": "布施",
+      "rent": 59700,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "河内永和",
+      "rent": 54600,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "河内小阪",
+      "rent": 48200,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "八戸ノ里",
+      "rent": 51200,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "若江岩田",
+      "rent": 53700,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "河内花園",
+      "rent": 46800,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "東花園",
+      "rent": 49100,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "瓢箪山",
+      "rent": 48600,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "枚岡",
+      "rent": 43200,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "額田",
+      "rent": 41900,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "石切",
+      "rent": 40800,
+      "source": "kintetsunara"
+    },
+    {
+      "name": "生駒",
+      "rent": 49600,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "東生駒",
+      "rent": 37300,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "富雄",
+      "rent": 52500,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "学園前",
+      "rent": 52500,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "菖蒲池",
+      "rent": 55400,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "大和西大寺",
+      "rent": 53700,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "新大宮",
+      "rent": 44100,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "近鉄奈良",
+      "rent": 50000,
+      "source": "kintetsunara-nara"
+    },
+    {
+      "name": "大阪梅田",
+      "rent": 94000,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "福島",
+      "rent": 81400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "野田",
+      "rent": 73900,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "淀川",
+      "rent": 84200,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "姫島",
+      "rent": 69000,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "千船",
+      "rent": 63700,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "杭瀬",
+      "rent": 58300,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "大物",
+      "rent": 61400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "尼崎",
+      "rent": 69600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "出屋敷",
+      "rent": 63300,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "尼崎センタープール前",
+      "rent": 62600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "武庫川",
+      "rent": 59800,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "鳴尾・武庫川女子大前",
+      "rent": 56400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "甲子園",
+      "rent": 62100,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "久寿川",
+      "rent": 62400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "今津",
+      "rent": 57400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "西宮",
+      "rent": 68600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "香櫨園",
+      "rent": 63500,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "打出",
+      "rent": 63700,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "芦屋",
+      "rent": 68100,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "深江",
+      "rent": 59000,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "青木",
+      "rent": 75300,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "魚崎",
+      "rent": 93400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "住吉",
+      "rent": 61600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "御影",
+      "rent": 59900,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "石屋川",
+      "rent": 57400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "新在家",
+      "rent": 59600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "大石",
+      "rent": 55900,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "西灘",
+      "rent": 54500,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "岩屋",
+      "rent": 58600,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "春日野道",
+      "rent": 70900,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "神戸三宮",
+      "rent": 70400,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "元町",
+      "rent": 73800,
+      "source": "hanshinhonsen"
+    },
+    {
+      "name": "難波",
+      "rent": 75500,
+      "source": "nankai"
+    },
+    {
+      "name": "新今宮",
+      "rent": 62000,
+      "source": "nankai"
+    },
+    {
+      "name": "天下茶屋",
+      "rent": 57000,
+      "source": "nankai"
+    },
+    {
+      "name": "岸里玉出",
+      "rent": 55900,
+      "source": "nankai"
+    },
+    {
+      "name": "粉浜",
+      "rent": 56900,
+      "source": "nankai"
+    },
+    {
+      "name": "住吉大社",
+      "rent": 55300,
+      "source": "nankai"
+    },
+    {
+      "name": "住ノ江",
+      "rent": 56400,
+      "source": "nankai"
+    },
+    {
+      "name": "七道",
+      "rent": 62300,
+      "source": "nankai"
+    },
+    {
+      "name": "堺",
+      "rent": 68900,
+      "source": "nankai"
+    },
+    {
+      "name": "湊",
+      "rent": 60000,
+      "source": "nankai"
+    },
+    {
+      "name": "石津川",
+      "rent": 58600,
+      "source": "nankai"
+    },
+    {
+      "name": "諏訪ノ森",
+      "rent": 55000,
+      "source": "nankai"
+    },
+    {
+      "name": "浜寺公園",
+      "rent": 55300,
+      "source": "nankai"
+    },
+    {
+      "name": "羽衣",
+      "rent": 60300,
+      "source": "nankai"
+    },
+    {
+      "name": "高石",
+      "rent": 62500,
+      "source": "nankai"
+    },
+    {
+      "name": "北助松",
+      "rent": 58000,
+      "source": "nankai"
+    },
+    {
+      "name": "松ノ浜",
+      "rent": 50700,
+      "source": "nankai"
+    },
+    {
+      "name": "泉大津",
+      "rent": 57800,
+      "source": "nankai"
+    },
+    {
+      "name": "忠岡",
+      "rent": 49800,
+      "source": "nankai"
+    },
+    {
+      "name": "春木",
+      "rent": 49800,
+      "source": "nankai"
+    },
+    {
+      "name": "和泉大宮",
+      "rent": 51600,
+      "source": "nankai"
+    },
+    {
+      "name": "岸和田",
+      "rent": 54300,
+      "source": "nankai"
+    },
+    {
+      "name": "蛸地蔵",
+      "rent": 53000,
+      "source": "nankai"
+    },
+    {
+      "name": "貝塚",
+      "rent": 53300,
+      "source": "nankai"
+    },
+    {
+      "name": "二色浜",
+      "rent": 55200,
+      "source": "nankai"
+    },
+    {
+      "name": "鶴原",
+      "rent": 52300,
+      "source": "nankai"
+    },
+    {
+      "name": "井原里",
+      "rent": 54700,
+      "source": "nankai"
+    },
+    {
+      "name": "泉佐野",
+      "rent": 57900,
+      "source": "nankai"
+    },
+    {
+      "name": "羽倉崎",
+      "rent": 58600,
+      "source": "nankai"
+    },
+    {
+      "name": "吉見ノ里",
+      "rent": 63700,
+      "source": "nankai"
+    },
+    {
+      "name": "岡田浦",
+      "rent": 50200,
+      "source": "nankai"
+    },
+    {
+      "name": "樽井",
+      "rent": 62000,
+      "source": "nankai"
+    },
+    {
+      "name": "尾崎",
+      "rent": 47100,
+      "source": "nankai"
+    },
+    {
+      "name": "鳥取ノ荘",
+      "rent": 66200,
+      "source": "nankai"
+    },
+    {
+      "name": "箱作",
+      "rent": 47000,
+      "source": "nankai"
+    },
+    {
+      "name": "大日",
+      "rent": 54900,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "守口",
+      "rent": 68900,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "太子橋今市",
+      "rent": 55100,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "千林大宮",
+      "rent": 60100,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "関目高殿",
+      "rent": 56800,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "野江内代",
+      "rent": 70700,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "都島",
+      "rent": 73100,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "天神橋筋六丁目",
+      "rent": 71500,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "中崎町",
+      "rent": 78300,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "東梅田",
+      "rent": 83300,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "南森町",
+      "rent": 79700,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "天満橋",
+      "rent": 78000,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "谷町四丁目",
+      "rent": 87200,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "谷町六丁目",
+      "rent": 86300,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "谷町九丁目",
+      "rent": 73900,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "四天王寺前夕陽ヶ丘",
+      "rent": 79600,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "天王寺",
+      "rent": 68300,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "阿倍野",
+      "rent": 65400,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "文の里",
+      "rent": 72200,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "田辺",
+      "rent": 63400,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "駒川中野",
+      "rent": 52200,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "平野",
+      "rent": 62000,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "喜連瓜破",
+      "rent": 59200,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "出戸",
+      "rent": 53700,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "長原",
+      "rent": 53100,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "八尾南",
+      "rent": 49500,
+      "source": "osakametrotanimachi"
+    },
+    {
+      "name": "大阪港",
+      "rent": 76400,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "朝潮橋",
+      "rent": 69000,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "弁天町",
+      "rent": 64600,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "九条",
+      "rent": 73300,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "阿波座",
+      "rent": 78600,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "本町",
+      "rent": 86300,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "堺筋本町",
+      "rent": 85800,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "谷町四丁目",
+      "rent": 87200,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "森ノ宮",
+      "rent": 71400,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "緑橋",
+      "rent": 69200,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "深江橋",
+      "rent": 70500,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "高井田",
+      "rent": 66500,
+      "source": "osakametrochuo"
+    },
+    {
+      "name": "長田",
+      "rent": 62000,
+      "source": "osakametrochuo"
     }
   ],
   "distanceModel": {
@@ -5498,6 +6830,8 @@
     "市ヶ谷": "市ケ谷",
     "西ケ原": "西ヶ原",
     "鶴ケ峰": "鶴ヶ峰",
-    "希望ケ丘": "希望ヶ丘"
+    "希望ケ丘": "希望ヶ丘",
+    "あびこ": "我孫子",
+    "なかもず": "中百舌鳥"
   }
 }

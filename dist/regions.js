@@ -134,22 +134,51 @@ for (const [operator,line,edges,kind] of RAIL_GEODATA.lines) {
       mode:bullet?'shinkansen':'rail',
       wait:bullet?24:subway?4:slow?12:jr?12:8,
       dwell:bullet?1.2:.45
-    }),links,bullet?3.7:subway?.69:slow?.36:jr?1:.83,bullet?1.3:subway?.32:.48);
+    // Osaka Metro calibrated 2026-11-26 (timing-audit-kansai.md): at the generic
+    // subway speed the model ran ~12% fast on the 御堂筋線 core (新大阪〜天王寺).
+    }),links,bullet?3.7:metro?.615:subway?.69:slow?.36:jr?1:.83,bullet?1.3:metro?.36:subway?.32:.48);
   }
 }
 
 function regionalChain(name,color,names,times,options={}) {
-  const ids=names.split(' ').map(name=>
-    (options.mode==='shinkansen'?geoIds[RAIL_GEODATA.bullet_stops[name]]:undefined)
-    ??findStation(name,options.region)??findStation(name));
+  const ids=names.split(' ').map(name=>{
+    // Same-name stations inside one region (e.g. 柏原 in Shiga vs Osaka):
+    // options.near picks the candidate closest to the named anchor station.
+    if (options.near?.[name]) {
+      const anchorId=findStation(options.near[name],options.region)??findStation(options.near[name]);
+      const candidates=STATIONS.filter(s=>s.name===name&&(!options.region||s.region===options.region));
+      if (anchorId!==undefined&&candidates.length) {
+        return candidates.sort((a,b)=>distance(a,STATIONS[anchorId])-distance(b,STATIONS[anchorId]))[0].id;
+      }
+    }
+    return (options.mode==='shinkansen'?geoIds[RAIL_GEODATA.bullet_stops[name]]:undefined)
+    ??findStation(name,options.region)??findStation(name);
+  });
 
   const id=service(name,color,options);
   chain(id,ids,times);
   return id;
 }
-regionalChain('JR西日本 新快速','#70c5f3','米原 彦根 能登川 近江八幡 野洲 守山 草津 南草津 石山 大津 山科 京都 高槻 新大阪 大阪 尼崎 芦屋 三ノ宮 神戸 明石 西明石 加古川 姫路',[5,8,6,6,3,4,4,5,4,5,5,12,11,4,6,8,8,4,13,4,10,11],{region:'京阪神',wait:8,dwell:.55});
-regionalChain('阪急 京都線 特急','#e08e95','大阪梅田 十三 淡路 茨木市 高槻市 長岡天神 桂 烏丸 京都河原町',[4,4,8,5,8,6,7,2],{region:'京阪神',wait:6});
-regionalChain('阪急 神戸線 特急','#d47b87','大阪梅田 十三 塚口 西宮北口 夙川 岡本 神戸三宮',[4,6,5,3,4,7],{region:'京阪神',wait:6});
+// Kansai chains calibrated 2026-11-26 (timing-audit-kansai.md): the chain times
+// are scheduled departure-to-arrival running minutes, and the dwell actually
+// scheduled at each station is charged separately via chainDwells, keyed by the
+// station the train continues from. Unlisted stations get dwell 0, matching
+// the many Kansai stops where arrival and departure share a minute.
+function chainDwells(id, dwellByName) {
+  for (const edge of SERVICES[id].edges) edge.dwell = dwellByName[STATIONS[edge.from].name] ?? 0;
+}
+chainDwells(regionalChain('JR西日本 新快速','#70c5f3','米原 彦根 能登川 近江八幡 野洲 守山 草津 南草津 石山 大津 山科 京都 高槻 新大阪 大阪 尼崎 芦屋 三ノ宮 神戸 明石 西明石 加古川 姫路',[5,8,6,7,3,4,3,4,4,5,5,13,10,4,5,7,8,3,13,3,10,11],{region:'京阪神',wait:8,dwell:.55}),
+  {南草津:.5,京都:1,高槻:1,新大阪:1,大阪:1,尼崎:.5,三ノ宮:.5,明石:.5,加古川:.5});
+chainDwells(regionalChain('阪急 京都線 特急','#e08e95','大阪梅田 十三 淡路 茨木市 高槻市 長岡天神 桂 烏丸 京都河原町',[3,5,8,4,7,6,6,2],{region:'京阪神',wait:6}),
+  {茨木市:1,高槻市:1});
+chainDwells(regionalChain('阪急 神戸線 特急','#d47b87','大阪梅田 十三 西宮北口 夙川 岡本 神戸三宮',[4,11,2,5,6],{region:'京阪神',wait:6}), {});
+chainDwells(regionalChain('京阪 京阪本線 特急','#57af91','淀屋橋 北浜 天満橋 京橋 枚方市 樟葉 中書島 丹波橋 七条 祇園四条 三条 出町柳',[2,2,3,15,5,11,2,6,3,3,4],{region:'京阪神',wait:6}), {});
+chainDwells(regionalChain('阪神 本線 直通特急','#62adba','大阪梅田 福島 野田 千船 尼崎 武庫川 甲子園 西宮 芦屋 魚崎 御影 神戸三宮 元町 高速神戸 新開地',[2,2,3,4,3,3,3,3,3,2,4,2,2,1],{region:'京阪神',wait:6}), {});
+chainDwells(regionalChain('近鉄 奈良線 快速急行','#d9956a','大阪難波 近鉄日本橋 大阪上本町 鶴橋 生駒 学園前 大和西大寺 新大宮 近鉄奈良',[1,2,3,16,5,8,3,2],{region:'京阪神',wait:6}), {});
+chainDwells(regionalChain('南海 本線 空港急行','#7a91d4','難波 新今宮 天下茶屋 堺 岸和田 泉佐野 りんくうタウン 関西空港',[3,2,7,12,10,5,6],{region:'京阪神',wait:6}), {});
+chainDwells(regionalChain('南海 本線 特急サザン','#7a91d4','難波 新今宮 天下茶屋 堺 羽衣 岸和田 泉佐野 尾崎 みさき公園 和歌山市',[3,2,7,5,10,9,12,6,6],{region:'京阪神',wait:12}), {});
+chainDwells(regionalChain('JR西日本 関空快速','#70c5f3','大阪 福島 西九条 弁天町 大正 新今宮 天王寺 堺市 三国ヶ丘 鳳 和泉府中 熊取 日根野 りんくうタウン 関西空港',[2,4,3,3,4,2,10,4,4,7,8,4,6,5],{region:'京阪神',wait:8}), {});
+chainDwells(regionalChain('JR西日本 大和路快速','#70c5f3','大阪 天満 桜ノ宮 京橋 森ノ宮 玉造 鶴橋 寺田町 天王寺 新今宮 今宮 加美 久宝寺 八尾 志紀 柏原 王寺 法隆寺 大和小泉 郡山 奈良',[2,2,2,2,2,2,2,2,2,1,2,2,3,3,3,4,4,3,4,4],{region:'京阪神',wait:8,near:{柏原:'王寺'}}), {});
 
 regionalChain('JR東海 新快速','#f5b86e','豊橋 蒲郡 岡崎 安城 刈谷 大府 金山 名古屋 尾張一宮 岐阜 西岐阜 穂積 大垣',[10,11,6,6,5,12,4,10,9,3,3,6],{region:'東海道',wait:12});
 const shinkansenColors='#f4b562';
@@ -183,6 +212,10 @@ for (const line of SERVICES) {
     bullet: line.mode === 'shinkansen',
     express: line.mode!=='shinkansen'&&(line.name.includes('新快速')||line.name.includes('特急')||line.name.includes('マリンライナー'))
   });
+}
+// Skip-stop Kansai services whose names the express test above does not catch.
+for (const line of LINES) {
+  if (['近鉄 奈良線 快速急行','南海 本線 空港急行','JR西日本 関空快速','JR西日本 大和路快速'].includes(line.name)) line.express = true;
 }
 ROUTING_POLICY.through.push(...regionalConnections);
 

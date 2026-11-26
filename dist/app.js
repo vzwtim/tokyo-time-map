@@ -1,8 +1,7 @@
 'use strict';
 const $=id=>document.getElementById(id),canvas=$('map'),ctx=canvas.getContext('2d'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let origin=S['新宿'],mode='rail',express=true,shinkansen=true,mix=1,zoom=1,pan=[0,0],selected=null,hover=null,result,warp,W=0,H=0,dpr=1,animation=null,frame=0,points=[],lastScreen=[],stationIndex=[],drawLabels=[],ringTargets=[],selectedMinute=30,hoverMinute=null;
-let mapView=location.hash==='#roads'?'roads':'rail';
-let railModelReady=false;
+let mapView='rail';
 let rentLayer=null,layerMode=0,rentTab='stations',rentPromise=null,viewMotion=null,terrainDepth=0,layerRequest=0;
 let yaw=0,pitch=.72,rentOpacity=.75,walkCorrection=true,modelRevision=0,profileLine=null,profileStation=null,orbit=null;
 function viewDepth(now=performance.now()){if(mapView!=='rail')return 0;if(!viewMotion)return terrainDepth;const t=Math.max(0,Math.min(1,(now-viewMotion.start)/650));return viewMotion.from+(terrainDepth-viewMotion.from)*(1-Math.cos(Math.PI*t))/2;}
@@ -30,7 +29,7 @@ function currentPoint(p,now=performance.now()){const t=progress(now);return [p.f
 function currentPan(now=performance.now()){if(!animation)return [...pan];const t=progress(now);return animation.panFrom.map((v,i)=>v+(pan[i]-v)*t);}
 function settleMotion(){if(!animation)return;const now=performance.now(),c=currentPan(now),remaining=animation?Math.max(150,animation.duration-(now-animation.start)):0;for(const p of points)p.from=currentPoint(p,now);pan=c;if(animation)animation={start:performance.now(),duration:remaining,panFrom:c};}
 function startMotion(camera,animate,duration=1050){if(animate&&!reduced)animation={start:performance.now(),duration,panFrom:camera};else{animation=null;for(const p of points)p.from=[...p.target];}}
-function updateModel(animate=true,recenter=false){railModelReady=true;const now=performance.now(),camera=currentPan(now);for(const p of points)p.from=currentPoint(p,now);pan=recenter?[0,0]:camera;modelRevision++;result=calculate(origin,mode,express,shinkansen);warp=makeWarp(origin,result);const stationLookup=new Map(stationIndex.map((id,j)=>[id,j]));for(let i=0;i<points.length;i++){const p=points[i],station=stationLookup.get(i)??-1;const t=station>=0?warp.station(station):warp.point(p.geo);p.warped=t;p.target=[p.geo[0]-warp.base[0]+(t[0]-p.geo[0])*mix,p.geo[1]-warp.base[1]+(t[1]-p.geo[1])*mix];}
+function updateModel(animate=true,recenter=false){const now=performance.now(),camera=currentPan(now);for(const p of points)p.from=currentPoint(p,now);pan=recenter?[0,0]:camera;modelRevision++;result=calculate(origin,mode,express,shinkansen);warp=makeWarp(origin,result);const stationLookup=new Map(stationIndex.map((id,j)=>[id,j]));for(let i=0;i<points.length;i++){const p=points[i],station=stationLookup.get(i)??-1;const t=station>=0?warp.station(station):warp.point(p.geo);p.warped=t;p.target=[p.geo[0]-warp.base[0]+(t[0]-p.geo[0])*mix,p.geo[1]-warp.base[1]+(t[1]-p.geo[1])*mix];}
  $('originName').textContent=STATIONS[origin].name;updateCards();if(selected!==null)showDestination(selected,rentPanelActive);$('announce').textContent=STATIONS[origin].name+'を中心に地図を更新しました。';startMotion(camera,animate);requestDraw();}
 function changeMix(v,animate=false){const now=performance.now(),camera=currentPan(now);for(const p of points)p.from=currentPoint(p,now);pan=camera;mix=v;modelRevision++;$('warpSlider').value=Math.round(v*100);$('warpSlider').style.setProperty('--pct',v*100+'%');$('geoBtn').classList.toggle('active',v<.5);$('timeBtn').classList.toggle('active',v>=.5);$('geoBtn').setAttribute('aria-pressed',v<.5);$('timeBtn').setAttribute('aria-pressed',v>=.5);for(const p of points){const t=p.warped;p.target=[p.geo[0]-warp.base[0]+(t[0]-p.geo[0])*mix,p.geo[1]-warp.base[1]+(t[1]-p.geo[1])*mix];}startMotion(camera,animate,900);requestDraw();}
 function baseScreen(){return [W/2,H/2];}
@@ -104,7 +103,7 @@ function drawRegionalLines(projection){
 }
 function visible(p,margin=50){return p[0]>-margin&&p[0]<W+margin&&p[1]>-margin&&p[1]<H+margin;}
 function requestDraw(){if(!frame)frame=requestAnimationFrame(draw);}
-function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);if(mapView!=='rail'){if(typeof drawAtlasOverlay==='function')drawAtlasOverlay();return;}ctx.fillStyle='#f1efe7';ctx.fillRect(0,0,W,H);const ease=progress(now),scale=17*zoom,depth=viewDepth(now),projection=sceneProjection(now),world=animation?points.map(p=>[p.from[0]+(p.target[0]-p.from[0])*ease,p.from[1]+(p.target[1]-p.from[1])*ease]):points.map(p=>p.target);lastScreen=world.map(p=>projection(p));
+function draw(now){frame=0;advanceWheelZoom(now);ctx.setTransform(dpr,0,0,dpr,0,0);ctx.clearRect(0,0,W,H);if(mapView!=='rail'){drawAtlasOverlay();return;}ctx.fillStyle='#f1efe7';ctx.fillRect(0,0,W,H);const ease=progress(now),scale=17*zoom,depth=viewDepth(now),projection=sceneProjection(now),world=animation?points.map(p=>[p.from[0]+(p.target[0]-p.from[0])*ease,p.from[1]+(p.target[1]-p.from[1])*ease]):points.map(p=>p.target);lastScreen=world.map(p=>projection(p));
  if(rentLayer&&layerMode)rentLayer.prepare(stationIndex.map(i=>world[i]),modelRevision+':'+(animation?animation.start:'settled')+':'+walkCorrection,now,!!animation,walkCorrection);
  if(regionCoast.length){
   ctx.fillStyle='#dbe7e4';ctx.fillRect(0,0,W,H);
@@ -254,13 +253,14 @@ function hit(x,y){const ids=zoom<.12?[...majorStations,...(selected===null?[]:[s
 function hitRing(x,y,labelsOnly=false){if(mix<.98)return null;for(const ring of ringTargets){const r=ring.rect;if(r&&x>=r[0]-5&&x<=r[0]+r[2]+5&&y>=r[1]-5&&y<=r[1]+r[3]+5)return ring.minute;}if(labelsOnly)return null;let minute=null,best=10;for(const ring of ringTargets){const d=Math.abs(Math.hypot(x-ring.center[0],(y-ring.center[1])/(ring.yScale||1))-ring.radius);if(d<best){best=d;minute=ring.minute;}}return minute;}
 const pointers=new Map();let drag=null,pinch=null,lastTap=null,tapTimer=null,quickTap=null,centerTipId=null;
 function hideCenterTip(){centerTipId=null;$('centerTip').hidden=true;}
-function showCenterTip(id,x,y){if(id===origin){hideCenterTip();return;}centerTipId=id;$('centerTipSet').textContent=STATIONS[id].name+'を中心にする';const tip=$('centerTip');tip.hidden=false;const w=tip.offsetWidth||0,h=tip.offsetHeight||0;tip.style.left=Math.max(8,Math.min(x-w/2,W-w-8))+'px';tip.style.top=(y-h-18>=8?y-h-18:y+22)+'px';}
+function showCenterTip(id,x,y){if(id===origin){hideCenterTip();return;}centerTipId=id;const label=STATIONS[id].name+'を中心にする',btn=$('centerTipSet');btn.setAttribute('aria-label',label);btn.title=label;const tip=$('centerTip');tip.hidden=false;const w=tip.offsetWidth||38,h=tip.offsetHeight||38;tip.style.left=Math.max(8,Math.min(x-w/2,W-w-8))+'px';tip.style.top=(y-h-14>=8?y-h-14:y+16)+'px';}
 function dismissDestination(){clearTimeout(tapTimer);tapTimer=null;lastTap=null;hideCenterTip();selected=null;hover=null;$('tip').hidden=true;$('destinationCard').hidden=true;document.querySelectorAll('[data-station]').forEach(b=>b.classList.toggle('active',false));updateSumuLink();if(typeof updateSheetSummary==='function')updateSheetSummary();requestDraw();}
-document.addEventListener('pointerdown',e=>{if(mapView==='rail'&&!$('railView').hidden&&e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('centerTip').contains(e.target)&&!$('regionTools').contains(e.target)&&!e.target.closest?.('dialog, [data-atlas-picker]')&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
+document.addEventListener('pointerdown',e=>{if(!$('centerTip').contains(e.target))hideCenterTip();if(mapView==='rail'&&!$('railView').hidden&&e.target!==canvas&&!$('destinationCard').contains(e.target)&&!$('centerTip').contains(e.target)&&!$('regionTools').contains(e.target)&&!e.target.closest?.('dialog, [data-atlas-picker]')&&!$('mapOptions').contains(e.target)&&!$('mapNavigation').contains(e.target)&&!$('rentDock').contains(e.target))dismissDestination();},true);
+document.addEventListener('focusin',e=>{if(!$('centerTip').contains(e.target))hideCenterTip();});
 document.addEventListener('keydown',e=>{if(mapView==='rail'&&e.key==='Escape'&&!$('mapOptions').open&&!$('atlasPicker').open&&!$('railView').hidden){dismissDestination();}});
 function stationTap(id,x,y,now=performance.now()){if(lastTap&&lastTap.id===id&&now-lastTap.time<380&&Math.hypot(x-lastTap.x,y-lastTap.y)<24){clearTimeout(tapTimer);tapTimer=null;lastTap=null;selectOrigin(id);return 'center';}if(tapTimer)clearTimeout(tapTimer);lastTap={id,x,y,time:now};tapTimer=setTimeout(()=>{tapTimer=null;showDestination(id);showCenterTip(id,x,y);},380);return 'destination';}
 canvas.addEventListener('contextmenu',e=>e.preventDefault());
-canvas.addEventListener('pointerdown',e=>{wheelZoom=null;settleMotion();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);$('tip').hidden=true;if(mapView==='rail'&&selected!==null)dismissDestination();
+canvas.addEventListener('pointerdown',e=>{wheelZoom=null;settleMotion();hideCenterTip();canvas.setPointerCapture(e.pointerId);pointers.set(e.pointerId,[e.clientX,e.clientY]);$('tip').hidden=true;if(mapView==='rail'&&selected!==null)dismissDestination();
  if(mapView==='rail'&&pointers.size===1&&e.pointerType!=='touch'&&(e.button===2||e.ctrlKey)){e.preventDefault();clearTimeout(tapTimer);tapTimer=null;lastTap=null;orbit={x:e.clientX,y:e.clientY,yaw,pitch};drag=null;set3D(true);return;}
  if(pointers.size===1){
    const second=e.pointerType==='touch'&&quickTap&&performance.now()-quickTap.time<360&&Math.hypot(e.clientX-quickTap.x,e.clientY-quickTap.y)<28;
@@ -332,6 +332,7 @@ function advanceWheelZoom(now){
 
 canvas.addEventListener('wheel',e=>{
  e.preventDefault();
+ hideCenterTip();
  if(!e.deltaY)return;
  if(!wheelZoom){if(mapView==='rail')dismissDestination();settleMotion();}
  const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
@@ -344,7 +345,7 @@ canvas.addEventListener('wheel',e=>{
 $('zoomIn').onclick=()=>{wheelZoom=null;settleMotion();zoomAround(W/2,H/2,zoom*1.25);requestDraw();};
 $('zoomOut').onclick=()=>{wheelZoom=null;settleMotion();zoomAround(W/2,H/2,zoom/1.25);requestDraw();};
 $('reset').onclick=()=>{if(mapView!=='rail'){resetAtlasCamera();return;}wheelZoom=null;yaw=0;pitch=.72;set3D(false);updateModel(true,true);};$('view3d').onclick=()=>set3D(!terrainDepth);$('geoBtn').onclick=()=>changeMix(0,true);$('timeBtn').onclick=()=>changeMix(1,true);$('warpSlider').oninput=e=>changeMix(Number(e.target.value)/100);
-$('centerStation').onclick=()=>{if(selected!==null)selectOrigin(selected);};$('centerTipSet').onclick=()=>{if(centerTipId!==null)selectOrigin(centerTipId);};$('centerTipClose').onclick=()=>hideCenterTip();$('stationCount').textContent=STATIONS.length;$('express').onchange=e=>{express=e.target.checked;updateModel();};$('closeCard').onclick=dismissDestination;
+$('centerStation').onclick=()=>{if(selected!==null)selectOrigin(selected);};$('centerTipSet').onclick=()=>{if(centerTipId!==null)selectOrigin(centerTipId);};$('stationCount').textContent=STATIONS.length;$('express').onchange=e=>{express=e.target.checked;updateModel();};$('closeCard').onclick=dismissDestination;
 for(let minute=10;minute<=90;minute+=10){const b=document.createElement('button');b.dataset.minute=minute;b.innerHTML=minute+'<small>分</small>';b.setAttribute('aria-pressed',minute===selectedMinute);b.classList.toggle('active',minute===selectedMinute);b.onclick=()=>chooseMinute(minute);$('timeChoices').append(b);}
 $('aboutBtn').onclick=()=>$('about').showModal();$('closeAbout').onclick=()=>$('about').close();$('about').addEventListener('click',e=>{if(e.target===$('about')){const r=$('about').getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)$('about').close();}});
 
@@ -583,9 +584,7 @@ function syncRentTabs(){for(const [id,value]of [['rentStations','stations'],['re
 $('rentExplore').onclick=()=>setLayer(true);$('timeExplore').onclick=()=>setLayer(false);
 for(const [id,value]of [['rentStations','stations'],['rentProfile','profile']])$(id).onclick=()=>{rentPanelActive=true;rentTab=value;syncRentTabs();updateCards();};
 $('rentInfo').onclick=()=>{$('about').showModal();$('rentMethod').scrollIntoView({block:'start'});};
-window.addEventListener('resize',resize);if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(canvas);resize();
-if(mapView==='roads'){warp={base:xy(STATIONS[origin])};}
-else{mix=0;updateModel(false);changeMix(1,true);}
+window.addEventListener('resize',resize);if(typeof ResizeObserver!=='undefined')new ResizeObserver(resize).observe(canvas);resize();mix=0;updateModel(false);changeMix(1,true);
 
 function updateSumuLink(workplace=origin){const base='https://sumu-eki.yudai-grex4.chatgpt.site/',params=new URLSearchParams(location.search);let target;
  try{const url=new URL(params.get('return'));if(url.origin===new URL(base).origin&&url.pathname==='/')target=url;}catch{}
@@ -593,4 +592,4 @@ function updateSumuLink(workplace=origin){const base='https://sumu-eki.yudai-gre
  if(!target){target=new URL(base);const other=workplace===S['大手町']?S['新宿']:S['大手町'];const data={v:1,config:{people:[{station:STATIONS[workplace].name,days:5,limit:45,officeWalk:5},{station:STATIONS[other].name,days:5,limit:45,officeWalk:5}],layout:'1LDK',budget:250000,useBudget:false,homeWalk:10,maxTransfers:2,express:true,costWeight:.35,fairness:.55},pins:selected!==null?[STATIONS[selected].name]:[]};target.hash='v1='+encodeURIComponent(JSON.stringify(data));}
  $('sumuLink').href=target.href;$('sumuLink').textContent=params.has('return')?'住む駅の比較に戻る ↗':'複数の勤務地で比較 ↗';
 }
-const crossQuery=new URLSearchParams(location.search);if(Number.isInteger(S[crossQuery.get('origin')])){origin=S[crossQuery.get('origin')];mix=1;if(mapView==='roads')warp={base:xy(STATIONS[origin])};else updateModel(false);animation=null;}if(mapView==='rail'&&Number.isInteger(S[crossQuery.get('station')]))showDestination(S[crossQuery.get('station')]);updateSumuLink();
+const crossQuery=new URLSearchParams(location.search);if(Number.isInteger(S[crossQuery.get('origin')])){origin=S[crossQuery.get('origin')];mix=1;updateModel(false);animation=null;}if(Number.isInteger(S[crossQuery.get('station')]))showDestination(S[crossQuery.get('station')]);updateSumuLink();
