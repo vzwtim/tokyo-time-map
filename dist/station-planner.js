@@ -13,29 +13,92 @@ let plannerCandidates = [], pickedPlannerId = null;
 const setPlannerSheetLevel = bindMapSheet(planner, $('plannerSheetHandle'), $('plannerSheetBody'), requestDraw);
 setPlannerSheetLevel(0);
 
-// --- みんなで入れるリンク（飲む駅） -------------------------------------
-// 駅IDをURLの ?nomu= に載せて渡す。開いた人が自分の駅を足すとURLが更新され、
-// そのリンクをLINE等に送り返すことで全員分がそろう（サーバー保存なし）。
+// --- みんなで入れるルーム（飲む駅） -------------------------------------
+// ルーム式：リンクは1つだけ（?room=ID）。開いた人が自分の駅を足すとサーバー
+// （Worker + Durable Object）に保存され、開いている全員の画面に自動で反映される。
+// ルームが作れない環境では、駅IDをURLに載せる旧リンク方式（?nomu=）に落とす。
 const NOMU_LINK_MAX = 12;
+let nomuRoomId = null;
+try { nomuRoomId = new URLSearchParams(location.search).get('room') || null; } catch {}
+let nomuRoomBusy = false, nomuRoomTimer = null;
+function validNomuIds(list) {
+  const ids = [];
+  for (const value of list ?? []) {
+    const id = Number(value);
+    if (Number.isInteger(id) && STATIONS[id] && !ids.includes(id)) ids.push(id);
+    if (ids.length >= NOMU_LINK_MAX) break;
+  }
+  return ids;
+}
 function nomuIdsFromUrl() {
   try {
     const raw = new URLSearchParams(location.search).get('nomu');
-    if (!raw) return [];
-    const ids = [];
-    for (const part of raw.split(',')) {
-      const id = Number(part);
-      if (Number.isInteger(id) && STATIONS[id] && !ids.includes(id)) ids.push(id);
-      if (ids.length >= NOMU_LINK_MAX) break;
-    }
-    return ids;
+    return raw ? validNomuIds(raw.split(',')) : [];
   } catch { return []; }
 }
 function nomuUrl(ids) {
   const url = new URL(location.href);
-  if (ids.length) url.searchParams.set('nomu', ids.join(','));
-  else url.searchParams.delete('nomu');
+  url.searchParams.delete('nomu');
+  if (nomuRoomId) url.searchParams.set('room', nomuRoomId);
+  else {
+    url.searchParams.delete('room');
+    if (ids.length) url.searchParams.set('nomu', ids.join(','));
+  }
   url.hash = 'meeting';
   return url.toString();
+}
+function lineShareUrl(url) {
+  return 'https://social-plugins.line.me/lineit/share?url=' + encodeURIComponent(url);
+}
+async function nomuApi(path, options) {
+  const response = await fetch(path, { headers: { 'content-type': 'application/json' }, ...options });
+  if (!response.ok) throw Error('room api');
+  return response.json();
+}
+async function ensureNomuRoom() {
+  if (nomuRoomId) return nomuRoomId;
+  const data = await nomuApi('/api/rooms', {
+    method: 'POST', body: JSON.stringify({ stations: plannerPeople.meeting }),
+  });
+  nomuRoomId = data.id;
+  startNomuRoomPolling();
+  updatePlannerShare();
+  return nomuRoomId;
+}
+function adoptNomuRoom(stations, announce = true) {
+  if (plannerEditingIndex !== null) return;
+  const ids = validNomuIds(stations);
+  if (JSON.stringify(ids) === JSON.stringify(plannerPeople.meeting)) return;
+  const grew = ids.length > plannerPeople.meeting.length;
+  plannerPeople.meeting = ids;
+  if (plannerMode === 'meeting' && !planner.hidden) {
+    invalidatePlanner();
+    if (announce && grew) showPlannerMessage(ids.length + '人の駅がそろっています。');
+  }
+}
+async function syncNomuRoom(action, stationId) {
+  if (!nomuRoomId || plannerMode !== 'meeting') return;
+  nomuRoomBusy = true;
+  try {
+    const data = await nomuApi('/api/rooms/' + nomuRoomId + '/' + action, {
+      method: 'POST', body: JSON.stringify({ id: stationId }),
+    });
+    adoptNomuRoom(data.stations, false);
+  } catch {
+    showPlannerMessage('同期できませんでした。つながったら自動で反映されます。');
+  } finally { nomuRoomBusy = false; }
+}
+async function pollNomuRoom() {
+  if (!nomuRoomId || nomuRoomBusy || document.hidden) return;
+  try {
+    const data = await nomuApi('/api/rooms/' + nomuRoomId);
+    adoptNomuRoom(data.stations);
+  } catch {}
+}
+function startNomuRoomPolling() {
+  if (nomuRoomTimer || !nomuRoomId) return;
+  nomuRoomTimer = setInterval(pollNomuRoom, 3000);
+  pollNomuRoom();
 }
 function updatePlannerShare() {
   const share = $('plannerShare');
@@ -43,27 +106,44 @@ function updatePlannerShare() {
   const meeting = plannerMode === 'meeting';
   share.hidden = !meeting;
   if (!meeting) return;
-  const ids = plannerPeople.meeting;
-  $('plannerLineShare').href = 'https://social-plugins.line.me/lineit/share?url='
-    + encodeURIComponent(nomuUrl(ids));
-  try { history.replaceState(null, '', nomuUrl(ids)); } catch {}
+  $('plannerLineShare').href = lineShareUrl(nomuUrl(plannerPeople.meeting));
+  try { history.replaceState(null, '', nomuUrl(plannerPeople.meeting)); } catch {}
 }
 $('plannerCopyLink').onclick = async () => {
-  const url = nomuUrl(plannerPeople.meeting);
+  try { await ensureNomuRoom(); } catch {}
   try {
-    await navigator.clipboard.writeText(url);
-    showPlannerMessage('リンクをコピーしました。LINEに貼って送ってね。');
+    await navigator.clipboard.writeText(nomuUrl(plannerPeople.meeting));
+    showPlannerMessage(nomuRoomId
+      ? 'ルームのリンクをコピーしました。LINEに貼って送ってね。開いた人が駅を足せば自動で反映されます。'
+      : 'リンクをコピーしました。LINEに貼って送ってね。');
   } catch {
     showPlannerMessage('コピーできませんでした。アドレスバーのURLを送ってね。');
   }
 };
+$('plannerLineShare').onclick = async event => {
+  if (nomuRoomId) return;
+  event.preventDefault();
+  try { await ensureNomuRoom(); } catch {}
+  window.open(lineShareUrl(nomuUrl(plannerPeople.meeting)), '_blank', 'noopener');
+};
 const nomuSeedIds = nomuIdsFromUrl();
-if (nomuSeedIds.length) {
+if (nomuRoomId) {
+  if (!location.hash) { try { history.replaceState(null, '', '#meeting'); } catch {} }
+  window.addEventListener('DOMContentLoaded', () => {
+    startNomuRoomPolling();
+    setTimeout(() => {
+      if (plannerMode === 'meeting' && !planner.hidden) {
+        showPlannerMessage('ルームに参加しました。あなたの駅を追加してね。追加は自動でみんなに反映されます。');
+        updatePlannerShare();
+      }
+    }, 0);
+  });
+} else if (nomuSeedIds.length) {
   plannerPeople.meeting = nomuSeedIds;
   if (!location.hash) { try { history.replaceState(null, '', '#meeting'); } catch {} }
   window.addEventListener('DOMContentLoaded', () => setTimeout(() => {
     if (plannerMode === 'meeting' && !planner.hidden) {
-      showPlannerMessage(nomuSeedIds.length + '人の駅をリンクから読み込みました。あなたの駅を追加したら、リンクを送り返してね。');
+      showPlannerMessage(nomuSeedIds.length + '人の駅をリンクから読み込みました。あなたの駅を追加してね。');
       updatePlannerShare();
     }
   }, 0));
@@ -306,7 +386,7 @@ function renderPlannerPeople(){
       clearPlannerSelection();plannerEditingIndex=index;plannerInput.value='';
       renderPlannerPeople();plannerInput.focus();
     };
-    remove.onclick=()=>{plannerEditingIndex=null;ids.splice(index,1);invalidatePlanner();};
+    remove.onclick=()=>{plannerEditingIndex=null;ids.splice(index,1);invalidatePlanner();syncNomuRoom('remove',id);};
     person.append(button,remove);list.append(person);
   }
   $('plannerRun').disabled=ids.length<2;
@@ -361,6 +441,7 @@ function addPlannerStation(id){
     showPlannerMessage('変更する職場の駅をタップしてください。');
     return;
   }
+  const replaced=plannerEditingIndex===null?null:people[plannerEditingIndex];
   if(plannerEditingIndex===null)people.push(id);
   else people[plannerEditingIndex]=id;
   plannerEditingIndex=null;
@@ -368,6 +449,8 @@ function addPlannerStation(id){
   plannerInput.value='';plannerInput.setCustomValidity('');plannerInput.blur();
   invalidatePlanner();
   $('plannerPeople').scrollLeft=$('plannerPeople').scrollWidth;
+  if(replaced!==null&&replaced!==id)syncNomuRoom('remove',replaced).then(()=>syncNomuRoom('add',id));
+  else syncNomuRoom('add',id);
 }
 $('plannerForm').onsubmit=event=>{
   event.preventDefault();
