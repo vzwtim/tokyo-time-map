@@ -46,6 +46,7 @@ function renderAtlasView(view, moveFocus = false) {
   if (view !== mapView) retainAtlasCamera(mapView, view);
   if (!$('stationPlanner').hidden) closePlanner();
   mapView = view;
+  if(view!=='roads'&&typeof closeRoadVideo==='function'){closeRoadVideo();$('roadVideoCards').hidden=true;}
   $('railView').dataset.view = view;
   $('rentDock').hidden = view !== 'rail';
   $('roadDock').hidden = view !== 'roads';
@@ -121,13 +122,14 @@ function drawAtlasOverlay() {
   ctx.lineWidth = .9/scale;ctx.strokeStyle = '#aabfb6';ctx.stroke(land);
   ctx.fillStyle = '#dce3d4';ctx.fill(green);
   ctx.lineWidth = 1.35/scale;ctx.strokeStyle = '#c6dcd6';ctx.stroke(water);
-  if (mapView === 'roads') drawRoadLines(bounds,scale);
+  if (mapView === 'roads') {if(typeof drawRoadLines==='function')drawRoadLines(bounds,scale);}
   else {
     ctx.lineWidth = .85/scale;ctx.strokeStyle = '#91a89d';ctx.globalAlpha = .55;ctx.stroke(geographic.tracks);
   }
   ctx.restore();
-  if (mapView === 'roads') drawRoadStops(bounds,project);
-  else drawPlannerMap(project,bounds);
+  if (mapView === 'roads') {
+    if(typeof drawRoadStops==='function'){drawRoadStops(bounds,project);renderRoadMapVideos(project);}
+  } else drawPlannerMap(project,bounds);
   if (typeof drawDeviceLocation === 'function') {
     drawDeviceLocation(([x,y]) => project([x+warp.base[0], y+warp.base[1]]));
   }

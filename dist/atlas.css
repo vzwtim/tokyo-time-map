@@ -423,3 +423,19 @@
 #railView #stationPlanner .planner-results li > button {padding:8px 4px;min-height:48px}
 #railView #stationPlanner .planner-status:empty {display:none}
 #railView #stationPlanner .planner-note {margin:8px 0 4px;font-size:10px}
+
+/* Small geographic video previews, loaded only for visible completed intervals. */
+.road-video-pins {position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}
+.road-video-pin {position:absolute;top:0;left:0;width:76px;padding:0;border:2px solid #fff;border-radius:8px;background:#fff;color:#203c35;box-shadow:0 2px 8px #18372b40;pointer-events:auto;cursor:pointer;overflow:hidden;text-align:center}
+.road-video-pin img {display:block;width:72px;height:40px;object-fit:cover;background:#dce7df}
+.road-video-pin small {display:block;padding:2px 3px;font-size:9px;line-height:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.road-video-play {position:absolute;top:10px;left:25px;display:grid;place-items:center;width:24px;height:22px;border-radius:7px;background:#173f35dc;color:#fff;font-size:12px}
+.road-video-pin:focus-visible {outline:3px solid #246660;outline-offset:3px}
+.road-video-player {position:absolute;right:12px;top:120px;width:min(300px,calc(100% - 24px));z-index:8;border-radius:12px;background:#fff;box-shadow:0 4px 20px #17372a40;overflow:hidden}
+.road-video-heading {display:flex;align-items:center;gap:8px;padding:4px 8px 4px 12px}
+.road-video-heading strong {flex:1;font-size:12px;line-height:1.5}
+.road-video-heading button {width:40px;height:40px;flex:0 0 40px;border:0;border-radius:50%;background:transparent;font-size:25px;color:#263c35;cursor:pointer}
+.road-video-frame {aspect-ratio:16/9;background:#17261f}
+.road-video-frame iframe {display:block;width:100%;height:100%;border:0}
+.road-video-player>a {display:block;padding:8px 12px;color:#246660;font-size:12px;text-decoration:none}
+#railView:not([data-view="roads"]) .road-video-pins,#railView:not([data-view="roads"]) .road-video-player {display:none}

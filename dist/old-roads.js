@@ -20,7 +20,9 @@ const cyclingEpisodes=[
 ];
 let roadCycling=false;
 const cyclingByHub=new Map();
-const riddenRoads=new Set(['R001','R002','R003','R005','R303']);
+const riddenRoads=new Set(['R001','R002','R003','R005','R303','R312']);
+const riddenSections=[['R004','日本橋','白河'],['R222','今市','大内']];
+const cyclingMapEpisodes=[];
 const riddenHubs=new Set();
 let cyclingSegments=[],cyclingGeoShapes;
 setRoadSheetLevel(0);
@@ -39,10 +41,11 @@ function roadShape(paths) {
 function loadOldRoads() {
   if (oldRoadData || oldRoadRequest) return;
   $('roadLoading').hidden = false;
-  oldRoadRequest = fetch('old-roads.json?v=3').then(response => {
-    if (!response.ok) throw Error('roads');
+  oldRoadRequest = Promise.all(['old-roads.json?v=3','old-roads-extra.json?v=1'].map(url=>fetch(url).then(response=>{
+    if(!response.ok)throw Error('roads');
     return response.json();
-  }).then(entries => {
+  }))).then(parts => {
+    const entries=parts.flat();
     oldRoadData = mergeRoadEntries(entries).map(([id,name,lines,stops],index)=>{
       const paths=lines.map(line=>line.map(geoXY));
       return {id,name,paths,color:roadColors[index<5?index:5],...roadShape(paths),
@@ -63,14 +66,17 @@ function indexCyclingEpisodes(){
   cyclingByHub.clear();
   riddenHubs.clear();
   cyclingGeoShapes=null;
-  const osuStops=cyclingSection('R004','日本橋','白河');
-  cyclingSegments=osuStops.slice(1).map((to,i)=>({road:to.road,from:osuStops[i],to}));
+  const partialStops=riddenSections.map(section=>cyclingSection(...section));
+  cyclingSegments=partialStops.flatMap(stops=>stops.slice(1).map((to,i)=>({road:to.road,from:stops[i],to})));
+  cyclingMapEpisodes.length=0;
   for(const road of oldRoadData)if(riddenRoads.has(road.id)){
     for(const stop of road.stops)riddenHubs.add(stop.hub);
   }
-  for(const stop of osuStops)riddenHubs.add(stop.hub);
+  for(const stop of partialStops.flat())riddenHubs.add(stop.hub);
   for(const [roadId,first,last,video,chapters] of cyclingEpisodes){
-    for(const stop of cyclingSection(roadId,first,last)){
+    const stops=cyclingSection(roadId,first,last);
+    if(stops.length)cyclingMapEpisodes.push({video,road:stops[0].road.name,first,last,stops});
+    for(const stop of stops){
       const episodes=cyclingByHub.get(stop.hub)??[];
       episodes.push({video,chapter:chapters[stop.name],road:stop.road.name,first,last});
       cyclingByHub.set(stop.hub,episodes);
@@ -264,6 +270,7 @@ $('roadCycling').onclick=()=>{
   $('roadCycling').setAttribute('aria-pressed',roadCycling);
   $('roadCyclingNote').hidden=!roadCycling;
   renderCyclingVideos();
+  if(!roadCycling)closeRoadVideo();
   requestDraw();
 };
 $('roadOrigin').onclick=()=>{
@@ -278,7 +285,7 @@ function renderRoadSuggestions(){
   const query=roadQuery.value.trim(),matches=[],seen=new Set();
   if(query){
     for(const stop of roadNetwork?.stops??[]){
-      if(!stop.name.includes(query)||seen.has(stop.hub))continue;
+      if(!(stop.name.includes(query)||(query.endsWith('宿')&&stop.name===query.slice(0,-1)))||seen.has(stop.hub))continue;
       matches.push(stop);seen.add(stop.hub);
     }
     matches.sort((a,b)=>Number(b.name.startsWith(query))-Number(a.name.startsWith(query)));
@@ -308,3 +315,55 @@ roadQuery.addEventListener('keydown',event=>{
 $('railView').addEventListener('pointerdown',event=>{
   if(!event.target.closest('.road-search,#roadOrigin'))closeRoadSearch();
 });
+
+const roadVideoPins=new Map();
+function closeRoadVideo(){
+  $('roadVideoPlayer').hidden=true;
+  $('roadVideoFrame').replaceChildren();
+}
+function openRoadVideo(episode,chapter){
+  const seconds=chapter?chapter.split(':').reduce((sum,part)=>sum*60+Number(part),0):0;
+  const title=episode.road+' '+episode.first+'〜'+episode.last;
+  $('roadVideoTitle').textContent=title;
+  $('roadVideoExternal').href='https://www.youtube.com/watch?v='+episode.video+(seconds?'&t='+seconds+'s':'');
+  const frame=document.createElement('iframe');
+  frame.title=title+'の動画';
+  frame.src='https://www.youtube-nocookie.com/embed/'+episode.video+'?autoplay=1'+(seconds?'&start='+seconds:'');
+  frame.allow='autoplay; encrypted-media; picture-in-picture';
+  frame.allowFullscreen=true;
+  frame.referrerPolicy='strict-origin-when-cross-origin';
+  $('roadVideoFrame').replaceChildren(frame);
+  $('roadVideoPlayer').hidden=false;
+}
+$('roadVideoClose').onclick=closeRoadVideo;
+document.addEventListener('keydown',event=>{if(event.key==='Escape')closeRoadVideo();});
+function renderRoadMapVideos(project){
+  const holder=$('roadVideoCards');
+  holder.hidden=!roadCycling||mapView!=='roads';
+  if(holder.hidden)return;
+  const occupied=[],shown=new Set();
+  const bottom=H-Math.max(48,$('roadDock').offsetHeight);
+  for(const episode of cyclingMapEpisodes){
+    if(shown.size===4)break;
+    // Use a visible post within the interval; retain the same geographic anchor while panning.
+    const candidates=episode.stops.map(stop=>({stop,point:project(stop.point)})).filter(({point:[x,y]})=>x>44&&x<W-74&&y>160&&y<bottom-34);
+    const candidate=candidates[Math.floor(candidates.length/2)];
+    if(!candidate)continue;
+    const [x,y]=candidate.point;
+    const box=[x-38,y-62,x+38,y-8];
+    if(occupied.some(b=>box[0]<b[2]+12&&box[2]>b[0]-12&&box[1]<b[3]+12&&box[3]>b[1]-12))continue;
+    occupied.push(box);shown.add(episode.video);
+    let button=roadVideoPins.get(episode.video);
+    if(!button){
+      button=document.createElement('button');button.type='button';button.className='road-video-pin';
+      button.setAttribute('aria-label',episode.road+' '+episode.first+'〜'+episode.last+'の動画を再生');
+      const image=document.createElement('img');image.src='https://i.ytimg.com/vi/'+episode.video+'/mqdefault.jpg';image.alt='';image.loading='lazy';image.decoding='async';
+      const play=document.createElement('span');play.className='road-video-play';play.textContent='▶';play.setAttribute('aria-hidden','true');
+      const label=document.createElement('small');label.textContent=episode.first+'〜'+episode.last;
+      button.append(image,play,label);button.onclick=()=>openRoadVideo(episode);
+      holder.append(button);roadVideoPins.set(episode.video,button);
+    }
+    button.hidden=false;button.style.transform='translate('+Math.round(x-38)+'px,'+Math.round(y-62)+'px)';
+  }
+  for(const [id,button] of roadVideoPins)button.hidden=!shown.has(id);
+}

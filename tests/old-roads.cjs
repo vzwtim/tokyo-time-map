@@ -4,7 +4,7 @@ const path=require('node:path');
 const vm=require('node:vm');
 const asset=file=>path.join(__dirname,'../dist',file);
 const engine=fs.readFileSync(asset('engine.js'),'utf8');
-const context=vm.createContext({assert,packed:JSON.parse(fs.readFileSync(asset('old-roads.json'),'utf8'))});
+const context=vm.createContext({assert,packed:[...JSON.parse(fs.readFileSync(asset('old-roads.json'),'utf8')),...JSON.parse(fs.readFileSync(asset('old-roads-extra.json'),'utf8'))]});
 vm.runInContext(engine+fs.readFileSync(asset('road-routing.js'),'utf8')+`
  const coordinates=([lon,lat])=>xy({lon,lat});
  const roads=mergeRoadEntries(packed).map(([id,name,paths,stops])=>({id,name,paths:paths.map(path=>path.map(coordinates)),
@@ -30,6 +30,13 @@ vm.runInContext(engine+fs.readFileSync(asset('road-routing.js'),'utf8')+`
    assert.ok(Number.isFinite(tokyo.distances[stop.index]),road+' must connect at a mapped junction');
    assert.ok(trail.every(edge=>roadEdgePoints(edge).every(point=>point.every(Number.isFinite))));
  }
+ for(const [name,road] of [['大山','大山街道'],['大内','会津西街道'],['若松','会津西街道']]){
+   const stop=station(name,road);assert.ok(Number.isFinite(tokyo.distances[stop.index]),road+' must connect to the existing map');
+ }
+ const aizu=routeOldRoads(graph,station('今市','会津西街道'));
+ assert.ok(aizu.distances[station('大内','会津西街道').index]>70);
+ assert.ok(aizu.distances[station('大内','会津西街道').index]<130);
+ assert.equal(roads.find(road=>road.id==='R222').stops.length,18);
  const branch=station('下諏訪','甲州道中');
  assert.ok(graph.groups.get(branch.hub).some(stop=>stop.road.name==='中山道'));
  assert.ok(roads.some(road=>road.name==='水戸街道'));
@@ -37,3 +44,23 @@ vm.runInContext(engine+fs.readFileSync(asset('road-routing.js'),'utf8')+`
  assert.ok(graph.stops.every(stop=>!stop.snap||roadDistance(stop.point,stop.snap.point)<=3.5));
 `,context);
 console.log('PASS: Road symmetry, multipart roads, branch junctions, sea-gap isolation and off-route stops.');
+
+const roadUI=fs.readFileSync(asset('old-roads.js'),'utf8');
+vm.runInContext(`
+ const oldRoadData=roads,cyclingByHub=new Map(),riddenHubs=new Set(),cyclingMapEpisodes=[];
+ const riddenRoads=new Set(['R001','R002','R003','R005','R303','R312']);
+ const riddenSections=[['R004','日本橋','白河'],['R222','今市','大内']],cyclingEpisodes=[];
+ let cyclingGeoShapes,cyclingSegments;
+`+roadUI.slice(roadUI.indexOf('function indexCyclingEpisodes'),roadUI.indexOf('function cyclingShapes'))+`
+ indexCyclingEpisodes();
+ const wasRidden=(name,road)=>riddenHubs.has(station(name,road).hub);
+ assert.ok(wasRidden('大山','大山街道'));
+ assert.ok(wasRidden('厚木','大山街道'));
+ assert.ok(wasRidden('今市','会津西街道'));
+ assert.ok(wasRidden('大内','会津西街道'));
+ assert.equal(wasRidden('関山','会津西街道'),false);
+ assert.equal(wasRidden('福永','会津西街道'),false);
+ assert.equal(wasRidden('若松','会津西街道'),false);
+ assert.ok(cyclingSegments.filter(edge=>edge.road.id==='R222').every(edge=>edge.from.point[1]>=station('大内','会津西街道').point[1]&&edge.to.point[1]>=station('大内','会津西街道').point[1]));
+`,context);
+console.log('PASS: Added roads connect to existing hubs; completed Aizu section stops precisely at Ouchi.');
