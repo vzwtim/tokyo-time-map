@@ -305,10 +305,25 @@
 
 #plannerTools {position:absolute;inset:0 88px auto 0;width:min(480px,calc(100% - 88px));pointer-events:none;--planner-accent:#246660}
 #plannerTools[data-mode="meeting"] {--planner-accent:#805115}
-#plannerTools {border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow)}
+#plannerTools {border-radius:24px;background:transparent;box-shadow:none}
 #plannerTools:has(#plannerSelection:not([hidden])) #plannerForm {display:none}
 #plannerTools[data-complete="true"] #plannerForm {display:none}
 #plannerTools[data-complete="true"] .planner-tray {padding-top:8px}
+#atlasNav {
+  position:fixed;inset:auto 0 0;z-index:20;display:flex;
+  padding-bottom:env(safe-area-inset-bottom);
+  background:var(--surface);border-top:1px solid var(--line)
+}
+#atlasNav button {
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  min-height:56px;padding:4px 0 2px;border:0;background:transparent;
+  color:var(--muted);font-size:10px;font-weight:600;cursor:pointer
+}
+#atlasNav button svg {width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#atlasNav button[aria-pressed="true"] {color:var(--teal)}
+:root {--atlas-nav-h:calc(56px + env(safe-area-inset-bottom))}
+.map-area {height:calc(100dvh - var(--atlas-nav-h))}
+body {padding-bottom:var(--atlas-nav-h)}
 .planner-limit-fields {display:flex;flex-wrap:wrap;gap:4px 8px;padding:4px 0;font-size:11px}
 .planner-limit-fields input {width:60px;min-height:32px;font-size:16px}
 
@@ -330,8 +345,8 @@
 #roadSheetBody .road-note {margin-block:4px}
 
 #plannerTools .station-search {
-  width:100%;height:48px;margin:0;padding:4px;gap:2px;border:0;border-radius:24px;
-  background:var(--surface);box-shadow:none;pointer-events:auto;
+  width:100%;height:48px;margin:8px 0 0;padding:4px;gap:2px;border:0;border-radius:24px;
+  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
 }
 #plannerTools .station-search input {min-height:40px;padding-inline:7px}
 #plannerTools .station-search button {
@@ -344,8 +359,8 @@
 #plannerTools .station-search:has(input:placeholder-shown) .planner-search-add {display:none}
 #plannerTools .station-suggestions {inset:calc(100% + 4px) 0 auto;width:auto;max-height:min(42dvh,220px);z-index:2}
 #plannerTools .planner-selection {
-  display:flex;align-items:center;gap:8px;min-height:48px;padding:5px 6px 5px 14px;margin-top:0;
-  border-radius:24px;background:var(--surface);box-shadow:none;pointer-events:auto
+  display:flex;align-items:center;gap:8px;min-height:48px;padding:5px 6px 5px 14px;margin-top:8px;
+  border-radius:24px;background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto
 }
 #plannerTools .planner-selection[hidden] {display:none}
 .planner-selection > div {flex:1;min-width:0;display:grid;gap:1px}
@@ -355,13 +370,16 @@
 #plannerTools #plannerConfirmAdd {background:var(--planner-accent);color:white;font-weight:650}
 #plannerTools #plannerCancelAdd {width:38px;padding:0;background:none;font-size:21px;color:var(--muted)}
 #plannerTools .planner-tray {
-  display:flex;align-items:center;gap:6px;padding:0 10px 8px;margin:0;pointer-events:auto
+  display:flex;flex-direction:column;align-items:flex-start;gap:6px;padding:8px 0 0;margin:0;pointer-events:none
 }
 #plannerTools .planner-tray:not(:has(.planner-person)) {display:none}
-.planner-people {display:flex;gap:5px;min-width:0;overflow:auto;scrollbar-width:none}
+.planner-people {
+  display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0;
+  max-height:calc(100dvh - 240px);overflow-y:auto;scrollbar-width:none
+}
 #plannerTools .planner-person {
   display:inline-flex;align-items:center;flex:none;gap:0;border-radius:16px;background:#f0f2ee;
-  border:1px solid transparent;
+  border:1px solid transparent;box-shadow:var(--control-shadow);pointer-events:auto;
 }
 #plannerTools[data-mode="meeting"] .planner-person {background:#f7f0e2}
 #plannerTools .planner-person.is-editing {border-color:var(--planner-accent)}
@@ -371,11 +389,11 @@
 }
 #plannerTools .planner-person button+button {width:30px;justify-content:center;padding:0;font-size:17px;color:var(--muted)}
 .planner-person i {width:7px;height:7px;border-radius:50%;flex:none}
-#plannerTools .planner-primary {border:0;border-radius:16px;min-height:32px;padding:0 10px;background:var(--planner-accent);color:white}
+#plannerTools .planner-primary {border:0;border-radius:16px;min-height:32px;padding:0 10px;background:var(--planner-accent);color:white;box-shadow:var(--control-shadow);pointer-events:auto}
 #plannerTools .planner-primary[hidden],#plannerTools .station-search button[hidden] {display:none}
 #plannerTools .planner-limits {
   display:block;width:max-content;max-width:100%;padding:0 10px;margin:0;border:0;border-radius:16px;
-  background:var(--surface);box-shadow:none;pointer-events:auto;
+  background:var(--surface);box-shadow:var(--control-shadow);pointer-events:auto;
 }
 #plannerTools .planner-limits summary {min-height:36px;align-content:center;font-size:12px;font-weight:600}
 .planner-limit-fields label {display:flex;align-items:center;gap:4px}

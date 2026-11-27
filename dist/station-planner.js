@@ -22,10 +22,11 @@ let nomuRoomId = null;
 try { nomuRoomId = new URLSearchParams(location.search).get('room') || null; } catch {}
 let nomuRoomBusy = false, nomuRoomTimer = null;
 function validNomuIds(list) {
+  // 同じ駅の人が複数いてもよい（重複を弾かない）
   const ids = [];
   for (const value of list ?? []) {
     const id = Number(value);
-    if (Number.isInteger(id) && STATIONS[id] && !ids.includes(id)) ids.push(id);
+    if (Number.isInteger(id) && STATIONS[id]) ids.push(id);
     if (ids.length >= NOMU_LINK_MAX) break;
   }
   return ids;
@@ -470,6 +471,15 @@ function stagePlannerStation(id){
   showPlannerMessage('');
   requestDraw();
 }
+// 入力欄からの選択は確認を挟まず、そのまま追加する（タップ／Enterで確定）。
+function choosePlannerStation(id){
+  if(!Number.isInteger(id)||!STATIONS[id])return;
+  if(plannerMode==='living'&&plannerPeople.living.length>=2&&plannerEditingIndex===null){
+    stagePlannerStation(id);
+    return;
+  }
+  addPlannerStation(id);
+}
 function addPlannerStation(id){
   const people=plannerPeople[plannerMode];
   if(plannerMode==='living'&&people.length>=2&&plannerEditingIndex===null){
@@ -483,14 +493,14 @@ function addPlannerStation(id){
   clearPlannerSelection();
   plannerInput.value='';plannerInput.setCustomValidity('');plannerInput.blur();
   invalidatePlanner();
-  $('plannerPeople').scrollLeft=$('plannerPeople').scrollWidth;
+  $('plannerPeople').scrollTop=$('plannerPeople').scrollHeight;
   if(replaced!==null&&replaced!==id)syncNomuRoom('remove',replaced).then(()=>syncNomuRoom('add',id));
   else syncNomuRoom('add',id);
 }
 $('plannerForm').onsubmit=event=>{
   event.preventDefault();
   const id=resolveStationInput(plannerInput.value);
-  if(Number.isInteger(id))stagePlannerStation(id);
+  if(Number.isInteger(id))choosePlannerStation(id);
   else if(plannerInput.value.trim()){
     plannerInput.setCustomValidity('駅名を候補から選んでください。');plannerInput.reportValidity();
   }

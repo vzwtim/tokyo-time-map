@@ -10,6 +10,7 @@ const stationSearchRecords = STATIONS.map(station => ({
   value: stationLabels[station.id],
   name: normalizeStationQuery(station.name),
   label: normalizeStationQuery(stationLabels[station.id]),
+  reading: normalizeStationQuery(STATION_READINGS[station.id] ?? ''),
 }));
 
 // First serving line per station; tells same-name stations apart in results.
@@ -23,11 +24,11 @@ function findStationSuggestions(query) {
   if (!key) return [];
   const matches = [];
   for (const record of stationSearchRecords) {
-    const {name, label, station} = record;
-    const score = name === key || label === key ? 0
-      : name.startsWith(key) ? 1
+    const {name, label, reading, station} = record;
+    const score = name === key || label === key || reading === key ? 0
+      : name.startsWith(key) || reading.startsWith(key) ? 1
       : label.startsWith(key) ? 2
-      : name.includes(key) ? 3 : 4;
+      : name.includes(key) || reading.includes(key) ? 3 : 4;
     if (score < 4) matches.push({record, score, main: S[station.name] === station.id});
   }
   matches.sort((a,b) => a.score-b.score || Number(b.main)-Number(a.main) || a.record.station.id-b.record.station.id);
@@ -134,4 +135,4 @@ function attachSuggestions(input, onChoose) {
 }
 
 attachSuggestions($('stationInput'));
-attachSuggestions($('plannerInput'), stagePlannerStation);
+attachSuggestions($('plannerInput'), choosePlannerStation);

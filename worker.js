@@ -4,10 +4,11 @@
 const MAX_STATIONS = 12;
 
 function cleanStations(list) {
+  // 同じ駅の人が複数いてもよい（重複を弾かない）
   const out = [];
   for (const value of Array.isArray(list) ? list : []) {
     const id = Number(value);
-    if (Number.isInteger(id) && id >= 0 && id < 20000 && !out.includes(id)) out.push(id);
+    if (Number.isInteger(id) && id >= 0 && id < 20000) out.push(id);
     if (out.length >= MAX_STATIONS) break;
   }
   return out;
@@ -36,9 +37,10 @@ export class NomuRoom {
       } else if (url.pathname.endsWith('/add')) {
         const id = Number(body.id);
         if (Number.isInteger(id) && id >= 0 && id < 20000
-          && !stations.includes(id) && stations.length < MAX_STATIONS) stations.push(id);
+          && stations.length < MAX_STATIONS) stations.push(id);
       } else if (url.pathname.endsWith('/remove')) {
-        stations = stations.filter(station => station !== Number(body.id));
+        const index = stations.indexOf(Number(body.id));
+        if (index >= 0) stations.splice(index, 1);
       } else {
         return json({ error: 'not found' }, 404);
       }

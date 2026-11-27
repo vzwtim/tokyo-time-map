@@ -3,6 +3,7 @@
 const atlasPicker = $('atlasPicker');
 const mapOptions = $('mapOptions');
 const atlasChoices = [...atlasPicker.querySelectorAll('[data-atlas-view]')];
+const atlasNavChoices = [...document.querySelectorAll('[data-atlas-nav]')];
 const atlasViews = new Set(atlasChoices.map(choice => choice.dataset.atlasView));
 let cameraShift = [0, 0];
 let geographicPaths;
@@ -58,6 +59,7 @@ function renderAtlasView(view, moveFocus = false) {
   if (view === 'living' || view === 'meeting') openPlanner(view);
   if (view === 'roads') loadOldRoads();
   for (const choice of atlasChoices) choice.setAttribute('aria-pressed', choice.dataset.atlasView === view);
+  for (const choice of atlasNavChoices) choice.setAttribute('aria-pressed', choice.dataset.atlasNav === view);
   document.title = view === 'rail' ? '時間地図' : view === 'roads' ? '旧街道宿場地図' : $('plannerTitle').textContent;
   requestDraw();
   if (moveFocus) $('mapMenuOpen').focus({preventScroll:true});
@@ -74,6 +76,12 @@ function readAtlasView() {
   return atlasViews.has(view) ? view : 'rail';
 }
 for (const choice of atlasChoices) choice.onclick = () => showAtlasView(choice.dataset.atlasView);
+for (const choice of atlasNavChoices) choice.onclick = () => {
+  const view = choice.dataset.atlasNav;
+  if (view === mapView) return;
+  history.pushState(null, '', view === 'rail' ? location.pathname + location.search : '#' + view);
+  renderAtlasView(view);
+};
 window.addEventListener('hashchange', () => renderAtlasView(readAtlasView(), true));
 window.addEventListener('DOMContentLoaded', () => {
   renderAtlasView(readAtlasView());
