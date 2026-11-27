@@ -423,44 +423,41 @@
 #railView #stationPlanner .planner-results li > button {padding:8px 4px;min-height:48px}
 #railView #stationPlanner .planner-status:empty {display:none}
 #railView #stationPlanner .planner-note {margin:8px 0 4px;font-size:10px}
-.planner-share {margin-top:10px}
+.planner-share {margin-top:8px}
 .planner-share[hidden] {display:none}
 #plannerShareOpen {
-  display:flex;align-items:center;justify-content:center;gap:8px;width:100%;min-height:44px;
-  border:0;border-radius:22px;background:var(--planner-accent,#a56b25);color:#fff;
-  font-size:14px;font-weight:650;cursor:pointer
+  display:flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:38px;
+  border:0;border-radius:20px;background:var(--planner-color);color:#fff;
+  font-size:13px;font-weight:650;cursor:pointer
 }
-#plannerShareOpen svg {width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.planner-share-note {margin:6px 0 2px;font-size:10px;color:var(--muted);line-height:1.5}
+#plannerShareOpen svg {width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 .planner-share-top {
   display:grid;place-items:center;flex:none;width:32px;height:32px;padding:0;
   border:1px solid #d8ba81;border-radius:50%;background:#f7f0e2;
-  color:var(--planner-color,#8a5a1d);cursor:pointer;pointer-events:auto
+  color:var(--planner-accent);cursor:pointer;pointer-events:auto
 }
 .planner-share-top[hidden] {display:none}
 .planner-share-top svg {width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-.nomu-share-status {font-size:13px;margin:2px 0 8px}
-.nomu-share-people {display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px}
+.nomu-share-status {font-size:12px;color:var(--muted);margin:0 0 8px}
+.nomu-share-people {display:flex;flex-wrap:wrap;gap:5px;margin-bottom:8px}
 .nomu-share-people:empty {display:none}
-.nomu-share-person {display:inline-flex;align-items:center;gap:5px;padding:4px 9px;border-radius:14px;background:#f7f0e2;font-size:12px}
+.nomu-share-person {display:inline-flex;align-items:center;gap:5px;min-height:30px;padding:0 9px;border-radius:15px;background:#f7f0e2;font-size:12px}
 .nomu-share-person i {width:7px;height:7px;border-radius:50%;flex:none}
-.nomu-share-link-label {font-size:11px;color:var(--muted)}
-.nomu-share-link-row {display:flex;gap:6px;margin-top:4px}
+.nomu-share-link-row {display:flex;gap:6px}
 .nomu-share-link-row input {
-  flex:1;min-width:0;height:40px;padding:0 10px;border:1px solid var(--line);border-radius:10px;
-  background:var(--surface);font-size:12px;color:var(--ink)
+  flex:1;min-width:0;min-height:40px;padding:0 9px;border:1px solid var(--line);border-radius:9px;
+  background:transparent;font-size:12px;color:var(--ink)
 }
 .nomu-share-link-row button {
-  flex:none;height:40px;padding:0 14px;border:0;border-radius:10px;
-  background:var(--planner-accent,#a56b25);color:#fff;font-weight:650;cursor:pointer
+  flex:none;min-height:40px;padding:0 14px;border:0;border-radius:9px;
+  background:var(--teal);color:#fff;font-size:12px;font-weight:650;cursor:pointer
 }
-.nomu-share-actions {display:flex;margin-top:10px}
+.nomu-share-actions {display:flex;margin-top:8px}
 .nomu-share-actions a {
-  flex:1;display:inline-flex;align-items:center;justify-content:center;height:40px;
-  border:1px solid #bfe3cc;border-radius:10px;background:var(--surface);
-  color:#06a94c;font-size:13px;font-weight:650;text-decoration:none
+  flex:1;display:inline-flex;align-items:center;justify-content:center;min-height:40px;
+  border:1px solid var(--line);border-radius:9px;background:transparent;
+  color:var(--ink);font-size:12px;font-weight:650;text-decoration:none
 }
-.nomu-share-note {font-size:10px;color:var(--muted);margin-top:10px;line-height:1.5}
 
 /* Small geographic video previews, loaded only for visible completed intervals. */
 .road-video-pins {position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}

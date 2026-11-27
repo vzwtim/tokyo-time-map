@@ -73,7 +73,7 @@ function adoptNomuRoom(stations, announce = true) {
   plannerPeople.meeting = ids;
   if (plannerMode === 'meeting' && !planner.hidden) {
     invalidatePlanner();
-    if (announce && grew) showPlannerMessage(ids.length + '人の駅がそろっています。');
+    if (announce && grew) showPlannerMessage(ids.length + ' 人が入力しています');
   }
 }
 async function syncNomuRoom(action, stationId) {
@@ -85,7 +85,7 @@ async function syncNomuRoom(action, stationId) {
     });
     adoptNomuRoom(data.stations, false);
   } catch {
-    showPlannerMessage('同期できませんでした。つながったら自動で反映されます。');
+    showPlannerMessage('同期できませんでした');
   } finally { nomuRoomBusy = false; }
 }
 async function pollNomuRoom() {
@@ -117,8 +117,8 @@ function updateNomuShareDialog() {
   $('nomuShareLine').href = lineShareUrl(url);
   const ids = plannerPeople.meeting;
   $('nomuShareStatus').textContent = ids.length
-    ? '現在 ' + ids.length + ' 人が入力しています'
-    : 'まだ誰も入力していません。あなたの駅を入れてから共有してね。';
+    ? ids.length + ' 人が入力しています'
+    : 'まだ入力がありません';
   const wrap = $('nomuSharePeople');
   wrap.replaceChildren();
   for (const [index, id] of ids.entries()) {
@@ -134,7 +134,7 @@ async function openNomuShare() {
   const url = nomuUrl(plannerPeople.meeting);
   if (navigator.share) {
     try {
-      await navigator.share({ title: '飲む駅', text: 'みんなの最寄り駅から、最適な飲む駅を探そう', url });
+      await navigator.share({ title: '飲む駅', url });
       return;
     } catch (error) {
       if (error && error.name === 'AbortError') return;
@@ -154,7 +154,7 @@ $('nomuShareCopy').onclick = async () => {
     $('nomuShareCopy').textContent = 'コピーしました';
     setTimeout(() => { $('nomuShareCopy').textContent = 'コピー'; }, 1600);
   } catch {
-    showPlannerMessage('コピーできませんでした。リンクを長押ししてコピーしてね。');
+    showPlannerMessage('コピーできませんでした');
   }
 };
 $('nomuShareLink').onclick = event => { if (event.target.select) event.target.select(); };
@@ -168,7 +168,7 @@ if (nomuRoomId) {
     startNomuRoomPolling();
     setTimeout(() => {
       if (plannerMode === 'meeting' && !planner.hidden) {
-        showPlannerMessage('ルームに参加しました。あなたの駅を追加してね。追加は自動でみんなに反映されます。');
+        showPlannerMessage('ルームに参加しました');
         updatePlannerShare();
       }
     }, 0);
@@ -178,7 +178,7 @@ if (nomuRoomId) {
   if (!location.hash) { try { history.replaceState(null, '', '#meeting'); } catch {} }
   window.addEventListener('DOMContentLoaded', () => setTimeout(() => {
     if (plannerMode === 'meeting' && !planner.hidden) {
-      showPlannerMessage(nomuSeedIds.length + '人の駅をリンクから読み込みました。あなたの駅を追加してね。');
+      showPlannerMessage(nomuSeedIds.length + ' 人の駅を読み込みました');
       updatePlannerShare();
     }
   }, 0));
