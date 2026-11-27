@@ -40,8 +40,13 @@ vm.runInContext(engine+fs.readFileSync(asset('road-routing.js'),'utf8')+`
  const branch=station('下諏訪','甲州道中');
  assert.ok(graph.groups.get(branch.hub).some(stop=>stop.road.name==='中山道'));
  assert.ok(roads.some(road=>road.name==='水戸街道'));
- assert.ok(graph.stops.some(stop=>!stop.snap));
- assert.ok(graph.stops.every(stop=>!stop.snap||roadDistance(stop.point,stop.snap.point)<=3.5));
+ assert.equal(graph.stops.filter(stop=>!stop.snap).length,0);
+ assert.ok(graph.stops.every(stop=>stop.snap&&roadDistance(stop.point,stop.snap.point)<.01));
+ assert.ok(graph.stops.every(stop=>graph.edges[stop.index].length>0));
+ for(const name of ['二子','愛甲','糟屋','赤坂御門','三軒茶屋'])assert.ok(station(name,'大山街道'));
+ assert.ok(Number.isFinite(tokyo.distances[station('富山','北陸街道').index]));
+ assert.ok(Number.isFinite(tokyo.distances[station('本宮','熊野街道').index]));
+ assert.ok(Number.isFinite(routeOldRoads(graph,station('高松','伊予街道')).distances[station('川之江','伊予街道').index]));
 `,context);
 console.log('PASS: Road symmetry, multipart roads, branch junctions, sea-gap isolation and off-route stops.');
 

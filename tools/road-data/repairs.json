@@ -1,0 +1,1079 @@
+{
+  "sources": {
+    "oyama": {
+      "title": "国土交通省 川崎国道事務所 大山街道・見どころマップ",
+      "url": "https://www.ktr.mlit.go.jp/kawakoku/kawakoku00027.html"
+    },
+    "hokuriku": {
+      "title": "日本歴史地名大系 北陸街道・水戸田宿",
+      "url": "https://kotobank.jp/word/北陸街道-132800"
+    },
+    "niigata": {
+      "title": "新潟県立図書館 北国街道の越後での道筋",
+      "url": "https://www.pref-lib.niigata.niigata.jp/1b8446f94c08f7ae67441d7d895601a6/"
+    },
+    "mie": {
+      "title": "三重県 熊野古道伊勢路 コース紹介",
+      "url": "https://www.kodo.pref.mie.lg.jp/course/"
+    },
+    "ohechi": {
+      "title": "和歌山県公式観光サイト 熊野古道大辺路",
+      "url": "https://www.wakayama-kanko.or.jp/courses/detail_57.html"
+    },
+    "kumano": {
+      "title": "田辺市熊野ツーリズムビューロー 大雲取越・小雲取越",
+      "url": "https://www.tb-kumano.jp/kumano-kodo/nakahechi/ogumotori-goe/"
+    },
+    "morioka": {
+      "title": "盛岡市 盛岡の城下町",
+      "url": "https://switch-www.ins.city.morioka.iwate.jp/kanko_sports_bunka/rkeishi_bunkazai/moriokajo/1009475.html"
+    },
+    "sanuki": {
+      "title": "全国風景ガイド 讃岐伊予街道（主要経由地の参考）",
+      "url": "https://view.ash.jp/inf/kaido_sanukiiyo"
+    },
+    "codh": {
+      "title": "CODH 江戸宿場・江戸主要街道データセット",
+      "url": "https://codh.rois.ac.jp/historical-gis/edo-post/"
+    },
+    "tosa": {
+      "title": "徳島県立図書館 日和佐町の峠道",
+      "url": "https://library.bunmori.tokushima.jp/digital/webkiyou/43/4331.html"
+    },
+    "nagao": {
+      "title": "日本歴史地名大系 長尾街道（讃岐）",
+      "url": "https://kotobank.jp/word/長尾街道-107581"
+    },
+    "hyuga": {
+      "title": "宮崎市 清武郷と先人廟（経由地域の参考）",
+      "url": "https://www.city.miyazaki.miyazaki.jp/life/activities/kiyotake/406646.html"
+    }
+  },
+  "additions": {
+    "R312": [
+      [
+        "赤坂御門",
+        "追加",
+        "",
+        139.7372,
+        35.6774,
+        "AUDIT-R312-赤坂御門",
+        {
+          "kind": "gate",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "青山",
+        "追加",
+        "",
+        139.7245,
+        35.6725,
+        "AUDIT-R312-青山",
+        {
+          "kind": "waypoint",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "渋谷",
+        "追加",
+        "",
+        139.701,
+        35.659,
+        "AUDIT-R312-渋谷",
+        {
+          "kind": "waypoint",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "三軒茶屋",
+        "追加",
+        "",
+        139.67,
+        35.6442,
+        "AUDIT-R312-三軒茶屋",
+        {
+          "kind": "tea",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "用賀",
+        "追加",
+        "",
+        139.6367,
+        35.6268,
+        "AUDIT-R312-用賀",
+        {
+          "kind": "waypoint",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "二子",
+        "追加",
+        "",
+        139.62,
+        35.6035,
+        "AUDIT-R312-二子",
+        {
+          "kind": "post",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "愛甲",
+        "追加",
+        "",
+        139.344,
+        35.4168,
+        "AUDIT-R312-愛甲",
+        {
+          "kind": "post",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "糟屋",
+        "追加",
+        "",
+        139.3135,
+        35.4105,
+        "AUDIT-R312-糟屋",
+        {
+          "kind": "post",
+          "source": "oyama",
+          "representative": true
+        }
+      ],
+      [
+        "石倉",
+        "追加",
+        "",
+        139.282,
+        35.417,
+        "AUDIT-R312-石倉",
+        {
+          "kind": "junction",
+          "source": "oyama",
+          "representative": true
+        }
+      ]
+    ],
+    "R400": [
+      [
+        "春日新田",
+        "追加",
+        "",
+        138.256,
+        37.169,
+        "AUDIT-R400-春日新田",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "潟町",
+        "追加",
+        "",
+        138.34,
+        37.233,
+        "AUDIT-R400-潟町",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "柿崎",
+        "追加",
+        "",
+        138.391,
+        37.276,
+        "AUDIT-R400-柿崎",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "鉢崎",
+        "追加",
+        "",
+        138.438,
+        37.335,
+        "AUDIT-R400-鉢崎",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "鯨波",
+        "追加",
+        "",
+        138.515,
+        37.348,
+        "AUDIT-R400-鯨波",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "柏崎",
+        "追加",
+        "",
+        138.553,
+        37.37,
+        "AUDIT-R400-柏崎",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "宮川",
+        "追加",
+        "",
+        138.588,
+        37.444,
+        "AUDIT-R400-宮川",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "椎谷",
+        "追加",
+        "",
+        138.607,
+        37.46,
+        "AUDIT-R400-椎谷",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "石地",
+        "追加",
+        "",
+        138.653,
+        37.496,
+        "AUDIT-R400-石地",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "弥彦",
+        "追加",
+        "",
+        138.826,
+        37.706,
+        "AUDIT-R400-弥彦",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "岩室",
+        "追加",
+        "",
+        138.842,
+        37.733,
+        "AUDIT-R400-岩室",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "赤塚",
+        "追加",
+        "",
+        138.882,
+        37.823,
+        "AUDIT-R400-赤塚",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "新潟",
+        "追加",
+        "",
+        139.046,
+        37.925,
+        "AUDIT-R400-新潟",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "新発田",
+        "追加",
+        "",
+        139.327,
+        37.947,
+        "AUDIT-R400-新発田",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "村松浜",
+        "追加",
+        "",
+        139.37,
+        38.055,
+        "AUDIT-R400-村松浜",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "荒井浜",
+        "追加",
+        "",
+        139.385,
+        38.112,
+        "AUDIT-R400-荒井浜",
+        {
+          "kind": "waypoint",
+          "source": "niigata",
+          "representative": true
+        }
+      ],
+      [
+        "出雲崎",
+        "E3",
+        "越後国 三島郡",
+        138.6865,
+        37.54231,
+        "SHUKU000943",
+        {
+          "kind": "post",
+          "source": "codh"
+        }
+      ],
+      [
+        "寺泊",
+        "E2",
+        "越後国 三島郡",
+        138.7668,
+        37.64163,
+        "SHUKU000944",
+        {
+          "kind": "post",
+          "source": "codh"
+        }
+      ],
+      [
+        "村上",
+        "E",
+        "越後国 岩船郡",
+        139.46782,
+        38.22542,
+        "SHUKU000957",
+        {
+          "kind": "endpoint",
+          "source": "codh"
+        }
+      ]
+    ],
+    "R516": [
+      [
+        "紀伊長島",
+        "追加",
+        "",
+        136.337,
+        34.21,
+        "AUDIT-R516-紀伊長島",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "相賀",
+        "追加",
+        "",
+        136.23,
+        34.11,
+        "AUDIT-R516-相賀",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "尾鷲",
+        "追加",
+        "",
+        136.2,
+        34.073,
+        "AUDIT-R516-尾鷲",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "賀田",
+        "追加",
+        "",
+        136.223,
+        33.968,
+        "AUDIT-R516-賀田",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "二木島",
+        "追加",
+        "",
+        136.19,
+        33.927,
+        "AUDIT-R516-二木島",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "新鹿",
+        "追加",
+        "",
+        136.15,
+        33.901,
+        "AUDIT-R516-新鹿",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "木本",
+        "追加",
+        "",
+        136.099,
+        33.892,
+        "AUDIT-R516-木本",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "阿田和",
+        "追加",
+        "",
+        136.043,
+        33.801,
+        "AUDIT-R516-阿田和",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "鵜殿",
+        "追加",
+        "",
+        136.01,
+        33.734,
+        "AUDIT-R516-鵜殿",
+        {
+          "kind": "waypoint",
+          "source": "mie",
+          "representative": true
+        }
+      ],
+      [
+        "那智山",
+        "追加",
+        "",
+        135.89,
+        33.6688,
+        "AUDIT-R516-那智山",
+        {
+          "kind": "waypoint",
+          "source": "kumano",
+          "representative": true
+        }
+      ],
+      [
+        "請川",
+        "追加",
+        "",
+        135.784,
+        33.815,
+        "AUDIT-R516-請川",
+        {
+          "kind": "waypoint",
+          "source": "kumano",
+          "representative": true
+        }
+      ]
+    ],
+    "R611": [
+      [
+        "見老津",
+        "追加",
+        "",
+        135.581,
+        33.51,
+        "AUDIT-R611-見老津",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "江住",
+        "追加",
+        "",
+        135.598,
+        33.507,
+        "AUDIT-R611-江住",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "和深",
+        "追加",
+        "",
+        135.679,
+        33.503,
+        "AUDIT-R611-和深",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "田並",
+        "追加",
+        "",
+        135.71,
+        33.49,
+        "AUDIT-R611-田並",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "串本",
+        "追加",
+        "",
+        135.78,
+        33.477,
+        "AUDIT-R611-串本",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "古座",
+        "追加",
+        "",
+        135.825,
+        33.518,
+        "AUDIT-R611-古座",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "浦神",
+        "追加",
+        "",
+        135.859,
+        33.562,
+        "AUDIT-R611-浦神",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "市屋",
+        "追加",
+        "",
+        135.891,
+        33.58,
+        "AUDIT-R611-市屋",
+        {
+          "kind": "waypoint",
+          "source": "ohechi",
+          "representative": true
+        }
+      ],
+      [
+        "川辺",
+        "追加",
+        "",
+        135.26464,
+        34.25683,
+        "AUDIT-R611-川辺",
+        {
+          "kind": "junction",
+          "source": "codh",
+          "representative": true
+        }
+      ],
+      [
+        "井田",
+        "追加",
+        "",
+        135.22335,
+        34.15444,
+        "AUDIT-R611-井田",
+        {
+          "kind": "junction",
+          "source": "codh",
+          "representative": true
+        }
+      ]
+    ],
+    "R823": [
+      [
+        "高松",
+        "追加",
+        "",
+        134.05058,
+        34.3463,
+        "AUDIT-R823-高松",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "新名追分",
+        "追加",
+        "",
+        133.96,
+        34.297,
+        "AUDIT-R823-新名追分",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "府中",
+        "追加",
+        "",
+        133.93,
+        34.31,
+        "AUDIT-R823-府中",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "高瀬",
+        "追加",
+        "",
+        133.72,
+        34.18,
+        "AUDIT-R823-高瀬",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "本山",
+        "追加",
+        "",
+        133.68,
+        34.141,
+        "AUDIT-R823-本山",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "観音寺",
+        "追加",
+        "",
+        133.659,
+        34.12,
+        "AUDIT-R823-観音寺",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "豊浜",
+        "追加",
+        "",
+        133.638,
+        34.073,
+        "AUDIT-R823-豊浜",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ],
+      [
+        "川之江",
+        "追加",
+        "",
+        133.57483,
+        34.01104,
+        "AUDIT-R823-川之江",
+        {
+          "kind": "waypoint",
+          "source": "sanuki",
+          "representative": true
+        }
+      ]
+    ],
+    "R004": [
+      [
+        "盛岡",
+        "追加",
+        "",
+        141.15,
+        39.697,
+        "AUDIT-R004-盛岡",
+        {
+          "kind": "town",
+          "source": "morioka",
+          "representative": true
+        }
+      ]
+    ],
+    "R700": [
+      [
+        "大坂京橋",
+        "E",
+        "摂津国 東成郡",
+        135.52238,
+        34.69108,
+        "SHUKU001212",
+        {
+          "kind": "endpoint",
+          "source": "codh"
+        }
+      ]
+    ],
+    "R810": [
+      [
+        "木太",
+        "追加",
+        "",
+        134.08,
+        34.322,
+        "AUDIT-R810-木太",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ],
+      [
+        "池戸",
+        "追加",
+        "",
+        134.116,
+        34.286,
+        "AUDIT-R810-池戸",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ],
+      [
+        "平木",
+        "追加",
+        "",
+        134.128,
+        34.275,
+        "AUDIT-R810-平木",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ],
+      [
+        "長尾",
+        "追加",
+        "",
+        134.174,
+        34.264,
+        "AUDIT-R810-長尾",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ],
+      [
+        "石田",
+        "追加",
+        "",
+        134.208,
+        34.263,
+        "AUDIT-R810-石田",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ],
+      [
+        "町田",
+        "追加",
+        "",
+        134.299,
+        34.252,
+        "AUDIT-R810-町田",
+        {
+          "kind": "waypoint",
+          "source": "nagao",
+          "representative": true
+        }
+      ]
+    ],
+    "R816": [
+      [
+        "日和佐",
+        "追加",
+        "",
+        134.533,
+        33.734,
+        "AUDIT-R816-日和佐",
+        {
+          "kind": "waypoint",
+          "source": "tosa",
+          "representative": true
+        }
+      ],
+      [
+        "牟岐",
+        "追加",
+        "",
+        134.419,
+        33.672,
+        "AUDIT-R816-牟岐",
+        {
+          "kind": "waypoint",
+          "source": "tosa",
+          "representative": true
+        }
+      ]
+    ],
+    "R902": [
+      [
+        "清武",
+        "追加",
+        "",
+        131.388,
+        31.857,
+        "AUDIT-R902-清武",
+        {
+          "kind": "waypoint",
+          "source": "hyuga",
+          "representative": true
+        }
+      ],
+      [
+        "田野",
+        "追加",
+        "",
+        131.3,
+        31.839,
+        "AUDIT-R902-田野",
+        {
+          "kind": "waypoint",
+          "source": "hyuga",
+          "representative": true
+        }
+      ],
+      [
+        "山之口",
+        "追加",
+        "",
+        131.162,
+        31.775,
+        "AUDIT-R902-山之口",
+        {
+          "kind": "waypoint",
+          "source": "hyuga",
+          "representative": true
+        }
+      ]
+    ]
+  },
+  "links": [
+    {
+      "road": "R400",
+      "names": [
+        "今石動",
+        "中田",
+        "水戸田",
+        "富山",
+        "新庄新町",
+        "町新庄",
+        "西水橋"
+      ],
+      "source": "hokuriku",
+      "note": "中田・富山経由の旧経路を概略補完"
+    },
+    {
+      "road": "R516",
+      "names": [
+        "浜ノ宮",
+        "那智山",
+        "小口",
+        "長井",
+        "請川",
+        "本宮"
+      ],
+      "source": "kumano",
+      "note": "那智・小口・本宮側を概略補完"
+    },
+    {
+      "road": "R600",
+      "names": [
+        "京都東寺口",
+        "伏見"
+      ],
+      "source": "codh",
+      "note": "宿場データの京都側の起点を概略補完"
+    },
+    {
+      "road": "R822",
+      "names": [
+        "大深浦",
+        "宿毛"
+      ],
+      "source": "codh",
+      "note": "宿場データ終点までの概略補完"
+    },
+    {
+      "road": "R400",
+      "names": [
+        "新潟",
+        "新発田",
+        "村松浜"
+      ],
+      "source": "niigata",
+      "note": "城下を経由する北国街道の概略別経路"
+    }
+  ],
+  "shared": [
+    {
+      "road": "R303",
+      "sourceRoad": "R005",
+      "from": "今市",
+      "to": "日光"
+    },
+    {
+      "road": "R314",
+      "sourceRoad": "R005",
+      "from": "今市",
+      "to": "日光"
+    },
+    {
+      "road": "R304",
+      "sourceRoad": "R400",
+      "from": "寺泊",
+      "to": "出雲崎"
+    },
+    {
+      "road": "R611",
+      "sourceRoad": "R516",
+      "from": "浜ノ宮",
+      "to": "新宮"
+    },
+    {
+      "road": "R516",
+      "sourceRoad": "R503",
+      "from": "伊勢神宮",
+      "toPoint": [
+        136.69599,
+        34.49239
+      ]
+    }
+  ],
+  "endConnections": [
+    {
+      "road": "R823",
+      "name": "川之江",
+      "source": "sanuki"
+    }
+  ]
+}

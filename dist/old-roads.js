@@ -41,7 +41,7 @@ function roadShape(paths) {
 function loadOldRoads() {
   if (oldRoadData || oldRoadRequest) return;
   $('roadLoading').hidden = false;
-  oldRoadRequest = Promise.all(['old-roads.json?v=3','old-roads-extra.json?v=1'].map(url=>fetch(url).then(response=>{
+  oldRoadRequest = Promise.all(['old-roads.json?v=4','old-roads-extra.json?v=2'].map(url=>fetch(url).then(response=>{
     if(!response.ok)throw Error('roads');
     return response.json();
   }))).then(parts => {
@@ -49,7 +49,7 @@ function loadOldRoads() {
     oldRoadData = mergeRoadEntries(entries).map(([id,name,lines,stops],index)=>{
       const paths=lines.map(line=>line.map(geoXY));
       return {id,name,paths,color:roadColors[index<5?index:5],...roadShape(paths),
-        stops:stops.map(([name,,region,lon,lat,hub])=>({name,region,hub,point:geoXY([lon,lat])}))};
+        stops:stops.map(([name,serial,region,lon,lat,hub,meta={}])=>({name,region,hub,kind:meta.kind??(serial==='S'||String(serial).startsWith('E')?'endpoint':name.endsWith('峠')?'pass':'post'),representative:!!meta.representative,point:geoXY([lon,lat])}))};
     });
     roadNetwork=buildRoadGraph(oldRoadData);
     indexCyclingEpisodes();
@@ -164,6 +164,8 @@ function renderRoadSheet() {
   const memberList=$('roadMembers');
   memberList.replaceChildren();
   if(roadDestination){
+    const kinds={post:'宿場・継立場',tea:'茶屋',gate:'門',town:'城下',waypoint:'経由地',junction:'分岐・合流',endpoint:'起終点',pass:'峠'};
+    const role=document.createElement('span');role.textContent=(kinds[focus.kind]??'地点')+(focus.representative?' · 概略位置':'');memberList.append(role);
     for(const label of new Set(members.map(stop=>stop.road.name))){
       const chip=document.createElement('span');chip.textContent=label;memberList.append(chip);
     }
@@ -251,7 +253,7 @@ function drawRoadStops(bounds,project) {
     const hub=roadNetwork.groups.get(stop.hub).length>1;
     const ridden=roadCycling&&riddenHubs.has(stop.hub);
     if(roadCycling&&!ridden)ctx.globalAlpha=.48;
-    atlasDot(project([x,y]),{label:hub||i%density===0?stop.name:null,color:roadCycling?(ridden?'#145c4c':'#87938a'):stop.road.color,radius:hub?3.6:zoom<.12?1.8:2.8,
+    atlasDot(project([x,y]),{label:hub||i%density===0?stop.name:null,color:roadCycling?(ridden?'#145c4c':'#87938a'):stop.road.color,radius:hub?3.6:stop.kind==='waypoint'?1.7:zoom<.12?1.8:2.8,subtle:stop.kind==='waypoint',
       action:origin=>origin?setRoadStart(stop):selectRoadStop(stop)});
     ctx.globalAlpha=1;
   }
