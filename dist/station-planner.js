@@ -105,27 +105,62 @@ function updatePlannerShare() {
   if (!share) return;
   const meeting = plannerMode === 'meeting';
   share.hidden = !meeting;
+  const top = $('plannerShareTop');
+  if (top) top.hidden = !meeting;
   if (!meeting) return;
-  $('plannerLineShare').href = lineShareUrl(nomuUrl(plannerPeople.meeting));
   try { history.replaceState(null, '', nomuUrl(plannerPeople.meeting)); } catch {}
+  if ($('nomuShareDialog').open) updateNomuShareDialog();
 }
-$('plannerCopyLink').onclick = async () => {
+function updateNomuShareDialog() {
+  const url = nomuUrl(plannerPeople.meeting);
+  $('nomuShareLink').value = url;
+  $('nomuShareLine').href = lineShareUrl(url);
+  const ids = plannerPeople.meeting;
+  $('nomuShareStatus').textContent = ids.length
+    ? '現在 ' + ids.length + ' 人が入力しています'
+    : 'まだ誰も入力していません。あなたの駅を入れてから共有してね。';
+  const wrap = $('nomuSharePeople');
+  wrap.replaceChildren();
+  for (const [index, id] of ids.entries()) {
+    const chip = document.createElement('span'), dot = document.createElement('i');
+    chip.className = 'nomu-share-person';
+    dot.style.background = plannerColor(index);
+    chip.append(dot, STATIONS[id].name);
+    wrap.append(chip);
+  }
+}
+async function openNomuShare() {
   try { await ensureNomuRoom(); } catch {}
+  const url = nomuUrl(plannerPeople.meeting);
+  if (navigator.share) {
+    try {
+      await navigator.share({ title: '飲む駅', text: 'みんなの最寄り駅から、最適な飲む駅を探そう', url });
+      return;
+    } catch (error) {
+      if (error && error.name === 'AbortError') return;
+    }
+  }
+  updateNomuShareDialog();
+  const dialog = $('nomuShareDialog');
+  if (!dialog.open) dialog.showModal();
+}
+$('plannerShareOpen').onclick = openNomuShare;
+$('plannerShareTop').onclick = openNomuShare;
+$('nomuShareCopy').onclick = async () => {
+  const input = $('nomuShareLink');
+  if (input.select) input.select();
   try {
-    await navigator.clipboard.writeText(nomuUrl(plannerPeople.meeting));
-    showPlannerMessage(nomuRoomId
-      ? 'ルームのリンクをコピーしました。LINEに貼って送ってね。開いた人が駅を足せば自動で反映されます。'
-      : 'リンクをコピーしました。LINEに貼って送ってね。');
+    await navigator.clipboard.writeText(input.value);
+    $('nomuShareCopy').textContent = 'コピーしました';
+    setTimeout(() => { $('nomuShareCopy').textContent = 'コピー'; }, 1600);
   } catch {
-    showPlannerMessage('コピーできませんでした。アドレスバーのURLを送ってね。');
+    showPlannerMessage('コピーできませんでした。リンクを長押ししてコピーしてね。');
   }
 };
-$('plannerLineShare').onclick = async event => {
-  if (nomuRoomId) return;
-  event.preventDefault();
-  try { await ensureNomuRoom(); } catch {}
-  window.open(lineShareUrl(nomuUrl(plannerPeople.meeting)), '_blank', 'noopener');
-};
+$('nomuShareLink').onclick = event => { if (event.target.select) event.target.select(); };
+$('nomuShareDialog').addEventListener('click', event => {
+  if (event.target === $('nomuShareDialog')) $('nomuShareDialog').close();
+});
 const nomuSeedIds = nomuIdsFromUrl();
 if (nomuRoomId) {
   if (!location.hash) { try { history.replaceState(null, '', '#meeting'); } catch {} }
