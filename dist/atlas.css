@@ -423,6 +423,16 @@
 #railView #stationPlanner .planner-results li > button {padding:8px 4px;min-height:48px}
 #railView #stationPlanner .planner-status:empty {display:none}
 #railView #stationPlanner .planner-note {margin:8px 0 4px;font-size:10px}
+.planner-share {margin-top:10px}
+.planner-share[hidden] {display:none}
+.planner-share-actions {display:flex;flex-wrap:wrap;gap:6px}
+.planner-share-actions button,.planner-share-actions a {
+  display:inline-flex;align-items:center;justify-content:center;min-height:38px;padding:0 12px;
+  border:1px solid #d8ba81;border-radius:20px;background:#f7f0e2;
+  color:var(--planner-color,#8a5a1d);font-size:12px;font-weight:650;text-decoration:none;cursor:pointer
+}
+.planner-share-actions a {background:var(--surface)}
+.planner-share-note {margin:6px 0 2px;font-size:10px;color:var(--muted);line-height:1.5}
 
 /* Small geographic video previews, loaded only for visible completed intervals. */
 .road-video-pins {position:absolute;inset:0;pointer-events:none;z-index:3;overflow:hidden}

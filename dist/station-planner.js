@@ -13,6 +13,62 @@ let plannerCandidates = [], pickedPlannerId = null;
 const setPlannerSheetLevel = bindMapSheet(planner, $('plannerSheetHandle'), $('plannerSheetBody'), requestDraw);
 setPlannerSheetLevel(0);
 
+// --- みんなで入れるリンク（飲む駅） -------------------------------------
+// 駅IDをURLの ?nomu= に載せて渡す。開いた人が自分の駅を足すとURLが更新され、
+// そのリンクをLINE等に送り返すことで全員分がそろう（サーバー保存なし）。
+const NOMU_LINK_MAX = 12;
+function nomuIdsFromUrl() {
+  try {
+    const raw = new URLSearchParams(location.search).get('nomu');
+    if (!raw) return [];
+    const ids = [];
+    for (const part of raw.split(',')) {
+      const id = Number(part);
+      if (Number.isInteger(id) && STATIONS[id] && !ids.includes(id)) ids.push(id);
+      if (ids.length >= NOMU_LINK_MAX) break;
+    }
+    return ids;
+  } catch { return []; }
+}
+function nomuUrl(ids) {
+  const url = new URL(location.href);
+  if (ids.length) url.searchParams.set('nomu', ids.join(','));
+  else url.searchParams.delete('nomu');
+  url.hash = 'meeting';
+  return url.toString();
+}
+function updatePlannerShare() {
+  const share = $('plannerShare');
+  if (!share) return;
+  const meeting = plannerMode === 'meeting';
+  share.hidden = !meeting;
+  if (!meeting) return;
+  const ids = plannerPeople.meeting;
+  $('plannerLineShare').href = 'https://social-plugins.line.me/lineit/share?url='
+    + encodeURIComponent(nomuUrl(ids));
+  try { history.replaceState(null, '', nomuUrl(ids)); } catch {}
+}
+$('plannerCopyLink').onclick = async () => {
+  const url = nomuUrl(plannerPeople.meeting);
+  try {
+    await navigator.clipboard.writeText(url);
+    showPlannerMessage('リンクをコピーしました。LINEに貼って送ってね。');
+  } catch {
+    showPlannerMessage('コピーできませんでした。アドレスバーのURLを送ってね。');
+  }
+};
+const nomuSeedIds = nomuIdsFromUrl();
+if (nomuSeedIds.length) {
+  plannerPeople.meeting = nomuSeedIds;
+  if (!location.hash) { try { history.replaceState(null, '', '#meeting'); } catch {} }
+  window.addEventListener('DOMContentLoaded', () => setTimeout(() => {
+    if (plannerMode === 'meeting' && !planner.hidden) {
+      showPlannerMessage(nomuSeedIds.length + '人の駅をリンクから読み込みました。あなたの駅を追加したら、リンクを送り返してね。');
+      updatePlannerShare();
+    }
+  }, 0));
+}
+
 function rankPlannerStations(stations, journeys, {rents, cap, budget, order}) {
   return stations.flatMap(station => {
     const minutes = journeys.map(journey => journey.best[station.id].time);
@@ -259,6 +315,7 @@ function renderPlannerPeople(){
   plannerInput.setAttribute('aria-label',plannerInput.placeholder);
   $('plannerCancelEdit').hidden=plannerEditingIndex===null;
   $('plannerTools').dataset.complete=plannerMode==='living'&&ids.length>=2&&plannerEditingIndex===null;
+  updatePlannerShare();
 }
 function invalidatePlanner(){
   clearPlannerSelection();
